@@ -131,7 +131,7 @@ export default function Home() {
               </div>
               <div className="flex flex-wrap gap-3">
                 <Button href="/datasnipe" variant="secondary">What we built</Button>
-                <Button href="https://datasnipe.io" variant="datasnipe">Visit DataSnype</Button>
+                <Button href="https://datasnype.io" variant="datasnipe">Visit DataSnype</Button>
               </div>
             </div>
           </div>

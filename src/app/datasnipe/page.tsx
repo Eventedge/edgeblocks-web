@@ -8,7 +8,7 @@ export default function DataSnypePage() {
         <header className="flex items-center justify-between gap-4 py-10">
           <Link className="text-sm text-muted hover:text-fg" href="/">&larr; Back to EdgeBlocks</Link>
           <div className="flex gap-3">
-            <Button href="https://datasnipe.io" variant="datasnipe">Visit DataSnype</Button>
+            <Button href="https://datasnype.io" variant="datasnipe">Visit DataSnype</Button>
             <Button href="https://app.edgeblocks.io" variant="secondary">Enter App</Button>
           </div>
         </header>
@@ -68,7 +68,7 @@ export default function DataSnypePage() {
           </div>
 
           <div className="mt-10 flex flex-wrap gap-3">
-            <Button href="https://datasnipe.io" variant="datasnipe">Visit DataSnype</Button>
+            <Button href="https://datasnype.io" variant="datasnipe">Visit DataSnype</Button>
             <Button href="/" variant="secondary">Back to EdgeBlocks</Button>
           </div>
         </section>
