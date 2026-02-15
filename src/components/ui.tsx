@@ -19,14 +19,14 @@ export function Button({
 }: {
   href: string;
   children: React.ReactNode;
-  variant?: "primary" | "secondary" | "ghost" | "proof" | "datasnipe";
+  variant?: "primary" | "secondary" | "ghost" | "proof" | "datasnype";
 }) {
   const cls =
     variant === "primary"
       ? "bg-accentGold text-ink hover:opacity-90"
       : variant === "proof"
       ? "bg-accentCyan text-ink hover:opacity-90"
-      : variant === "datasnipe"
+      : variant === "datasnype"
       ? "bg-accentGreen text-ink hover:opacity-90"
       : variant === "secondary"
       ? "border border-border bg-surface hover:bg-surface2 text-fg"

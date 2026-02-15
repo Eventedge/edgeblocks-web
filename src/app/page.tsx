@@ -17,7 +17,7 @@ export default function Home() {
           <nav className="hidden md:flex items-center gap-6 text-sm text-muted">
             <a className="hover:text-fg" href="#platform">Platform</a>
             <a className="hover:text-fg" href="/proofclaw">ProofClaw</a>
-            <a className="hover:text-fg" href="/datasnipe">Track record</a>
+            <a className="hover:text-fg" href="/datasnype">Track record</a>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -130,8 +130,8 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex flex-wrap gap-3">
-                <Button href="/datasnipe" variant="secondary">What we built</Button>
-                <Button href="https://datasnype.io" variant="datasnipe">Visit DataSnype</Button>
+                <Button href="/datasnype" variant="secondary">What we built</Button>
+                <Button href="https://datasnype.io" variant="datasnype">Visit DataSnype</Button>
               </div>
             </div>
           </div>
@@ -143,7 +143,7 @@ export default function Home() {
             <div>&copy; {new Date().getFullYear()} EdgeBlocks</div>
             <div className="flex flex-wrap gap-4">
               <a className="hover:text-fg" href="/proofclaw">ProofClaw</a>
-              <a className="hover:text-fg" href="/datasnipe">DataSnype</a>
+              <a className="hover:text-fg" href="/datasnype">DataSnype</a>
               <a className="hover:text-fg" href="https://app.edgeblocks.io">Enter App</a>
             </div>
           </div>
