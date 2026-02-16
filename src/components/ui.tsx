@@ -4,12 +4,23 @@ export function Container({ children }: { children: React.ReactNode }) {
   return <div className="mx-auto max-w-6xl px-6">{children}</div>;
 }
 
-export function Chip({ children }: { children: React.ReactNode }) {
+export function Chip({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-surface/70 px-4 py-2 text-xs font-mono text-muted backdrop-blur">
+    <div className={`inline-flex items-center gap-2 rounded-full border border-border/70 bg-surface/70 px-4 py-2 text-xs font-mono text-muted backdrop-blur ${className}`}>
       {children}
     </div>
   );
+}
+
+export function PnlChip({ v }: { v: number }) {
+  const cls =
+    v > 0
+      ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-200"
+      : v < 0
+      ? "border-rose-400/30 bg-rose-400/10 text-rose-200"
+      : "border-border bg-surface2 text-muted";
+  const sign = v > 0 ? "+" : "";
+  return <Chip className={cls}>{sign}{v.toFixed(2)} USDT</Chip>;
 }
 
 export function Button({
