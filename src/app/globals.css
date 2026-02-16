@@ -30,4 +30,31 @@ body{
               radial-gradient(800px 520px at 60% 90%, rgba(167,139,250,0.12), transparent 60%),
               var(--bg);
   color: var(--fg);
+  position: relative;
+}
+
+body::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+  opacity: 0.06;
+  mix-blend-mode: screen;
+}
+
+body::after{
+  content:"";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(245,200,66,0.08), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(34,211,238,0.06), transparent 40%),
+    radial-gradient(circle at 60% 90%, rgba(167,139,250,0.05), transparent 45%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.015), rgba(255,255,255,0.015) 1px, transparent 1px, transparent 7px);
+  opacity: 0.18;
 }

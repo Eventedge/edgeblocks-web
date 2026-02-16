@@ -18,6 +18,7 @@ export default function Home() {
             <a className="hover:text-fg" href="#platform">Platform</a>
             <a className="hover:text-fg" href="/proofclaw">ProofClaw</a>
             <a className="hover:text-fg" href="/datasnype">Track record</a>
+            <a className="hover:text-fg" href="/dashboard">Dashboard</a>
           </nav>
 
           <div className="flex items-center gap-3">
