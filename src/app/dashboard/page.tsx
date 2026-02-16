@@ -167,7 +167,7 @@ export default async function Dashboard() {
             <div className="text-xs font-mono text-accentCyan">SUPERCARD</div>
             <div className="mt-1 text-lg font-semibold">BTC SuperCard</div>
             <div className="mt-1 text-sm text-muted">
-              {supercard?.summary?.headline !== "—" ? supercard.summary.headline : "Pillar-based composite view"}
+              {supercard?.summary?.headline && supercard.summary.headline !== "—" ? supercard.summary.headline : "Pillar-based composite view"}
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
               <Chip>stance: {supercard?.summary?.stance ?? "—"}</Chip>
