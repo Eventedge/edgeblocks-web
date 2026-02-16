@@ -87,6 +87,30 @@ body::after {
   100% { transform: translateY(0px); }
 }
 
+/* Module header normalization */
+.module-header {
+  min-height: 56px;
+}
+
+/* SuperCard pillar row: stable columns on md+ */
+.pill-row {
+  display: grid;
+  gap: 4px;
+}
+@media (min-width: 768px) {
+  .pill-row {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 12px;
+  }
+}
+
+.nowrap-tight {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* Interactive polish */
 .module-card {
   position: relative;

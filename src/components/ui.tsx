@@ -17,7 +17,7 @@ export function Chip({
 }) {
   return (
     <div
-      className={`inline-flex items-center gap-2 rounded-full border border-border/70 bg-surface/70 px-4 py-2 text-xs font-mono text-muted backdrop-blur ${onClick ? "cursor-pointer select-none" : ""} ${className}`}
+      className={`inline-flex shrink-0 items-center gap-2 rounded-full border border-border/70 bg-surface/70 px-4 py-2 text-xs font-mono text-muted backdrop-blur ${onClick ? "cursor-pointer select-none" : ""} ${className}`}
       onClick={onClick}
       role={role}
     >

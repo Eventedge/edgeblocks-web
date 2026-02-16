@@ -466,9 +466,9 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
                   (p: { key: string; label: string; value: string; status: string; hint: string }) => (
                     <div
                       key={p.key}
-                      className="tile rounded-xl border border-border/50 bg-surface2/40 px-4 py-2 no-overlap grid gap-1 md:gap-3 md:grid-cols-[1fr_auto_auto] md:items-center"
+                      className="tile pill-row rounded-xl border border-border/50 bg-surface2/40 px-4 py-2 no-overlap"
                     >
-                      {/* Mobile: label + chip inline; md+: label in col 1 */}
+                      {/* Col 1: label + hint (truncates); on mobile includes chip inline */}
                       <div className="min-w-0 flex items-center gap-2 md:block">
                         <div className="min-w-0">
                           <div className="text-sm text-muted truncate">{p.label}</div>
@@ -487,9 +487,9 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
                           {p.status ?? "neutral"}
                         </span>
                       </div>
-                      {/* md+ chip column */}
+                      {/* Col 2: md+ chip */}
                       <span
-                        className={`hidden md:inline-block justify-self-end whitespace-nowrap rounded-full border px-2 py-0.5 text-[10px] font-mono leading-tight ${
+                        className={`hidden md:inline-block justify-self-end shrink-0 whitespace-nowrap rounded-full border px-2 py-0.5 text-[10px] font-mono leading-tight ${
                           p.status === "positive"
                             ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
                             : p.status === "negative"
@@ -499,8 +499,8 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
                       >
                         {p.status ?? "neutral"}
                       </span>
-                      {/* Value — always right-aligned */}
-                      <span className="justify-self-end shrink-0 text-sm font-mono tabular-nums text-fg whitespace-nowrap">
+                      {/* Col 3: value — never wraps, ellipsis if extreme */}
+                      <span className="justify-self-end shrink-0 text-sm font-mono tabular-nums text-fg nowrap-tight">
                         {p.value ?? "\u2014"}
                       </span>
                     </div>
