@@ -122,6 +122,103 @@ export function LiveDot({ label = "LIVE", ts }: { label?: string; ts?: string | 
   );
 }
 
+export function UpdatedAgo({ ts, renderTs }: { ts?: string | null; renderTs: string }) {
+  if (!ts) return null;
+  const diff = Math.max(0, Math.floor((new Date(renderTs).getTime() - new Date(ts).getTime()) / 1000));
+  let ago: string;
+  if (diff < 60) ago = `${diff}s ago`;
+  else if (diff < 3600) ago = `${Math.floor(diff / 60)}m ago`;
+  else ago = `${Math.floor(diff / 3600)}h ago`;
+  return <span className="text-[10px] font-mono text-muted2">{ago}</span>;
+}
+
+export function StatusStrip({ ts }: { ts: string | null }) {
+  const date = ts ? String(ts).slice(0, 19).replace("T", " ") + "Z" : null;
+  return (
+    <div className="flex flex-wrap items-center gap-3 rounded-xl border border-border/30 bg-surface/50 px-4 py-2.5 backdrop-blur text-xs font-mono">
+      <div className="flex items-center gap-2">
+        <span className="relative inline-flex h-1.5 w-1.5">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/60" />
+          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-300" />
+        </span>
+        <span className="text-emerald-300/90">API OK</span>
+      </div>
+      <div className="h-3.5 w-px bg-border/40" />
+      <span className="text-muted2">
+        Last refresh: <span className="text-muted">{date ?? "\u2014"}</span>
+      </span>
+      <div className="ml-auto flex gap-2">
+        <span className="rounded-md border border-border/40 bg-surface2/40 px-2.5 py-1 text-fg/80 font-semibold">BTC</span>
+        <span className="rounded-md border border-border/40 bg-surface2/40 px-2.5 py-1 text-muted">24h</span>
+      </div>
+    </div>
+  );
+}
+
+const MODULE_ICONS: Record<string, React.ReactNode> = {
+  market: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+      <polyline points="16 7 22 7 22 13" />
+    </svg>
+  ),
+  sentiment: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 6v6l4 2" />
+    </svg>
+  ),
+  supercard: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+    </svg>
+  ),
+  regime: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+      <path d="M2 12h20" />
+    </svg>
+  ),
+  paper: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <polyline points="14 2 14 8 20 8" />
+      <line x1="16" y1="13" x2="8" y2="13" />
+      <line x1="16" y1="17" x2="8" y2="17" />
+    </svg>
+  ),
+  simlab: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="3" width="20" height="14" rx="2" />
+      <line x1="8" y1="21" x2="16" y2="21" />
+      <line x1="12" y1="17" x2="12" y2="21" />
+    </svg>
+  ),
+};
+
+export function ModuleIconBadge({
+  icon,
+  accent = "cyan",
+}: {
+  icon: keyof typeof MODULE_ICONS | (string & {});
+  accent?: string;
+}) {
+  const accentColor: Record<string, string> = {
+    cyan: "border-cyan-500/25 bg-cyan-500/10 text-cyan-300",
+    violet: "border-violet-500/25 bg-violet-500/10 text-violet-300",
+    amber: "border-amber-500/25 bg-amber-500/10 text-amber-300",
+    emerald: "border-emerald-500/25 bg-emerald-500/10 text-emerald-300",
+    rose: "border-rose-500/25 bg-rose-500/10 text-rose-300",
+  };
+  const cls = accentColor[accent] ?? accentColor.cyan;
+  return (
+    <div className={`inline-flex items-center justify-center rounded-lg border p-1.5 ${cls}`}>
+      {MODULE_ICONS[icon] ?? MODULE_ICONS.market}
+    </div>
+  );
+}
+
 export function EmptyState({
   title,
   description,
@@ -175,6 +272,7 @@ const ACCENT_MAP: Record<string, { border: string; gradient: string }> = {
 
 export function ModuleCard({
   accent = "cyan",
+  icon,
   title,
   subtitle,
   right,
@@ -182,6 +280,7 @@ export function ModuleCard({
   className = "",
 }: {
   accent?: "cyan" | "violet" | "amber" | "emerald" | "rose";
+  icon?: React.ReactNode;
   title?: string;
   subtitle?: string;
   right?: React.ReactNode;
@@ -189,19 +288,23 @@ export function ModuleCard({
   className?: string;
 }) {
   const a = ACCENT_MAP[accent] ?? ACCENT_MAP.cyan;
+  const hasHeader = !!(title || subtitle || right || icon);
   return (
-    <div className={`module-card scanline rounded-2xl border ${a.border} bg-surface overflow-hidden ${className}`}>
+    <div className={`module-card scanline rounded-2xl border ${a.border} bg-surface shadow-[0_2px_16px_rgba(0,0,0,0.25)] overflow-hidden ${className}`}>
       <div className={`h-px w-full bg-gradient-to-r ${a.gradient} to-transparent`} />
-      {(title || subtitle || right) && (
-        <div className="flex items-start justify-between gap-4 px-6 pt-5 pb-3">
-          <div>
-            {title && <div className="text-lg font-semibold tracking-tight">{title}</div>}
-            {subtitle && <div className="mt-0.5 text-sm text-muted">{subtitle}</div>}
+      {hasHeader && (
+        <div className="module-header flex items-start justify-between gap-4 px-6 pt-5 pb-3">
+          <div className="flex items-start gap-3">
+            {icon && <div className="shrink-0 mt-0.5">{icon}</div>}
+            <div>
+              {title && <div className="text-[15px] font-semibold tracking-tight text-fg">{title}</div>}
+              {subtitle && <div className="mt-0.5 text-[13px] text-muted2">{subtitle}</div>}
+            </div>
           </div>
-          {right && <div className="shrink-0 pt-1">{right}</div>}
+          {right && <div className="shrink-0 pt-0.5">{right}</div>}
         </div>
       )}
-      <div className={title || subtitle || right ? "px-6 pb-6" : "p-6"}>{children}</div>
+      <div className={hasHeader ? "px-6 pb-6" : "p-6"}>{children}</div>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { Button, Chip, Container, EmptyState, LiveDot, ModuleCard, SectionHeading } from "@/components/ui";
+import { Button, Chip, Container, EmptyState, LiveDot, ModuleCard, ModuleIconBadge, SectionHeading, StatusStrip, UpdatedAgo } from "@/components/ui";
 import { Sparkline } from "@/components/Sparkline";
 import { SimLabLive } from "@/components/SimLabLive";
 import { Divider, Metric } from "@/components/dashboard";
@@ -78,12 +78,18 @@ export default async function Dashboard() {
   const simlab = await safeFetchJSON(`${base}/api/v1/simlab/overview?days=30`);
   const simTrades = await safeFetchJSON(`${base}/api/v1/simlab/trades/live?limit=30`);
 
+  const renderTs = new Date().toISOString();
+
   const fgValue = fearGreed?.current?.value ?? null;
   const fgLabel = fearGreed?.current?.label ?? "—";
   const fgUpdated = fearGreed?.source_ts ?? fearGreed?.ts ?? null;
   const fgHist: Array<{ t: string; v: number }> = Array.isArray(fearGreed?.history) ? fearGreed.history : [];
   const fgVals = fgHist.map((p: { t: string; v: number }) => Number(p.v)).filter((n: number) => Number.isFinite(n));
   const fgPath = sparklinePath(fgVals);
+
+  // Compute latest source_ts across all modules for the status strip
+  const allTs = [marketTs, fgUpdated, supercard?.ts, regime?.ts, paper?.ts, simlab?.ts].filter(Boolean) as string[];
+  const maxSourceTs = allTs.length ? allTs.sort().pop()! : null;
 
   return (
     <main className="min-h-screen">
@@ -100,17 +106,7 @@ export default async function Dashboard() {
           </div>
         </header>
 
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <Chip>API-backed • Bot-native widgets • Refreshes every ~3–6 min</Chip>
-          <div className="flex flex-wrap gap-3 text-sm">
-            <div className="rounded-xl border border-border bg-surface px-4 py-2 text-muted">
-              Symbol: <span className="text-fg font-semibold">BTC</span>
-            </div>
-            <div className="rounded-xl border border-border bg-surface px-4 py-2 text-muted">
-              Window: <span className="text-fg font-semibold">24h</span>
-            </div>
-          </div>
-        </div>
+        <StatusStrip ts={maxSourceTs} />
 
         <Divider />
 
@@ -123,9 +119,10 @@ export default async function Dashboard() {
         <section className="mt-6 grid gap-4 lg:grid-cols-3">
           <ModuleCard
             accent="cyan"
+            icon={<ModuleIconBadge icon="market" accent="cyan" />}
             title="Market Tiles"
             subtitle="Price, funding, OI, liquidations"
-            right={<LiveDot ts={marketTs} />}
+            right={<div className="flex flex-col items-end gap-1"><LiveDot ts={marketTs} /><UpdatedAgo ts={marketTs} renderTs={renderTs} /></div>}
             className="lg:col-span-2"
           >
             <div className="grid gap-3 sm:grid-cols-2">
@@ -137,9 +134,10 @@ export default async function Dashboard() {
 
           <ModuleCard
             accent="cyan"
+            icon={<ModuleIconBadge icon="market" accent="cyan" />}
             title="BTC Snapshot"
             subtitle="Standardized bot-parity card"
-            right={<LiveDot ts={marketTs} />}
+            right={<div className="flex flex-col items-end gap-1"><LiveDot ts={marketTs} /><UpdatedAgo ts={marketTs} renderTs={renderTs} /></div>}
           >
             <div className="grid gap-3 sm:grid-cols-2">
               {Object.entries(btcCard).map(([k, v]) => (
@@ -155,9 +153,10 @@ export default async function Dashboard() {
         <section className="mt-4 grid gap-4 lg:grid-cols-3">
           <ModuleCard
             accent="amber"
+            icon={<ModuleIconBadge icon="sentiment" accent="amber" />}
             title="Fear & Greed"
             subtitle="Behavioral context (Alternative.me)"
-            right={<LiveDot ts={fgUpdated} />}
+            right={<div className="flex flex-col items-end gap-1"><LiveDot ts={fgUpdated} /><UpdatedAgo ts={fgUpdated} renderTs={renderTs} /></div>}
           >
             <div className="flex items-end justify-between">
               <div>
@@ -200,9 +199,10 @@ export default async function Dashboard() {
           {/* BTC SuperCard (Pillars) */}
           <ModuleCard
             accent="violet"
+            icon={<ModuleIconBadge icon="supercard" accent="violet" />}
             title={supercard?.summary?.headline ?? "BTC SuperCard"}
-            subtitle={`stance: ${supercard?.summary?.stance ?? "—"} · confidence: ${supercard?.summary?.confidence ?? "—"}`}
-            right={<LiveDot ts={supercard?.ts} />}
+            subtitle={`stance: ${supercard?.summary?.stance ?? "\u2014"} \u00b7 confidence: ${supercard?.summary?.confidence ?? "\u2014"}`}
+            right={<div className="flex flex-col items-end gap-1"><LiveDot ts={supercard?.ts} /><UpdatedAgo ts={supercard?.ts} renderTs={renderTs} /></div>}
           >
             <div className="space-y-2">
               {(supercard?.pillars ?? []).map((p: { key: string; label: string; value: string; status: string; hint: string }) => (
@@ -243,8 +243,9 @@ export default async function Dashboard() {
           {/* Market Regime */}
           <ModuleCard
             accent="emerald"
+            icon={<ModuleIconBadge icon="regime" accent="emerald" />}
             title="Market Regime"
-            right={<LiveDot ts={regime?.ts} />}
+            right={<div className="flex flex-col items-end gap-1"><LiveDot ts={regime?.ts} /><UpdatedAgo ts={regime?.ts} renderTs={renderTs} /></div>}
           >
             <div className="flex flex-col items-center justify-center rounded-xl border border-border/50 bg-surface2/40 py-6">
               <div className="text-3xl font-semibold">{regime?.regime?.label ?? "\u2014"}</div>
@@ -274,9 +275,10 @@ export default async function Dashboard() {
           {/* Paper Trader / Strategy Outcomes */}
           <ModuleCard
             accent="rose"
+            icon={<ModuleIconBadge icon="paper" accent="rose" />}
             title="Paper Trader"
             subtitle="Bot simulation outcomes"
-            right={<LiveDot ts={paper?.ts} />}
+            right={<div className="flex flex-col items-end gap-1"><LiveDot ts={paper?.ts} /><UpdatedAgo ts={paper?.ts} renderTs={renderTs} /></div>}
           >
             <div className="grid grid-cols-2 gap-2">
               <div className="tile rounded-xl border border-border/50 bg-surface2/40 p-3 text-center">
