@@ -323,7 +323,7 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
     return (
       <div className="flex flex-col items-end gap-1">
         <LiveDot ts={ts} />
-        {ts && <span className="text-[10px] font-mono text-muted2">{agoLabel(ts, now)}</span>}
+        {ts && <span className="text-[9px] font-mono text-muted2/70">{agoLabel(ts, now)}</span>}
       </div>
     );
   }
@@ -340,11 +340,13 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
       <Divider />
 
       {/* ---- MARKET DATA ---- */}
-      <SectionHeading
-        eyebrow="MARKET DATA"
-        title="Live market intelligence"
-        desc="Sourced from EdgeCore snapshots via the EventEdge API. Auto-refreshes every 15–30 s."
-      />
+      <div className="mt-2">
+        <SectionHeading
+          eyebrow="MARKET DATA"
+          title="Live market intelligence"
+          desc="Sourced from EdgeCore snapshots via the EventEdge API. Auto-refreshes every 15–30 s."
+        />
+      </div>
 
       {/* Top row: Market Tiles + BTC Snapshot — equal heights */}
       <section className="equal-grid mt-6 grid w-full gap-4 grid-cols-1 lg:grid-cols-3 items-stretch">
@@ -442,11 +444,13 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
       <Divider />
 
       {/* ---- EDGEBLOCKS EXCLUSIVES ---- */}
-      <SectionHeading
-        eyebrow="EDGEBLOCKS EXCLUSIVES"
-        title="Proprietary intelligence widgets"
-        desc="EdgeBlocks-native views powered by EdgeCore analysis pipelines."
-      />
+      <div className="mt-2">
+        <SectionHeading
+          eyebrow="EDGEBLOCKS EXCLUSIVES"
+          title="Proprietary intelligence widgets"
+          desc="EdgeBlocks-native views powered by EdgeCore analysis pipelines."
+        />
+      </div>
 
       {/* Intelligence widgets row: SuperCard / Regime / Paper — equal heights */}
       <section className="equal-grid mt-6 grid w-full gap-4 grid-cols-1 lg:grid-cols-3 items-stretch">
@@ -458,15 +462,15 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
             title={sc?.summary?.headline ?? "BTC SuperCard"}
             subtitle={`stance: ${sc?.summary?.stance ?? "\u2014"} \u00b7 confidence: ${sc?.summary?.confidence ?? "\u2014"}`}
             right={liveRight(sc?.ts)}
-            className="h-full"
+            className="h-full excl-minh"
           >
             <div className="module-body">
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 {(sc?.pillars ?? []).map(
                   (p: { key: string; label: string; value: string; status: string; hint: string }) => (
                     <div
                       key={p.key}
-                      className="tile pill-row rounded-xl border border-border/50 bg-surface2/40 px-4 py-2"
+                      className="tile pill-row rounded-xl border border-border/50 bg-surface2/40 px-4"
                     >
                       {/* Col 1: label + hint; below lg includes chip inline */}
                       <div className="min-w-0 flex items-center gap-2 lg:block">
@@ -540,7 +544,7 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
             icon={<ModuleIconBadge icon="regime" accent="emerald" />}
             title="Market Regime"
             right={liveRight(reg?.ts)}
-            className="h-full"
+            className="h-full excl-minh"
           >
             <div className="module-body">
               <div className="flex flex-col items-center justify-center rounded-xl border border-border/50 bg-surface2/40 py-6">
@@ -590,7 +594,7 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
             title="Paper Trader"
             subtitle="Bot simulation outcomes"
             right={liveRight(pap?.ts)}
-            className="h-full"
+            className="h-full excl-minh"
           >
             <div className="module-body">
               <div className="grid grid-cols-2 gap-2">
@@ -641,11 +645,13 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
       <Divider />
 
       {/* ---- SIMLAB ---- */}
-      <SectionHeading
-        eyebrow="SIMLAB"
-        title="SimLab Live Trading"
-        desc="Admin paper-trading agent feed: 30D curve + KPIs + live trades across the SimLab accounts."
-      />
+      <div className="mt-2">
+        <SectionHeading
+          eyebrow="SIMLAB"
+          title="SimLab Live Trading"
+          desc="Admin paper-trading agent feed: 30D curve + KPIs + live trades across the SimLab accounts."
+        />
+      </div>
 
       <section className="mt-6">
         <SimLabLive
@@ -658,11 +664,13 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
       <Divider />
 
       {/* ---- ALERTS MODULE ---- */}
-      <SectionHeading
-        eyebrow="ALERTS"
-        title="Live Alerts"
-        desc="Regime changes, sentiment shifts, and state tape from the EventEdge API. Refreshes every 5 s."
-      />
+      <div className="mt-2">
+        <SectionHeading
+          eyebrow="ALERTS"
+          title="Live Alerts"
+          desc="Regime changes, sentiment shifts, and state tape from the EventEdge API. Refreshes every 5 s."
+        />
+      </div>
 
       <section className="mt-6">
         <div ref={alertRef}>

@@ -96,13 +96,27 @@ body::after {
 .pill-row {
   display: grid;
   gap: 4px;
+  padding-top: 6px;
+  padding-bottom: 6px;
 }
 @media (min-width: 1024px) {
   .pill-row {
-    grid-template-columns: minmax(10rem, 1fr) auto auto;
+    grid-template-columns: minmax(12rem, 1fr) auto auto;
     align-items: center;
     gap: 12px;
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
+  /* Subtle separator between label and chip/value */
+  .pill-row > :first-child {
+    border-right: 1px solid rgba(255,255,255,0.05);
+    padding-right: 12px;
+  }
+}
+
+/* Exclusives row: balanced min-height on lg+ */
+@media (min-width: 1024px) {
+  .excl-minh { min-height: 420px; }
 }
 
 /* Dark glass card — reusable for Home/Roadmap sections */
