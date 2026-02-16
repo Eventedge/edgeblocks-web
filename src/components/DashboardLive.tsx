@@ -466,13 +466,13 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
                   (p: { key: string; label: string; value: string; status: string; hint: string }) => (
                     <div
                       key={p.key}
-                      className="tile pill-row rounded-xl border border-border/50 bg-surface2/40 px-4 py-2 no-overlap"
+                      className="tile pill-row rounded-xl border border-border/50 bg-surface2/40 px-4 py-2"
                     >
-                      {/* Col 1: label + hint (truncates); on mobile includes chip inline */}
+                      {/* Col 1: label + hint; on mobile includes chip inline */}
                       <div className="min-w-0 flex items-center gap-2 md:block">
                         <div className="min-w-0">
-                          <div className="text-sm text-muted truncate">{p.label}</div>
-                          <div className="hidden md:block mt-0.5 text-xs text-muted2 truncate">{p.hint}</div>
+                          <div className="text-sm text-muted truncate leading-tight">{p.label}</div>
+                          <div className="hidden md:block mt-0.5 text-xs text-muted2 clamp-2 leading-tight">{p.hint}</div>
                         </div>
                         {/* Mobile-only chip */}
                         <span
@@ -499,8 +499,8 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
                       >
                         {p.status ?? "neutral"}
                       </span>
-                      {/* Col 3: value — never wraps, ellipsis if extreme */}
-                      <span className="justify-self-end shrink-0 text-sm font-mono tabular-nums text-fg nowrap-tight">
+                      {/* Col 3: value */}
+                      <span className="justify-self-end whitespace-nowrap text-sm font-mono tabular-nums text-fg">
                         {p.value ?? "\u2014"}
                       </span>
                     </div>
