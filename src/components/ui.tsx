@@ -122,6 +122,49 @@ export function LiveDot({ label = "LIVE", ts }: { label?: string; ts?: string | 
   );
 }
 
+export function EmptyState({
+  title,
+  description,
+  ctaHref,
+  ctaLabel,
+}: {
+  title: string;
+  description: string;
+  ctaHref?: string;
+  ctaLabel?: string;
+}) {
+  return (
+    <div className="empty-shimmer relative rounded-2xl border border-dashed border-border2/60 bg-surface/40 backdrop-blur p-8 text-center overflow-hidden">
+      <div className="relative z-10">
+        <svg
+          className="mx-auto mb-3 text-muted2/60"
+          width="32"
+          height="32"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <rect x="3" y="3" width="18" height="18" rx="4" />
+          <path d="M9 12h6M12 9v6" />
+        </svg>
+        <div className="text-sm font-semibold text-muted">{title}</div>
+        <div className="mt-1 text-xs text-muted2 max-w-xs mx-auto leading-relaxed">{description}</div>
+        {ctaHref && ctaLabel && (
+          <a
+            href={ctaHref}
+            className="mt-3 inline-flex items-center gap-1 text-xs font-mono text-muted hover:text-fg transition"
+          >
+            {ctaLabel} &rarr;
+          </a>
+        )}
+      </div>
+    </div>
+  );
+}
+
 const ACCENT_MAP: Record<string, { border: string; gradient: string }> = {
   cyan: { border: "border-cyan-500/20", gradient: "from-cyan-400/15 via-transparent" },
   violet: { border: "border-violet-500/20", gradient: "from-violet-400/15 via-transparent" },

@@ -131,3 +131,23 @@ body::after{
   100% { box-shadow: 0 0 0 rgba(255,255,255,0); }
 }
 .kpi-flash { animation: kpiFlash 520ms ease-out; }
+
+@keyframes emptyShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+.empty-shimmer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255,255,255,0.03) 45%,
+    rgba(255,255,255,0.06) 50%,
+    rgba(255,255,255,0.03) 55%,
+    transparent 70%
+  );
+  animation: emptyShimmer 4s ease-in-out infinite;
+}

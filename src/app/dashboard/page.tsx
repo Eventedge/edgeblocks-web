@@ -1,7 +1,7 @@
-import { Button, Chip, Container, LiveDot, ModuleCard, SectionHeading } from "@/components/ui";
+import { Button, Chip, Container, EmptyState, LiveDot, ModuleCard, SectionHeading } from "@/components/ui";
 import { Sparkline } from "@/components/Sparkline";
 import { SimLabLive } from "@/components/SimLabLive";
-import { ChartPlaceholder, Divider, Metric, Table } from "@/components/dashboard";
+import { Divider, Metric } from "@/components/dashboard";
 
 export const dynamic = "force-dynamic";
 
@@ -180,10 +180,12 @@ export default async function Dashboard() {
             </div>
           </ModuleCard>
 
-          <ChartPlaceholder
-            title="Funding / OI / Liq (placeholder)"
-            note="Next: render small sparklines or lightweight SVG charts (no heavy chart libs)."
-          />
+          <ModuleCard accent="cyan" className="lg:col-span-2">
+            <EmptyState
+              title="Funding / OI / Liq Charts"
+              description="Lightweight SVG sparklines for derivatives data. Wiring to EdgeCore snapshot endpoints."
+            />
+          </ModuleCard>
         </section>
 
         <Divider />
@@ -336,33 +338,15 @@ export default async function Dashboard() {
 
         <Divider />
 
-        <SectionHeading
-          eyebrow="TABLES"
-          title="Ranked lists & feeds"
-          desc="Dense tables backed by cached EdgeCore snapshot endpoints. Sortable columns coming soon."
-        />
-
-        <section className="mt-6 grid gap-4 lg:grid-cols-2 pb-14">
-          <Table
-            title="Top movers (placeholder)"
-            columns={["Asset", "24h %", "Vol", "Signal"]}
-            rows={[
-              ["BTC", "—", "—", "—"],
-              ["ETH", "—", "—", "—"],
-              ["SOL", "—", "—", "—"],
-              ["BASE", "—", "—", "—"],
-            ]}
+        <div className="mb-4 text-xs font-mono text-muted2 tracking-widest">COMING SOON</div>
+        <section className="grid gap-4 lg:grid-cols-2 pb-14">
+          <EmptyState
+            title="Top Movers"
+            description="Ranked asset table with 24h change, volume, and signal strength. Coming when multi-asset snapshots land."
           />
-
-          <Table
-            title="Latest alerts feed (placeholder)"
-            columns={["Time", "Type", "Asset", "Message"]}
-            rows={[
-              ["—", "BTC_CARD", "BTC", "Snapshot updated"],
-              ["—", "FEAR_GREED", "MKT", "Index refreshed"],
-              ["—", "DERIV", "BTC", "Funding/OI refresh"],
-              ["—", "LIQ", "BTC", "Liq totals refresh"],
-            ]}
+          <EmptyState
+            title="Alert Feed"
+            description="Live stream of EdgeCore snapshot events — price updates, funding shifts, liquidation spikes."
           />
         </section>
 
