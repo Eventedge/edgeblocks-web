@@ -65,10 +65,28 @@ export function AlertTicker() {
     return items.map((it) => {
       const badge = it.badge || (it.type === "SENTIMENT_SHIFT" ? "\ud83e\udded" : "\ud83d\udcca");
       const asset = it.asset || "\u2014";
-      const msg =
-        it.type === "SENTIMENT_SHIFT"
-          ? `${asset} sentiment: ${it.from ?? "\u2014"} \u2192 ${it.to ?? "\u2014"}${typeof it.score === "number" ? ` (${it.score})` : ""}`
-          : `${asset} regime: ${it.from ?? "\u2014"} \u2192 ${it.to ?? "\u2014"}${it.confidence ? ` (${String(it.confidence).toUpperCase()})` : ""}`;
+      const T = String(it.type || "").toUpperCase();
+      const conf = it.confidence ? String(it.confidence).toUpperCase() : "";
+      const score = typeof it.score === "number" ? String(it.score) : "";
+
+      let msg = "";
+      if (T === "STATE") {
+        // Compact bot-style: "BTC REGIME: Chop (HIGH)" / "ETH SENTIMENT: EXTREME_FEAR (12)"
+        const hl = String(it.headline || "").toUpperCase();
+        if (hl.includes("REGIME")) {
+          msg = `${asset} REGIME: ${it.to ?? "\u2014"}${conf ? ` (${conf})` : ""}`;
+        } else if (hl.includes("SENTIMENT")) {
+          msg = `${asset} SENTIMENT: ${it.to ?? "\u2014"}${score ? ` (${score})` : ""}`;
+        } else {
+          msg = `${asset}: ${it.message || it.to || "\u2014"}`;
+        }
+      } else if (T === "SENTIMENT_SHIFT") {
+        msg = `${asset} SENTIMENT: ${it.from ?? "\u2014"} \u2192 ${it.to ?? "\u2014"}${score ? ` (${score})` : ""}`;
+      } else if (T === "REGIME_CHANGE") {
+        msg = `${asset} REGIME: ${it.from ?? "\u2014"} \u2192 ${it.to ?? "\u2014"}${conf ? ` (${conf})` : ""}`;
+      } else {
+        msg = `${asset}: ${it.message ?? it.headline ?? "update"}`;
+      }
       return { badge, msg };
     });
   }, [items]);
