@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
+import { proxyJSON } from "@/lib/eventedge";
 
 export async function GET() {
-  // Placeholder snapshot. Later: proxy/merge from EventEdge/EdgeCore snapshot tables.
-  const data = {
+  const fallback = {
     ts: new Date().toISOString(),
     kpis: [
       { key: "btc_price", label: "BTC Price", value: "$—", sub: "wire EventEdge price feed" },
@@ -11,8 +11,10 @@ export async function GET() {
       { key: "liq_24h", label: "Liquidations (24h)", value: "—", sub: "long/short breakdown" },
     ],
   };
-
-  return NextResponse.json(data, {
-    headers: { "Cache-Control": "public, s-maxage=30, stale-while-revalidate=300" },
+  const { json, headers } = await proxyJSON({
+    path: "/api/v1/market/overview",
+    fallback,
+    cacheControl: "public, s-maxage=30, stale-while-revalidate=600",
   });
+  return NextResponse.json(json, { headers });
 }

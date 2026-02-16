@@ -1,16 +1,13 @@
 import { NextResponse } from "next/server";
+import { proxyJSON } from "@/lib/eventedge";
 
-export async function GET(
-  _req: Request,
-  { params }: { params: Promise<{ symbol: string }> }
-) {
-  const { symbol: rawSymbol } = await params;
-  const symbol = (rawSymbol || "BTC").toUpperCase();
+export async function GET(_req: Request, ctx: { params: Promise<{ symbol: string }> }) {
+  const { symbol } = await ctx.params;
+  const sym = (symbol || "BTC").toUpperCase();
 
-  // Placeholder. Later: hydrate from EventEdge "BTC card" snapshot + derived metrics.
-  const data = {
+  const fallback = {
     ts: new Date().toISOString(),
-    symbol,
+    symbol: sym,
     card: {
       price: "—",
       change_24h: "—",
@@ -22,7 +19,11 @@ export async function GET(
     },
   };
 
-  return NextResponse.json(data, {
-    headers: { "Cache-Control": "public, s-maxage=20, stale-while-revalidate=300" },
+  const { json, headers } = await proxyJSON({
+    path: `/api/v1/assets/${encodeURIComponent(sym)}/card`,
+    fallback,
+    cacheControl: "public, s-maxage=20, stale-while-revalidate=600",
   });
+
+  return NextResponse.json(json, { headers });
 }
