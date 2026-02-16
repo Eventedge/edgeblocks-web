@@ -122,7 +122,7 @@ export function ModuleCard({
 }) {
   const a = ACCENT_MAP[accent] ?? ACCENT_MAP.cyan;
   return (
-    <div className={`rounded-2xl border ${a.border} bg-surface overflow-hidden ${className}`}>
+    <div className={`module-card scanline rounded-2xl border ${a.border} bg-surface overflow-hidden ${className}`}>
       <div className={`h-px w-full bg-gradient-to-r ${a.gradient} to-transparent`} />
       {(title || subtitle || right) && (
         <div className="flex items-start justify-between gap-4 px-6 pt-5 pb-3">

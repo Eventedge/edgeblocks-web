@@ -61,3 +61,49 @@ body::after{
     repeating-linear-gradient(0deg, rgba(255,255,255,0.015), rgba(255,255,255,0.015) 1px, transparent 1px, transparent 7px);
   opacity: 0.18;
 }
+
+/* Interactive polish */
+.module-card {
+  position: relative;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+.module-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 16px;
+  opacity: 0;
+  transition: opacity 220ms ease;
+  background: radial-gradient(800px 220px at 30% 10%, rgba(255,255,255,0.06), transparent 60%);
+}
+.module-card:hover {
+  transform: translateY(-2px);
+}
+.module-card:hover::after {
+  opacity: 1;
+}
+
+.tile {
+  transition: transform 180ms ease, border-color 180ms ease, background-color 180ms ease;
+}
+.tile:hover { transform: translateY(-1px); }
+
+/* Subtle animated scanline (very light) */
+@keyframes scan {
+  0% { transform: translateY(-120%); opacity: 0; }
+  20% { opacity: 0.10; }
+  60% { opacity: 0.06; }
+  100% { transform: translateY(220%); opacity: 0; }
+}
+.scanline::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0;
+  top: 0;
+  height: 120px;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.05), transparent);
+  animation: scan 6.5s ease-in-out infinite;
+}

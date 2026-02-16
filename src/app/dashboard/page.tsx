@@ -138,7 +138,7 @@ export default async function Dashboard() {
           >
             <div className="grid gap-3 sm:grid-cols-2">
               {Object.entries(btcCard).map(([k, v]) => (
-                <div key={k} className="rounded-xl border border-border/70 bg-surface2/50 p-3">
+                <div key={k} className="tile rounded-xl border border-border/50 bg-surface2/40 p-3">
                   <div className="text-xs font-mono text-muted">{k}</div>
                   <div className="mt-1 text-base font-semibold">{String(v)}</div>
                 </div>
@@ -160,7 +160,7 @@ export default async function Dashboard() {
                 <div className="text-sm text-muted">{fgLabel}</div>
               </div>
             </div>
-            <div className="mt-4 rounded-xl border border-border/70 bg-surface2/50 p-3">
+            <div className="mt-4 tile rounded-xl border border-border/50 bg-surface2/40 p-3">
               <div className="text-xs font-mono text-muted mb-2">7D HISTORY</div>
               {fgPath ? (
                 <svg width="100%" height="44" viewBox="0 0 220 44" preserveAspectRatio="none" role="img" aria-label="Fear and Greed 7-day sparkline">
@@ -199,7 +199,7 @@ export default async function Dashboard() {
           >
             <div className="space-y-2">
               {(supercard?.pillars ?? []).map((p: { key: string; label: string; value: string; status: string; hint: string }) => (
-                <div key={p.key} className="flex items-center justify-between gap-2 rounded-xl border border-border/70 bg-surface2/50 px-4 py-2">
+                <div key={p.key} className="tile flex items-center justify-between gap-2 rounded-xl border border-border/50 bg-surface2/40 px-4 py-2">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
                       <span className="text-sm text-muted">{p.label}</span>
@@ -215,7 +215,7 @@ export default async function Dashboard() {
                 </div>
               ))}
               {(!supercard?.pillars || supercard.pillars.length === 0) && (
-                <div className="rounded-xl border border-border/70 bg-surface2/50 px-4 py-3 text-sm text-muted">
+                <div className="rounded-xl border border-border/50 bg-surface2/40 px-4 py-3 text-sm text-muted">
                   SuperCard endpoint not available
                 </div>
               )}
@@ -239,13 +239,13 @@ export default async function Dashboard() {
             title="Market Regime"
             right={<LiveDot ts={regime?.ts} />}
           >
-            <div className="flex flex-col items-center justify-center rounded-xl border border-border/70 bg-surface2/50 py-6">
+            <div className="flex flex-col items-center justify-center rounded-xl border border-border/50 bg-surface2/40 py-6">
               <div className="text-3xl font-semibold">{regime?.regime?.label ?? "\u2014"}</div>
               <div className="mt-2"><Chip>confidence: {regime?.regime?.confidence ?? "\u2014"}</Chip></div>
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2">
               {(regime?.axes ?? []).map((a: { key: string; label: string; value: string }) => (
-                <div key={a.key} className="flex items-center justify-between rounded-xl border border-border/70 bg-surface2/50 px-3 py-2">
+                <div key={a.key} className="tile flex items-center justify-between rounded-xl border border-border/50 bg-surface2/40 px-3 py-2">
                   <span className="text-xs text-muted">{a.label}</span>
                   <span className="text-xs font-mono font-semibold text-fg">{a.value ?? "\u2014"}</span>
                 </div>
@@ -253,7 +253,7 @@ export default async function Dashboard() {
             </div>
             <div className="mt-3 space-y-1">
               {(regime?.drivers ?? []).filter((d: string) => d && d !== "\u2014").slice(0, 3).map((d: string, i: number) => (
-                <div key={i} className="rounded-xl border border-border/70 bg-surface2/50 px-3 py-2 text-xs text-fg">
+                <div key={i} className="tile rounded-xl border border-border/50 bg-surface2/40 px-3 py-2 text-xs text-fg">
                   {d}
                 </div>
               ))}
@@ -272,28 +272,28 @@ export default async function Dashboard() {
             right={<LiveDot ts={paper?.ts} />}
           >
             <div className="grid grid-cols-2 gap-2">
-              <div className="rounded-xl border border-border/70 bg-surface2/50 p-3 text-center">
+              <div className="tile rounded-xl border border-border/50 bg-surface2/40 p-3 text-center">
                 <div className="text-xs font-mono text-muted">Win rate</div>
                 <div className="mt-1 text-base font-semibold text-fg">{paper?.kpis?.win_rate ?? "\u2014"}</div>
               </div>
-              <div className="rounded-xl border border-border/70 bg-surface2/50 p-3 text-center">
+              <div className="tile rounded-xl border border-border/50 bg-surface2/40 p-3 text-center">
                 <div className="text-xs font-mono text-muted">Active positions</div>
                 <div className="mt-1 text-base font-semibold text-fg">{paper?.kpis?.active_positions ?? "\u2014"}</div>
               </div>
               {paper?.kpis?.equity_30d && paper.kpis.equity_30d !== "\u2014" && (
-                <div className="rounded-xl border border-border/70 bg-surface2/50 p-3 text-center">
+                <div className="tile rounded-xl border border-border/50 bg-surface2/40 p-3 text-center">
                   <div className="text-xs font-mono text-muted">Equity (30d)</div>
                   <div className="mt-1 text-base font-semibold text-fg">{paper.kpis.equity_30d}</div>
                 </div>
               )}
               {paper?.kpis?.max_drawdown && paper.kpis.max_drawdown !== "\u2014" && (
-                <div className="rounded-xl border border-border/70 bg-surface2/50 p-3 text-center">
+                <div className="tile rounded-xl border border-border/50 bg-surface2/40 p-3 text-center">
                   <div className="text-xs font-mono text-muted">Max drawdown</div>
                   <div className="mt-1 text-base font-semibold text-fg">{paper.kpis.max_drawdown}</div>
                 </div>
               )}
             </div>
-            <div className="mt-3 rounded-xl border border-border/70 bg-surface2/50 p-4">
+            <div className="mt-3 tile rounded-xl border border-border/50 bg-surface2/40 p-4">
               <div className="text-xs font-mono text-muted">Accounts</div>
               <div className="mt-2 flex gap-3 text-sm">
                 <Chip>active: {paper?.accounts?.active ?? 0}</Chip>
