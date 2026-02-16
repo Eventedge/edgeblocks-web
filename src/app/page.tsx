@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button, Card, Chip, Container, SectionHeading } from "@/components/ui";
 import { Divider, Metric } from "@/components/dashboard";
 
@@ -39,8 +40,8 @@ export default async function Home() {
           <nav className="hidden md:flex items-center gap-6 text-sm text-muted">
             <a className="hover:text-fg" href="#platform">Platform</a>
             <a className="hover:text-fg" href="/eventedge">EventEdge</a>
+            <a className="hover:text-fg" href="/roadmap">Roadmap</a>
             <a className="hover:text-fg" href="/proofclaw">ProofClaw</a>
-            <a className="hover:text-fg" href="/datasnype">Track record</a>
             <a className="hover:text-fg" href="/dashboard">Dashboard</a>
           </nav>
 
@@ -224,12 +225,166 @@ export default async function Home() {
           </div>
         </section>
 
+        <Divider />
+
+        {/* How it works */}
+        <section className="py-8">
+          <SectionHeading
+            eyebrow="HOW IT WORKS"
+            title="Three steps from noise to signal"
+            desc="EdgeBlocks runs a continuous pipeline that turns raw market data into scored, explainable intelligence."
+          />
+
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {[
+              {
+                num: "01",
+                title: "Collect",
+                desc: "30+ data feeds ingested every 3 minutes\u2014price, funding, OI, on-chain, sentiment, prediction markets.",
+              },
+              {
+                num: "02",
+                title: "Score",
+                desc: "Multi-source confluence scoring. Signals only fire when multiple inputs agree. Every output carries a confidence tag.",
+              },
+              {
+                num: "03",
+                title: "Deliver",
+                desc: "Alerts, dashboards, and API endpoints. Same data schema across Telegram, web, and programmatic access.",
+              },
+            ].map((step) => (
+              <div
+                key={step.num}
+                className="rounded-xl border border-border bg-surface/80 p-5"
+              >
+                <div className="text-2xl font-mono font-semibold text-accentCyan/60">
+                  {step.num}
+                </div>
+                <div className="mt-2 text-sm font-semibold text-fg">
+                  {step.title}
+                </div>
+                <div className="mt-2 text-sm text-muted leading-relaxed">
+                  {step.desc}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <Divider />
+
+        {/* Why EdgeBlocks */}
+        <section className="py-8">
+          <SectionHeading
+            eyebrow="WHY EDGEBLOCKS"
+            title="What makes this different"
+            desc="Most tools show data. We interpret it."
+          />
+
+          <div className="mt-6 grid gap-3 md:grid-cols-3">
+            {[
+              {
+                title: "Confluence, not indicators",
+                desc: "Signals require multi-source agreement. A regime change only fires when funding, OI, momentum, and sentiment align.",
+              },
+              {
+                title: "Confidence-tagged outputs",
+                desc: "Every alert carries LOW / MEDIUM / HIGH confidence so you can filter by conviction instead of guessing.",
+              },
+              {
+                title: "Built on real operations",
+                desc: "Years of production on-chain ops (DataSnype) \u2192 a modular platform. Not a demo\u2014a working system.",
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="rounded-xl border border-border bg-surface/80 p-5"
+              >
+                <div className="text-sm font-semibold text-fg">
+                  {item.title}
+                </div>
+                <div className="mt-2 text-sm text-muted leading-relaxed">
+                  {item.desc}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <Divider />
+
+        {/* Roadmap preview */}
+        <section className="py-8">
+          <SectionHeading
+            eyebrow="ROADMAP"
+            title="What&apos;s next"
+            desc="Building incrementally, shipping continuously."
+          />
+
+          <div className="mt-6 grid gap-3 md:grid-cols-3">
+            {[
+              {
+                quarter: "Q2 2026",
+                title: "Intelligence + Builder Tools",
+                highlights: "EdgeMind scoring, multi-asset SuperCards, agent SDK",
+                status: "building" as const,
+              },
+              {
+                quarter: "Q3 2026",
+                title: "Marketplace + Expansion",
+                highlights: "EdgeDesk, strategy marketplace, on-chain analytics",
+                status: "planned" as const,
+              },
+              {
+                quarter: "Q4 2026",
+                title: "North Star",
+                highlights: "EDGE token, autonomous agents, cross-chain",
+                status: "planned" as const,
+              },
+            ].map((m) => (
+              <div
+                key={m.quarter}
+                className="rounded-xl border border-border bg-surface/80 p-5"
+              >
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`h-1.5 w-1.5 rounded-full ${
+                      m.status === "building"
+                        ? "bg-amber-400 shadow-[0_0_6px_rgba(251,191,36,0.4)]"
+                        : "bg-muted2"
+                    }`}
+                  />
+                  <span className="text-xs font-mono text-muted">
+                    {m.quarter}
+                  </span>
+                </div>
+                <div className="mt-2 text-sm font-semibold text-fg">
+                  {m.title}
+                </div>
+                <div className="mt-1 text-sm text-muted leading-relaxed">
+                  {m.highlights}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-4">
+            <Link
+              href="/roadmap"
+              className="text-sm font-mono text-muted hover:text-fg transition"
+            >
+              View full roadmap &rarr;
+            </Link>
+          </div>
+        </section>
+
         {/* Footer */}
         <footer className="border-t border-border py-10 mt-10 text-sm text-muted2">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>&copy; {new Date().getFullYear()} EdgeBlocks</div>
             <div className="flex flex-wrap gap-4">
               <a className="hover:text-fg" href="/eventedge">EventEdge</a>
+              <a className="hover:text-fg" href="/roadmap">Roadmap</a>
               <a className="hover:text-fg" href="/proofclaw">ProofClaw</a>
               <a className="hover:text-fg" href="/datasnype">DataSnype</a>
               <a className="hover:text-fg" href="https://app.edgeblocks.io">Enter App</a>
