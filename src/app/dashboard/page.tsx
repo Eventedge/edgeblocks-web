@@ -34,17 +34,27 @@ const FALLBACK_CARD = {
   funding: "—", open_interest: "—", liquidations_24h: "—",
 };
 
-const FALLBACK_FG = {
-  ts: "—", current: { value: 50, label: "Neutral" }, history: [],
-};
+function sparklinePath(values: number[], w = 220, h = 44, pad = 4): string {
+  if (!values || values.length < 2) return "";
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const span = max - min || 1;
+  const innerW = w - pad * 2;
+  const innerH = h - pad * 2;
+  return values
+    .map((v, i) => {
+      const x = pad + (innerW * i) / (values.length - 1);
+      const y = pad + innerH - ((v - min) / span) * innerH;
+      return `${i === 0 ? "M" : "L"} ${x.toFixed(2)} ${y.toFixed(2)}`;
+    })
+    .join(" ");
+}
 
 export default async function Dashboard() {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://edgeblocks.io";
 
   let kpis = FALLBACK_KPIS;
   let btcCard = FALLBACK_CARD;
-  let fg = FALLBACK_FG;
-
   try {
     const overview = await getJSON<{ ts: string; kpis: KPI[] }>(`${base}/api/v1/market/overview`);
     kpis = overview.kpis || FALLBACK_KPIS;
@@ -55,14 +65,17 @@ export default async function Dashboard() {
     btcCard = btc.card || FALLBACK_CARD;
   } catch { /* use fallback */ }
 
-  try {
-    const fgRes = await getJSON<typeof FALLBACK_FG>(`${base}/api/v1/sentiment/fear-greed`);
-    fg = fgRes;
-  } catch { /* use fallback */ }
-
+  const fearGreed = await safeFetchJSON(`${base}/api/v1/sentiment/fear-greed`);
   const supercard = await safeFetchJSON(`${base}/api/v1/edge/supercard?symbol=BTC`);
   const regime = await safeFetchJSON(`${base}/api/v1/edge/regime`);
   const paper = await safeFetchJSON(`${base}/api/v1/paper/summary`);
+
+  const fgValue = fearGreed?.current?.value ?? null;
+  const fgLabel = fearGreed?.current?.label ?? "—";
+  const fgUpdated = fearGreed?.source_ts ?? fearGreed?.ts ?? null;
+  const fgHist: Array<{ t: string; v: number }> = Array.isArray(fearGreed?.history) ? fearGreed.history : [];
+  const fgVals = fgHist.map((p: { t: string; v: number }) => Number(p.v)).filter((n: number) => Number.isFinite(n));
+  const fgPath = sparklinePath(fgVals);
 
   return (
     <main className="min-h-screen">
@@ -140,14 +153,25 @@ export default async function Dashboard() {
               <div className="mt-1 text-lg font-semibold">Fear & Greed</div>
               <div className="mt-3 flex items-end justify-between">
                 <div>
-                  <div className="text-3xl font-semibold">{fg.current?.value ?? "—"}</div>
-                  <div className="text-sm text-muted">{fg.current?.label ?? "—"}</div>
+                  <div className="text-3xl font-semibold">{fgValue ?? "—"}</div>
+                  <div className="text-sm text-muted">{fgLabel}</div>
                 </div>
-                <div className="text-xs text-muted2 font-mono">ts: {typeof fg.ts === "string" ? fg.ts.slice(0, 19) : "—"}</div>
+                <div className="text-xs text-muted2 font-mono">
+                  {fgUpdated ? String(fgUpdated).slice(0, 10) : "—"}
+                </div>
               </div>
-              <div className="mt-4 h-10 rounded-xl border border-border/70 bg-surface2/60" />
-              <div className="mt-3 text-xs text-muted2 font-mono">
-                * Placeholder sparkline area. Later: mini SVG from history.
+              <div className="mt-4 rounded-xl border border-border/70 bg-surface2/50 p-3">
+                <div className="text-xs font-mono text-muted mb-2">7D HISTORY</div>
+                {fgPath ? (
+                  <svg width="100%" height="44" viewBox="0 0 220 44" preserveAspectRatio="none" role="img" aria-label="Fear and Greed 7-day sparkline">
+                    <path d={fgPath} fill="none" stroke="currentColor" strokeWidth="2" opacity="0.8" />
+                  </svg>
+                ) : (
+                  <div className="h-10 text-sm text-muted flex items-center">No history</div>
+                )}
+                <div className="mt-1 text-xs text-muted2 font-mono">
+                  {fgVals.length >= 2 ? `${fgVals[0]} → ${fgVals[fgVals.length - 1]}` : "—"}
+                </div>
               </div>
             </div>
           </div>
