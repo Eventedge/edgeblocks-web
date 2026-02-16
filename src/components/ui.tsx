@@ -102,8 +102,8 @@ export function SectionHeading({
   return (
     <div className="max-w-3xl">
       <div className="text-xs font-mono text-muted">{eyebrow}</div>
-      <h2 className="mt-2 text-2xl md:text-3xl font-semibold tracking-tight">{title}</h2>
-      <p className="mt-3 text-sm md:text-base text-muted leading-relaxed">{desc}</p>
+      <h2 className="mt-2 text-2xl md:text-3xl font-semibold tracking-tight text-fg">{title}</h2>
+      <p className="mt-3 max-w-2xl text-sm md:text-base text-muted leading-relaxed">{desc}</p>
     </div>
   );
 }

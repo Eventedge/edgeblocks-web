@@ -100,14 +100,14 @@ export default async function Home() {
         </section>
 
         {/* Platform */}
-        <section id="platform" className="py-10">
+        <section id="platform" className="py-8">
           <SectionHeading
             eyebrow="PLATFORM"
             title="A modular stack for crypto intelligence"
             desc="EdgeBlocks is built as a set of composable layers—data → features → intelligence → outputs—so each part can evolve without breaking the rest."
           />
 
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
+          <div className="equal-grid mt-6 grid gap-4 md:grid-cols-3 items-stretch">
             <Card label="DATA ENGINE" title="EdgeCore + EdgeBank">
               Collection, normalization, caching, and a feature store that turns raw feeds into consistent primitives you can reuse everywhere.
             </Card>
@@ -120,39 +120,36 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ProofClaw light mention */}
-        <section className="py-10">
-          <div className="rounded-2xl border border-border bg-surface p-6">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-              <div className="max-w-2xl">
-                <div className="text-xs font-mono text-muted">TRUST LAYER</div>
-                <div className="mt-2 text-xl font-semibold">ProofClaw</div>
-                <div className="mt-2 text-sm text-muted leading-relaxed">
-                  ProofClaw adds verifiable trust to the ecosystem—badges, evidence, and partner-friendly &ldquo;trust artifacts&rdquo;
-                  for agents and outputs that run on EdgeBlocks.
-                </div>
+        {/* ProofClaw + DataSnype — equal heights */}
+        <section className="py-8">
+          <SectionHeading
+            eyebrow="BUILT ON REAL SYSTEMS"
+            title="Proven foundations"
+            desc="ProofClaw secures agent execution. DataSnype is our multi-year on-chain signal foundation. EdgeBlocks merges both into one platform."
+          />
+
+          <div className="equal-grid mt-6 grid gap-4 lg:grid-cols-2 items-stretch">
+            <div className="flex flex-col rounded-2xl border border-border bg-surface p-6">
+              <div className="text-xs font-mono text-muted">TRUST LAYER</div>
+              <div className="mt-2 text-xl font-semibold text-fg">ProofClaw</div>
+              <div className="mt-2 text-sm text-muted leading-relaxed">
+                ProofClaw adds verifiable trust to the ecosystem—badges, evidence, and partner-friendly &ldquo;trust artifacts&rdquo;
+                for agents and outputs that run on EdgeBlocks.
               </div>
-              <div className="flex flex-wrap gap-3">
+              <div className="mt-auto pt-4 flex flex-wrap gap-3">
                 <Button href="/proofclaw" variant="secondary">Learn how it works</Button>
                 <Button href="https://proofclaw.io" variant="proof">Visit ProofClaw</Button>
               </div>
             </div>
-          </div>
-        </section>
 
-        {/* DataSnype light mention */}
-        <section className="pb-14">
-          <div className="rounded-2xl border border-border bg-surface p-6">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-              <div className="max-w-2xl">
-                <div className="text-xs font-mono text-muted">TRACK RECORD</div>
-                <div className="mt-2 text-xl font-semibold">DataSnype (2–3 years)</div>
-                <div className="mt-2 text-sm text-muted leading-relaxed">
-                  We&apos;ve been collecting and operating on-chain data in production for years. EdgeBlocks is the next step:
-                  from pipelines and bots &rarr; to a modular intelligence platform.
-                </div>
+            <div className="flex flex-col rounded-2xl border border-border bg-surface p-6">
+              <div className="text-xs font-mono text-muted">TRACK RECORD</div>
+              <div className="mt-2 text-xl font-semibold text-fg">DataSnype (2–3 years)</div>
+              <div className="mt-2 text-sm text-muted leading-relaxed">
+                We&apos;ve been collecting and operating on-chain data in production for years. EdgeBlocks is the next step:
+                from pipelines and bots &rarr; to a modular intelligence platform.
               </div>
-              <div className="flex flex-wrap gap-3">
+              <div className="mt-auto pt-4 flex flex-wrap gap-3">
                 <Button href="/datasnype" variant="secondary">What we built</Button>
                 <Button href="https://datasnype.io" variant="datasnype">Visit DataSnype</Button>
               </div>
@@ -168,48 +165,48 @@ export default async function Home() {
           desc="EdgeBlocks turns raw market signals into bot-native widgets: pillars, regimes, and supercards, powered by HiveMind rollups and HiveBank features."
         />
 
-        <section className="mt-6 grid gap-4 lg:grid-cols-3">
-          <div className="rounded-2xl border border-border bg-surface p-6">
+        <div className="equal-grid mt-6 grid gap-4 lg:grid-cols-3 items-stretch">
+          <div className="flex flex-col rounded-2xl border border-border bg-surface p-6">
             <div className="text-xs font-mono text-muted">WIDGETS</div>
-            <div className="mt-1 text-lg font-semibold">Bot-native cards</div>
-            <ul className="mt-3 space-y-2 text-sm text-muted">
-              <li>• BTC SuperCard with pillars & flags</li>
-              <li>• Regime cards (risk-on/off, trend, chop)</li>
-              <li>• Actionable summaries (without noise)</li>
+            <div className="mt-1 text-lg font-semibold text-fg">Bot-native cards</div>
+            <ul className="mt-3 space-y-2 text-sm text-muted leading-relaxed">
+              <li>&bull; BTC SuperCard with pillars & flags</li>
+              <li>&bull; Regime cards (risk-on/off, trend, chop)</li>
+              <li>&bull; Actionable summaries (without noise)</li>
             </ul>
           </div>
 
-          <div className="rounded-2xl border border-border bg-surface p-6">
+          <div className="flex flex-col rounded-2xl border border-border bg-surface p-6">
             <div className="text-xs font-mono text-muted">HIVEMIND</div>
-            <div className="mt-1 text-lg font-semibold">Rollups & logic layer</div>
-            <ul className="mt-3 space-y-2 text-sm text-muted">
-              <li>• Multi-source rollups (price, leverage, flow)</li>
-              <li>• Consistent scoring + confidence signals</li>
-              <li>• &ldquo;Interpretation first&rdquo; outputs</li>
+            <div className="mt-1 text-lg font-semibold text-fg">Rollups & logic layer</div>
+            <ul className="mt-3 space-y-2 text-sm text-muted leading-relaxed">
+              <li>&bull; Multi-source rollups (price, leverage, flow)</li>
+              <li>&bull; Consistent scoring + confidence signals</li>
+              <li>&bull; &ldquo;Interpretation first&rdquo; outputs</li>
             </ul>
           </div>
 
-          <div className="rounded-2xl border border-border bg-surface p-6">
+          <div className="flex flex-col rounded-2xl border border-border bg-surface p-6">
             <div className="text-xs font-mono text-muted">HIVEBANK</div>
-            <div className="mt-1 text-lg font-semibold">Feature store</div>
-            <ul className="mt-3 space-y-2 text-sm text-muted">
-              <li>• Versioned features powering widgets</li>
-              <li>• Reproducible snapshots + history</li>
-              <li>• Foundation for EdgeMind models</li>
+            <div className="mt-1 text-lg font-semibold text-fg">Feature store</div>
+            <ul className="mt-3 space-y-2 text-sm text-muted leading-relaxed">
+              <li>&bull; Versioned features powering widgets</li>
+              <li>&bull; Reproducible snapshots + history</li>
+              <li>&bull; Foundation for EdgeMind models</li>
             </ul>
           </div>
-        </section>
+        </div>
 
         <section className="mt-6 rounded-2xl border border-border bg-surface p-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <div className="text-xs font-mono text-muted">LIVE PREVIEW</div>
-              <div className="mt-1 text-lg font-semibold">Real-time snapshots from our stack</div>
-              <div className="mt-2 text-sm text-muted">
+              <div className="mt-1 text-lg font-semibold text-fg">Real-time snapshots from our stack</div>
+              <div className="mt-2 max-w-xl text-sm text-muted leading-relaxed">
                 These values are served by our API and refreshed by EdgeCore shadow jobs every few minutes.
               </div>
             </div>
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3">
               <Button href="/dashboard" variant="primary">Open Dashboard</Button>
               <Button href="https://app.edgeblocks.io" variant="secondary">Enter App</Button>
             </div>
@@ -227,7 +224,7 @@ export default async function Home() {
         </section>
 
         {/* Footer */}
-        <footer className="border-t border-border py-10 mt-14 text-sm text-muted2">
+        <footer className="border-t border-border py-10 mt-10 text-sm text-muted2">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>&copy; {new Date().getFullYear()} EdgeBlocks</div>
             <div className="flex flex-wrap gap-4">
