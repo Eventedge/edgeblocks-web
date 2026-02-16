@@ -53,6 +53,7 @@ export default async function Dashboard() {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>EdgeBlocks Intelligence &bull; Powered by EdgeCore</div>
             <div className="flex gap-4">
+              <a className="hover:text-fg" href="/eventedge">EventEdge</a>
               <a className="hover:text-fg" href="/proofclaw">ProofClaw</a>
               <a className="hover:text-fg" href="/datasnype">DataSnype</a>
             </div>

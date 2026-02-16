@@ -38,6 +38,7 @@ export default async function Home() {
 
           <nav className="hidden md:flex items-center gap-6 text-sm text-muted">
             <a className="hover:text-fg" href="#platform">Platform</a>
+            <a className="hover:text-fg" href="/eventedge">EventEdge</a>
             <a className="hover:text-fg" href="/proofclaw">ProofClaw</a>
             <a className="hover:text-fg" href="/datasnype">Track record</a>
             <a className="hover:text-fg" href="/dashboard">Dashboard</a>
@@ -228,6 +229,7 @@ export default async function Home() {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>&copy; {new Date().getFullYear()} EdgeBlocks</div>
             <div className="flex flex-wrap gap-4">
+              <a className="hover:text-fg" href="/eventedge">EventEdge</a>
               <a className="hover:text-fg" href="/proofclaw">ProofClaw</a>
               <a className="hover:text-fg" href="/datasnype">DataSnype</a>
               <a className="hover:text-fg" href="https://app.edgeblocks.io">Enter App</a>
