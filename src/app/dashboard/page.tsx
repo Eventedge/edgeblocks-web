@@ -189,23 +189,26 @@ export default async function Dashboard() {
           {/* BTC SuperCard (Pillars) */}
           <div className="rounded-2xl border border-border bg-surface/70 p-6 backdrop-blur">
             <div className="text-xs font-mono text-accentCyan">SUPERCARD</div>
-            <div className="mt-1 text-lg font-semibold">BTC SuperCard</div>
+            <div className="mt-1 text-lg font-semibold">{supercard?.summary?.headline ?? "BTC SuperCard"}</div>
             <div className="mt-1 text-sm text-muted">
-              {supercard?.summary?.headline && supercard.summary.headline !== "—" ? supercard.summary.headline : "Pillar-based composite view"}
-            </div>
-            <div className="mt-3 flex flex-wrap gap-2">
-              <Chip>stance: {supercard?.summary?.stance ?? "—"}</Chip>
-              <Chip>confidence: {supercard?.summary?.confidence ?? "—"}</Chip>
-              <Chip>{supercard?.version ?? "—"}</Chip>
+              stance: <span className="text-fg">{supercard?.summary?.stance ?? "—"}</span>{" · "}
+              confidence: <span className="text-fg">{supercard?.summary?.confidence ?? "—"}</span>
             </div>
             <div className="mt-4 space-y-2">
               {(supercard?.pillars ?? []).map((p: { key: string; label: string; value: string; status: string; hint: string }) => (
-                <div key={p.key} className="flex items-center justify-between rounded-xl border border-border/70 bg-surface2/50 px-4 py-2">
-                  <div>
-                    <span className="text-sm text-muted">{p.label}</span>
-                    <span className="ml-2 text-xs text-muted2">{p.hint}</span>
+                <div key={p.key} className="flex items-center justify-between gap-2 rounded-xl border border-border/70 bg-surface2/50 px-4 py-2">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-muted">{p.label}</span>
+                      <span className={`inline-block rounded-full border px-2 py-0.5 text-[10px] font-mono leading-tight ${
+                        p.status === "positive" ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300" :
+                        p.status === "negative" ? "border-rose-500/30 bg-rose-500/10 text-rose-300" :
+                        "border-border/60 bg-surface2/40 text-muted2"
+                      }`}>{p.status ?? "neutral"}</span>
+                    </div>
+                    <div className="mt-0.5 text-xs text-muted2">{p.hint}</div>
                   </div>
-                  <span className="text-sm font-mono text-muted2">{p.value ?? "—"}</span>
+                  <span className="shrink-0 text-sm font-mono text-fg">{p.value ?? "—"}</span>
                 </div>
               ))}
               {(!supercard?.pillars || supercard.pillars.length === 0) && (
@@ -214,69 +217,85 @@ export default async function Dashboard() {
                 </div>
               )}
             </div>
-            <div className="mt-4 text-xs text-muted2 font-mono">
-              {supercard?.disclaimer ?? "Placeholder — waiting for API data."}
-            </div>
+            {supercard?.summary?.notes && supercard.summary.notes.some((n: string) => n && n !== "—") && (
+              <div className="mt-3 space-y-1">
+                {supercard.summary.notes.filter((n: string) => n && n !== "—").map((n: string, i: number) => (
+                  <div key={i} className="text-xs text-muted2">· {n}</div>
+                ))}
+              </div>
+            )}
+            <details className="mt-4 text-xs text-muted2 font-mono">
+              <summary className="cursor-pointer text-muted hover:text-fg">info</summary>
+              <div className="mt-1">{supercard?.disclaimer ?? "—"}</div>
+            </details>
           </div>
 
           {/* Market Regime */}
           <div className="rounded-2xl border border-border bg-surface/70 p-6 backdrop-blur">
             <div className="text-xs font-mono text-accentGold">REGIME</div>
             <div className="mt-1 text-lg font-semibold">Market Regime</div>
-            <div className="mt-1 text-sm text-muted">{regime?.version ?? "Current regime classification"}</div>
-            <div className="mt-4 flex flex-col items-center justify-center rounded-xl border border-border/70 bg-surface2/50 py-8">
-              <div className="text-3xl font-semibold text-muted2">{regime?.regime?.label ?? "—"}</div>
-              <div className="mt-2 text-sm text-muted">confidence: {regime?.regime?.confidence ?? "—"}</div>
+            <div className="mt-4 flex flex-col items-center justify-center rounded-xl border border-border/70 bg-surface2/50 py-6">
+              <div className="text-3xl font-semibold">{regime?.regime?.label ?? "—"}</div>
+              <div className="mt-2"><Chip>confidence: {regime?.regime?.confidence ?? "—"}</Chip></div>
             </div>
-            <div className="mt-4 space-y-2">
+            <div className="mt-4 grid grid-cols-2 gap-2">
               {(regime?.axes ?? []).map((a: { key: string; label: string; value: string }) => (
-                <div key={a.key} className="flex items-center justify-between rounded-xl border border-border/70 bg-surface2/50 px-4 py-2">
-                  <span className="text-sm text-muted">{a.label}</span>
-                  <span className="text-sm font-mono text-muted2">{a.value ?? "—"}</span>
+                <div key={a.key} className="flex items-center justify-between rounded-xl border border-border/70 bg-surface2/50 px-3 py-2">
+                  <span className="text-xs text-muted">{a.label}</span>
+                  <span className="text-xs font-mono font-semibold text-fg">{a.value ?? "—"}</span>
                 </div>
               ))}
             </div>
             <div className="mt-3 space-y-1">
-              {(regime?.drivers ?? []).slice(0, 3).map((d: string, i: number) => (
-                <div key={i} className="rounded-xl border border-border/70 bg-surface2/50 px-4 py-2 text-sm text-fg">
-                  Driver {i + 1}: {d}
+              {(regime?.drivers ?? []).filter((d: string) => d && d !== "—").slice(0, 3).map((d: string, i: number) => (
+                <div key={i} className="rounded-xl border border-border/70 bg-surface2/50 px-3 py-2 text-xs text-fg">
+                  {d}
                 </div>
               ))}
             </div>
-            <div className="mt-4 text-xs text-muted2 font-mono">
-              {regime?.disclaimer ?? "Placeholder — waiting for API data."}
-            </div>
+            <details className="mt-4 text-xs text-muted2 font-mono">
+              <summary className="cursor-pointer text-muted hover:text-fg">info</summary>
+              <div className="mt-1">{regime?.disclaimer ?? "—"}</div>
+            </details>
           </div>
 
           {/* Paper Trader / Strategy Outcomes */}
           <div className="rounded-2xl border border-border bg-surface/70 p-6 backdrop-blur">
             <div className="text-xs font-mono text-accentPurple">PAPER TRADER</div>
             <div className="mt-1 text-lg font-semibold">Strategy Outcomes</div>
-            <div className="mt-1 text-sm text-muted">{paper?.version ?? "Paper trading performance snapshot"}</div>
             <div className="mt-4 grid grid-cols-2 gap-2">
-              {[
-                { label: "Equity (30d)", value: paper?.kpis?.equity_30d ?? "—" },
-                { label: "Win rate", value: paper?.kpis?.win_rate ?? "—" },
-                { label: "Max drawdown", value: paper?.kpis?.max_drawdown ?? "—" },
-                { label: "Active positions", value: paper?.kpis?.active_positions ?? "—" },
-              ].map((m) => (
-                <div key={m.label} className="rounded-xl border border-border/70 bg-surface2/50 p-3 text-center">
-                  <div className="text-xs font-mono text-muted">{m.label}</div>
-                  <div className="mt-1 text-base font-semibold text-muted2">{m.value}</div>
+              <div className="rounded-xl border border-border/70 bg-surface2/50 p-3 text-center">
+                <div className="text-xs font-mono text-muted">Win rate</div>
+                <div className="mt-1 text-base font-semibold text-fg">{paper?.kpis?.win_rate ?? "—"}</div>
+              </div>
+              <div className="rounded-xl border border-border/70 bg-surface2/50 p-3 text-center">
+                <div className="text-xs font-mono text-muted">Active positions</div>
+                <div className="mt-1 text-base font-semibold text-fg">{paper?.kpis?.active_positions ?? "—"}</div>
+              </div>
+              {paper?.kpis?.equity_30d && paper.kpis.equity_30d !== "—" && (
+                <div className="rounded-xl border border-border/70 bg-surface2/50 p-3 text-center">
+                  <div className="text-xs font-mono text-muted">Equity (30d)</div>
+                  <div className="mt-1 text-base font-semibold text-fg">{paper.kpis.equity_30d}</div>
                 </div>
-              ))}
+              )}
+              {paper?.kpis?.max_drawdown && paper.kpis.max_drawdown !== "—" && (
+                <div className="rounded-xl border border-border/70 bg-surface2/50 p-3 text-center">
+                  <div className="text-xs font-mono text-muted">Max drawdown</div>
+                  <div className="mt-1 text-base font-semibold text-fg">{paper.kpis.max_drawdown}</div>
+                </div>
+              )}
             </div>
-            <div className="mt-4 rounded-xl border border-border/70 bg-surface2/50 p-4">
+            <div className="mt-3 rounded-xl border border-border/70 bg-surface2/50 p-4">
               <div className="text-xs font-mono text-muted">Accounts</div>
               <div className="mt-2 flex gap-3 text-sm">
                 <Chip>active: {paper?.accounts?.active ?? 0}</Chip>
                 <Chip>tracked: {paper?.accounts?.tracked ?? 0}</Chip>
               </div>
             </div>
-            <div className="mt-4 h-24 rounded-xl border border-border/70 bg-surface2/60" />
-            <div className="mt-3 text-xs text-muted2 font-mono">
-              {paper?.disclaimer ?? "Placeholder — waiting for API data."}
-            </div>
+            <details className="mt-4 text-xs text-muted2 font-mono">
+              <summary className="cursor-pointer text-muted hover:text-fg">info</summary>
+              <div className="mt-1">{paper?.disclaimer ?? "—"}</div>
+            </details>
           </div>
         </section>
 
