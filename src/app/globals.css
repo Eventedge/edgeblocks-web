@@ -142,6 +142,18 @@ body::after{
 }
 .kpi-flash { animation: kpiFlash 520ms ease-out; }
 
+@keyframes tickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.ticker-track {
+  animation: tickerScroll 28s linear infinite;
+  cursor: pointer;
+}
+.ticker-paused {
+  animation-play-state: paused;
+}
+
 @keyframes emptyShimmer {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(200%); }

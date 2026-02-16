@@ -587,7 +587,7 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
       <Divider />
 
       {/* ---- SYSTEM EVENTS FEED ---- */}
-      <section className="pb-14">
+      <section id="events" className="pb-14 scroll-mt-16">
         <ModuleCard
           accent="cyan"
           icon={<ModuleIconBadge icon="events" accent="cyan" />}

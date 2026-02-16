@@ -1,4 +1,5 @@
 import "./globals.css";
+import { AlertTicker } from "@/components/AlertTicker";
 
 export const metadata = {
   title: "EdgeBlocks — Modular crypto intelligence",
@@ -24,7 +25,10 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <AlertTicker />
+        {children}
+      </body>
     </html>
   );
 }
