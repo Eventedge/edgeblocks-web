@@ -11,6 +11,17 @@ async function getJSON<T>(url: string): Promise<T> {
   return res.json();
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function safeFetchJSON(url: string): Promise<any> {
+  try {
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) return null;
+    return res.json();
+  } catch {
+    return null;
+  }
+}
+
 const FALLBACK_KPIS: KPI[] = [
   { key: "btc_price", label: "BTC Price", value: "$—", sub: "wire EventEdge price feed" },
   { key: "funding_oiw", label: "Funding (OI-weighted)", value: "—", sub: "8h / 24h toggle" },
@@ -48,6 +59,10 @@ export default async function Dashboard() {
     const fgRes = await getJSON<typeof FALLBACK_FG>(`${base}/api/v1/sentiment/fear-greed`);
     fg = fgRes;
   } catch { /* use fallback */ }
+
+  const supercard = await safeFetchJSON(`${base}/api/v1/edge/supercard?symbol=BTC`);
+  const regime = await safeFetchJSON(`${base}/api/v1/edge/regime`);
+  const paper = await safeFetchJSON(`${base}/api/v1/paper/summary`);
 
   return (
     <main className="min-h-screen">
@@ -151,17 +166,32 @@ export default async function Dashboard() {
           <div className="rounded-2xl border border-border bg-surface/70 p-6 backdrop-blur">
             <div className="text-xs font-mono text-accentCyan">SUPERCARD</div>
             <div className="mt-1 text-lg font-semibold">BTC SuperCard</div>
-            <div className="mt-1 text-sm text-muted">The 7-pillar composite view</div>
+            <div className="mt-1 text-sm text-muted">
+              {supercard?.summary?.headline !== "—" ? supercard.summary.headline : "Pillar-based composite view"}
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Chip>stance: {supercard?.summary?.stance ?? "—"}</Chip>
+              <Chip>confidence: {supercard?.summary?.confidence ?? "—"}</Chip>
+              <Chip>{supercard?.version ?? "—"}</Chip>
+            </div>
             <div className="mt-4 space-y-2">
-              {["Price Action", "Derivatives", "On-chain", "Sentiment", "Macro", "Orderflow", "Volatility"].map((pillar) => (
-                <div key={pillar} className="flex items-center justify-between rounded-xl border border-border/70 bg-surface2/50 px-4 py-2">
-                  <span className="text-sm text-muted">{pillar}</span>
-                  <span className="text-sm font-mono text-muted2">—</span>
+              {(supercard?.pillars ?? []).map((p: { key: string; label: string; value: string; status: string; hint: string }) => (
+                <div key={p.key} className="flex items-center justify-between rounded-xl border border-border/70 bg-surface2/50 px-4 py-2">
+                  <div>
+                    <span className="text-sm text-muted">{p.label}</span>
+                    <span className="ml-2 text-xs text-muted2">{p.hint}</span>
+                  </div>
+                  <span className="text-sm font-mono text-muted2">{p.value ?? "—"}</span>
                 </div>
               ))}
+              {(!supercard?.pillars || supercard.pillars.length === 0) && (
+                <div className="rounded-xl border border-border/70 bg-surface2/50 px-4 py-3 text-sm text-muted">
+                  SuperCard endpoint not available
+                </div>
+              )}
             </div>
             <div className="mt-4 text-xs text-muted2 font-mono">
-              * Placeholder — will be wired to /api/v1/edge/supercard
+              {supercard?.disclaimer ?? "Placeholder — waiting for API data."}
             </div>
           </div>
 
@@ -169,21 +199,28 @@ export default async function Dashboard() {
           <div className="rounded-2xl border border-border bg-surface/70 p-6 backdrop-blur">
             <div className="text-xs font-mono text-accentGold">REGIME</div>
             <div className="mt-1 text-lg font-semibold">Market Regime</div>
-            <div className="mt-1 text-sm text-muted">Current regime classification</div>
+            <div className="mt-1 text-sm text-muted">{regime?.version ?? "Current regime classification"}</div>
             <div className="mt-4 flex flex-col items-center justify-center rounded-xl border border-border/70 bg-surface2/50 py-8">
-              <div className="text-3xl font-semibold text-muted2">—</div>
-              <div className="mt-2 text-sm text-muted">Regime not yet classified</div>
+              <div className="text-3xl font-semibold text-muted2">{regime?.regime?.label ?? "—"}</div>
+              <div className="mt-2 text-sm text-muted">confidence: {regime?.regime?.confidence ?? "—"}</div>
             </div>
             <div className="mt-4 space-y-2">
-              {["Trend", "Volatility", "Momentum", "Correlation"].map((axis) => (
-                <div key={axis} className="flex items-center justify-between rounded-xl border border-border/70 bg-surface2/50 px-4 py-2">
-                  <span className="text-sm text-muted">{axis}</span>
-                  <span className="text-sm font-mono text-muted2">—</span>
+              {(regime?.axes ?? []).map((a: { key: string; label: string; value: string }) => (
+                <div key={a.key} className="flex items-center justify-between rounded-xl border border-border/70 bg-surface2/50 px-4 py-2">
+                  <span className="text-sm text-muted">{a.label}</span>
+                  <span className="text-sm font-mono text-muted2">{a.value ?? "—"}</span>
+                </div>
+              ))}
+            </div>
+            <div className="mt-3 space-y-1">
+              {(regime?.drivers ?? []).slice(0, 3).map((d: string, i: number) => (
+                <div key={i} className="rounded-xl border border-border/70 bg-surface2/50 px-4 py-2 text-sm text-fg">
+                  Driver {i + 1}: {d}
                 </div>
               ))}
             </div>
             <div className="mt-4 text-xs text-muted2 font-mono">
-              * Placeholder — will be wired to /api/v1/edge/regime
+              {regime?.disclaimer ?? "Placeholder — waiting for API data."}
             </div>
           </div>
 
@@ -191,13 +228,13 @@ export default async function Dashboard() {
           <div className="rounded-2xl border border-border bg-surface/70 p-6 backdrop-blur">
             <div className="text-xs font-mono text-accentPurple">PAPER TRADER</div>
             <div className="mt-1 text-lg font-semibold">Strategy Outcomes</div>
-            <div className="mt-1 text-sm text-muted">Paper trading performance snapshot</div>
+            <div className="mt-1 text-sm text-muted">{paper?.version ?? "Paper trading performance snapshot"}</div>
             <div className="mt-4 grid grid-cols-2 gap-2">
               {[
-                { label: "PnL (24h)", value: "—" },
-                { label: "Win rate", value: "—" },
-                { label: "Open positions", value: "—" },
-                { label: "Sharpe", value: "—" },
+                { label: "Equity (30d)", value: paper?.kpis?.equity_30d ?? "—" },
+                { label: "Win rate", value: paper?.kpis?.win_rate ?? "—" },
+                { label: "Max drawdown", value: paper?.kpis?.max_drawdown ?? "—" },
+                { label: "Active positions", value: paper?.kpis?.active_positions ?? "—" },
               ].map((m) => (
                 <div key={m.label} className="rounded-xl border border-border/70 bg-surface2/50 p-3 text-center">
                   <div className="text-xs font-mono text-muted">{m.label}</div>
@@ -205,9 +242,16 @@ export default async function Dashboard() {
                 </div>
               ))}
             </div>
+            <div className="mt-4 rounded-xl border border-border/70 bg-surface2/50 p-4">
+              <div className="text-xs font-mono text-muted">Accounts</div>
+              <div className="mt-2 flex gap-3 text-sm">
+                <Chip>active: {paper?.accounts?.active ?? 0}</Chip>
+                <Chip>tracked: {paper?.accounts?.tracked ?? 0}</Chip>
+              </div>
+            </div>
             <div className="mt-4 h-24 rounded-xl border border-border/70 bg-surface2/60" />
             <div className="mt-3 text-xs text-muted2 font-mono">
-              * Placeholder — will be wired to /api/v1/paper/summary
+              {paper?.disclaimer ?? "Placeholder — waiting for API data."}
             </div>
           </div>
         </section>
