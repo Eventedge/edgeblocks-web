@@ -1,4 +1,5 @@
 import { Button, Chip, Container, LiveDot, ModuleCard, SectionHeading } from "@/components/ui";
+import { Sparkline } from "@/components/Sparkline";
 import { ChartPlaceholder, Divider, Metric, Table } from "@/components/dashboard";
 
 export const dynamic = "force-dynamic";
@@ -299,6 +300,15 @@ export default async function Dashboard() {
                 <Chip>tracked: {paper?.accounts?.tracked ?? 0}</Chip>
               </div>
             </div>
+
+            <div className="mt-3">
+              <div className="mb-2 text-xs font-mono text-muted">Equity curve (30d)</div>
+              <Sparkline
+                ariaLabel="paper-equity-sparkline"
+                points={paper?.sample?.equity_curve ?? []}
+              />
+            </div>
+
             <details className="mt-4 text-xs text-muted2 font-mono">
               <summary className="cursor-pointer text-muted hover:text-fg">info</summary>
               <div className="mt-1">{paper?.disclaimer ?? "\u2014"}</div>
