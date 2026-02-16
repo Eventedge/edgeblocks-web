@@ -31,6 +31,22 @@ type SystemEvent = {
   message: string;
 };
 
+type AlertItem = {
+  ts?: string;
+  category?: string;
+  type?: string;
+  asset?: string;
+  from?: string;
+  to?: string;
+  score?: number | null;
+  confidence?: string;
+  headline?: string;
+  message?: string;
+  badge?: string;
+};
+
+type AlertFilter = "ALL" | "INTELHUB" | "MARKET" | "STATE";
+
 export type DashboardInitial = {
   marketOverview: Any;
   btcCardData: Any;
@@ -40,6 +56,7 @@ export type DashboardInitial = {
   paper: Any;
   simlab: Any;
   simTrades: Any;
+  alerts: Any;
 };
 
 /* ------------------------------------------------------------------ */
@@ -142,6 +159,13 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
   const [sc, setSc] = useState<Any>(initial.supercard);
   const [reg, setReg] = useState<Any>(initial.regime);
   const [pap, setPap] = useState<Any>(initial.paper);
+
+  /* --- alerts data ------------------------------------------------ */
+  const [alerts, setAlerts] = useState<AlertItem[]>(
+    Array.isArray(initial.alerts?.items) ? initial.alerts.items : [],
+  );
+  const [alertFilter, setAlertFilter] = useState<AlertFilter>("ALL");
+  const alertRef = useRef<HTMLDivElement>(null);
 
   /* --- system events ---------------------------------------------- */
   const evtId = useRef(0);
@@ -265,6 +289,13 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
     }
   }, 30_000);
 
+  useInterval(async () => {
+    const data = await fetchJSON("/api/v1/alerts/live?limit=50");
+    if (!data?.ok || !Array.isArray(data.items)) return;
+    setAlerts(data.items);
+    flashEl(alertRef.current);
+  }, 5_000);
+
   /* SimLab event callback */
   const handleSimLabEvent = (type: string, message: string) => {
     addEvent(type, "SIM", message);
@@ -316,7 +347,7 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
       />
 
       {/* Top row: Market Tiles + BTC Snapshot — equal heights */}
-      <section className="equal-grid mt-6 grid gap-4 lg:grid-cols-3 items-stretch">
+      <section className="equal-grid mt-6 grid w-full gap-4 grid-cols-1 lg:grid-cols-3 items-stretch">
         <div ref={marketRef} className="lg:col-span-2">
           <ModuleCard
             accent="cyan"
@@ -359,7 +390,7 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
         </div>
       </section>
 
-      <section className="equal-grid mt-4 grid gap-4 lg:grid-cols-3 items-stretch">
+      <section className="equal-grid mt-4 grid w-full gap-4 grid-cols-1 lg:grid-cols-3 items-stretch">
         <div ref={fgRef}>
           <ModuleCard
             accent="amber"
@@ -418,7 +449,7 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
       />
 
       {/* Intelligence widgets row: SuperCard / Regime / Paper — equal heights */}
-      <section className="equal-grid mt-6 grid gap-4 lg:grid-cols-3 items-stretch">
+      <section className="equal-grid mt-6 grid w-full gap-4 grid-cols-1 lg:grid-cols-3 items-stretch">
         {/* SuperCard */}
         <div ref={scRef}>
           <ModuleCard
@@ -435,14 +466,30 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
                   (p: { key: string; label: string; value: string; status: string; hint: string }) => (
                     <div
                       key={p.key}
-                      className="tile grid grid-cols-[1fr_auto_auto] items-center gap-3 rounded-xl border border-border/50 bg-surface2/40 px-4 py-2 no-overlap"
+                      className="tile rounded-xl border border-border/50 bg-surface2/40 px-4 py-2 no-overlap grid gap-1 md:gap-3 md:grid-cols-[1fr_auto_auto] md:items-center"
                     >
-                      <div className="min-w-0">
-                        <div className="text-sm text-muted truncate">{p.label}</div>
-                        <div className="mt-0.5 text-xs text-muted2 truncate">{p.hint}</div>
+                      {/* Mobile: label + chip inline; md+: label in col 1 */}
+                      <div className="min-w-0 flex items-center gap-2 md:block">
+                        <div className="min-w-0">
+                          <div className="text-sm text-muted truncate">{p.label}</div>
+                          <div className="hidden md:block mt-0.5 text-xs text-muted2 truncate">{p.hint}</div>
+                        </div>
+                        {/* Mobile-only chip */}
+                        <span
+                          className={`ml-auto md:hidden shrink-0 whitespace-nowrap inline-block rounded-full border px-2 py-0.5 text-[10px] font-mono leading-tight ${
+                            p.status === "positive"
+                              ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
+                              : p.status === "negative"
+                                ? "border-rose-500/30 bg-rose-500/10 text-rose-300"
+                                : "border-border/60 bg-surface2/40 text-muted2"
+                          }`}
+                        >
+                          {p.status ?? "neutral"}
+                        </span>
                       </div>
+                      {/* md+ chip column */}
                       <span
-                        className={`justify-self-end whitespace-nowrap inline-block rounded-full border px-2 py-0.5 text-[10px] font-mono leading-tight ${
+                        className={`hidden md:inline-block justify-self-end whitespace-nowrap rounded-full border px-2 py-0.5 text-[10px] font-mono leading-tight ${
                           p.status === "positive"
                             ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
                             : p.status === "negative"
@@ -452,6 +499,7 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
                       >
                         {p.status ?? "neutral"}
                       </span>
+                      {/* Value — always right-aligned */}
                       <span className="justify-self-end shrink-0 text-sm font-mono tabular-nums text-fg whitespace-nowrap">
                         {p.value ?? "\u2014"}
                       </span>
@@ -605,6 +653,85 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
           initialTrades={initial.simTrades}
           onEvent={handleSimLabEvent}
         />
+      </section>
+
+      <Divider />
+
+      {/* ---- ALERTS MODULE ---- */}
+      <SectionHeading
+        eyebrow="ALERTS"
+        title="Live Alerts"
+        desc="Regime changes, sentiment shifts, and state tape from the EventEdge API. Refreshes every 5 s."
+      />
+
+      <section className="mt-6">
+        <div ref={alertRef}>
+          <ModuleCard
+            accent="amber"
+            icon={<ModuleIconBadge icon="events" accent="amber" />}
+            title="Alert Feed"
+            subtitle="IntelHub &bull; Market &bull; State"
+            right={<LiveDot label={`${alerts.length} items`} />}
+          >
+            <div className="module-body">
+              <div className="flex flex-wrap gap-2 mb-3">
+                {(["ALL", "INTELHUB", "MARKET", "STATE"] as const).map((k) => (
+                  <button
+                    key={k}
+                    className={`tile rounded-full px-3 py-1 text-xs font-mono transition ${
+                      alertFilter === k
+                        ? "bg-surface2/70 border border-border text-fg"
+                        : "bg-surface2/30 border border-border/40 text-muted2 hover:text-muted"
+                    }`}
+                    onClick={() => setAlertFilter(k)}
+                  >
+                    {k === "ALL" ? "All" : k === "INTELHUB" ? "IntelHub" : k === "MARKET" ? "Market" : "State"}
+                  </button>
+                ))}
+              </div>
+              <div className="rounded-xl border border-border/50 bg-surface2/35 overflow-hidden">
+                <div className="max-h-[320px] overflow-auto">
+                  {alerts
+                    .filter((a) => {
+                      if (alertFilter === "ALL") return true;
+                      if (alertFilter === "STATE") return a.type === "STATE";
+                      return String(a.category || "").toUpperCase() === alertFilter;
+                    })
+                    .slice(0, 30)
+                    .map((a, idx) => {
+                      const ts = a.ts ? String(a.ts).slice(11, 19) : "\u2014";
+                      const typeCls =
+                        a.type === "REGIME_CHANGE" || (a.type === "STATE" && String(a.headline || "").includes("REGIME"))
+                          ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-200"
+                          : a.type === "SENTIMENT_SHIFT" || (a.type === "STATE" && String(a.headline || "").includes("SENTIMENT"))
+                            ? "border-amber-400/30 bg-amber-400/10 text-amber-200"
+                            : "border-border/60 bg-surface2/40 text-muted2";
+                      return (
+                        <div
+                          key={`${a.ts}-${a.asset}-${idx}`}
+                          className="event-row flex items-center gap-3 px-4 py-2.5 border-b border-border/30 last:border-b-0"
+                        >
+                          <span className="shrink-0 text-[11px] font-mono text-muted2 w-[56px]">{ts}</span>
+                          <span
+                            className={`shrink-0 inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-mono leading-tight ${typeCls}`}
+                          >
+                            {a.type ?? "ALERT"}
+                          </span>
+                          <span className="shrink-0 text-xs font-semibold text-fg w-[32px]">{a.asset ?? "\u2014"}</span>
+                          <span className="text-sm text-muted truncate">{a.message ?? "\u2014"}</span>
+                        </div>
+                      );
+                    })}
+                  {alerts.length === 0 && (
+                    <div className="px-4 py-8 text-center text-xs font-mono text-muted2">
+                      Waiting for alerts&hellip;
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </ModuleCard>
+        </div>
       </section>
 
       <Divider />

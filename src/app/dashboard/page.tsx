@@ -17,7 +17,7 @@ async function safeFetchJSON(url: string): Promise<any> {
 export default async function Dashboard() {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://edgeblocks.io";
 
-  const [marketOverview, btcCardData, fearGreed, supercard, regime, paper, simlab, simTrades] =
+  const [marketOverview, btcCardData, fearGreed, supercard, regime, paper, simlab, simTrades, alerts] =
     await Promise.all([
       safeFetchJSON(`${base}/api/v1/market/overview`),
       safeFetchJSON(`${base}/api/v1/assets/BTC/card`),
@@ -27,6 +27,7 @@ export default async function Dashboard() {
       safeFetchJSON(`${base}/api/v1/paper/summary`),
       safeFetchJSON(`${base}/api/v1/simlab/overview?days=30`),
       safeFetchJSON(`${base}/api/v1/simlab/trades/live?limit=30`),
+      safeFetchJSON(`${base}/api/v1/alerts/live?limit=50`),
     ]);
 
   return (
@@ -45,7 +46,7 @@ export default async function Dashboard() {
         </header>
 
         <DashboardLive
-          initial={{ marketOverview, btcCardData, fearGreed, supercard, regime, paper, simlab, simTrades }}
+          initial={{ marketOverview, btcCardData, fearGreed, supercard, regime, paper, simlab, simTrades, alerts }}
         />
 
         <footer className="border-t border-border py-10 text-sm text-muted2">
