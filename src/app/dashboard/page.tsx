@@ -1,5 +1,6 @@
-import { Button, Chip, Container, LiveDot, ModuleCard, PnlChip, SectionHeading } from "@/components/ui";
+import { Button, Chip, Container, LiveDot, ModuleCard, SectionHeading } from "@/components/ui";
 import { Sparkline } from "@/components/Sparkline";
+import { SimLabLive } from "@/components/SimLabLive";
 import { ChartPlaceholder, Divider, Metric, Table } from "@/components/dashboard";
 
 export const dynamic = "force-dynamic";
@@ -330,81 +331,7 @@ export default async function Dashboard() {
         />
 
         <section className="mt-6">
-          <ModuleCard
-            accent="violet"
-            title="SimLab — Live Feed"
-            subtitle={`accounts: ${simlab?.admin?.accounts?.total ?? 0} \u00b7 active: ${simlab?.admin?.accounts?.active ?? 0}`}
-            right={<LiveDot ts={simlab?.ts ?? null} />}
-          >
-            <div className="grid gap-3 md:grid-cols-5">
-              <div className="tile rounded-xl border border-border/50 bg-surface2/40 p-4">
-                <div className="text-xs font-mono text-muted">PnL (30d)</div>
-                <div className="mt-1 text-lg font-semibold">{simlab?.kpis?.pnl_30d_usdt ?? "\u2014"}</div>
-              </div>
-              <div className="tile rounded-xl border border-border/50 bg-surface2/40 p-4">
-                <div className="text-xs font-mono text-muted">Win rate</div>
-                <div className="mt-1 text-lg font-semibold">{simlab?.kpis?.win_rate ?? "\u2014"}</div>
-              </div>
-              <div className="tile rounded-xl border border-border/50 bg-surface2/40 p-4">
-                <div className="text-xs font-mono text-muted">Trades (30d)</div>
-                <div className="mt-1 text-lg font-semibold">{simlab?.kpis?.trades_30d ?? 0}</div>
-              </div>
-              <div className="tile rounded-xl border border-border/50 bg-surface2/40 p-4">
-                <div className="text-xs font-mono text-muted">Open positions</div>
-                <div className="mt-1 text-lg font-semibold">{simlab?.kpis?.open_positions ?? 0}</div>
-              </div>
-              <div className="tile rounded-xl border border-border/50 bg-surface2/40 p-4">
-                <div className="text-xs font-mono text-muted">Max DD</div>
-                <div className="mt-1 text-lg font-semibold">{simlab?.kpis?.max_drawdown ?? "\u2014"}</div>
-              </div>
-            </div>
-
-            <div className="mt-4 grid gap-4 lg:grid-cols-2">
-              <div>
-                <div className="mb-2 text-xs font-mono text-muted">30D curve</div>
-                <Sparkline ariaLabel="simlab-curve-sparkline" points={simlab?.curve ?? []} />
-              </div>
-
-              <div>
-                <div className="mb-2 flex items-center justify-between">
-                  <div className="text-xs font-mono text-muted">Live trades</div>
-                  <Chip className="border-violet-400/25 bg-violet-400/10 text-violet-200">stream</Chip>
-                </div>
-
-                <div className="rounded-xl border border-border/50 bg-surface2/35 overflow-hidden">
-                  <div className="grid grid-cols-6 gap-2 px-4 py-2 text-[11px] font-mono text-muted2 border-b border-border/40">
-                    <div className="col-span-2">time</div>
-                    <div>symbol</div>
-                    <div>side</div>
-                    <div className="col-span-2">pnl</div>
-                  </div>
-                  <div className="max-h-[260px] overflow-auto">
-                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                    {(simTrades?.items ?? []).slice(0, 30).map((it: any, idx: number) => {
-                      const t = String(it?.t ?? "").slice(11, 19);
-                      const sym = it?.symbol ?? "\u2014";
-                      const side = String(it?.side ?? "\u2014").toUpperCase();
-                      const pnl = typeof it?.pnl_usdt === "number" ? it.pnl_usdt : Number(it?.pnl_usdt ?? 0);
-                      return (
-                        <div
-                          key={idx}
-                          className="grid grid-cols-6 gap-2 px-4 py-2 text-sm border-b border-border/30 last:border-b-0"
-                        >
-                          <div className="col-span-2 font-mono text-muted2">{t || "\u2014"}</div>
-                          <div className="font-mono">{sym}</div>
-                          <div className="font-mono text-muted">{side}</div>
-                          <div className="col-span-2"><PnlChip v={pnl} /></div>
-                        </div>
-                      );
-                    })}
-                    {!(simTrades?.items ?? []).length && (
-                      <div className="px-4 py-6 text-xs font-mono text-muted2">Listening\u2026</div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </ModuleCard>
+          <SimLabLive initialOverview={simlab} initialTrades={simTrades} />
         </section>
 
         <Divider />

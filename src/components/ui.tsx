@@ -4,9 +4,23 @@ export function Container({ children }: { children: React.ReactNode }) {
   return <div className="mx-auto max-w-6xl px-6">{children}</div>;
 }
 
-export function Chip({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+export function Chip({
+  children,
+  className = "",
+  onClick,
+  role,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  onClick?: () => void;
+  role?: string;
+}) {
   return (
-    <div className={`inline-flex items-center gap-2 rounded-full border border-border/70 bg-surface/70 px-4 py-2 text-xs font-mono text-muted backdrop-blur ${className}`}>
+    <div
+      className={`inline-flex items-center gap-2 rounded-full border border-border/70 bg-surface/70 px-4 py-2 text-xs font-mono text-muted backdrop-blur ${onClick ? "cursor-pointer select-none" : ""} ${className}`}
+      onClick={onClick}
+      role={role}
+    >
       {children}
     </div>
   );
