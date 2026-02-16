@@ -36,30 +36,53 @@ body{
   -moz-osx-font-smoothing: grayscale;
 }
 
-body::before{
-  content:"";
+/* Unified background system (ledger + network + vignette) */
+body::before,
+body::after {
+  content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
-  background:
-    linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
-  background-size: 64px 64px;
-  opacity: 0.06;
-  mix-blend-mode: screen;
 }
 
-body::after{
-  content:"";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    radial-gradient(circle at 20% 10%, rgba(245,200,66,0.08), transparent 45%),
-    radial-gradient(circle at 80% 0%, rgba(34,211,238,0.06), transparent 40%),
-    radial-gradient(circle at 60% 90%, rgba(167,139,250,0.05), transparent 45%),
-    repeating-linear-gradient(0deg, rgba(255,255,255,0.015), rgba(255,255,255,0.015) 1px, transparent 1px, transparent 7px);
-  opacity: 0.18;
+/* Layer 1: Ledger grid (fine + faint) */
+body::before {
+  z-index: -3;
+  background:
+    linear-gradient(to right, rgba(255,255,255,0.022) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.022) 1px, transparent 1px),
+    linear-gradient(to right, rgba(255,255,255,0.010) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.010) 1px, transparent 1px);
+  background-size: 72px 72px, 72px 72px, 12px 12px, 12px 12px;
+  opacity: 0.55;
+}
+
+/* Layer 2+3: Network SVG + vignette/glow */
+body::after {
+  z-index: -2;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='420' viewBox='0 0 640 420'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.07)' stroke-width='1'%3E%3Cpath d='M70 90 L170 60 L260 110 L360 80 L460 130 L560 95'/%3E%3Cpath d='M90 250 L200 210 L300 255 L420 220 L520 275'/%3E%3Cpath d='M140 340 L240 310 L330 345 L470 315 L600 350'/%3E%3Cpath d='M170 60 L200 210'/%3E%3Cpath d='M360 80 L420 220'/%3E%3Cpath d='M460 130 L520 275'/%3E%3C/g%3E%3Cg fill='rgba(255,255,255,0.10)'%3E%3Ccircle cx='70' cy='90' r='2'/%3E%3Ccircle cx='170' cy='60' r='2'/%3E%3Ccircle cx='260' cy='110' r='2'/%3E%3Ccircle cx='360' cy='80' r='2'/%3E%3Ccircle cx='460' cy='130' r='2'/%3E%3Ccircle cx='560' cy='95' r='2'/%3E%3Ccircle cx='90' cy='250' r='2'/%3E%3Ccircle cx='200' cy='210' r='2'/%3E%3Ccircle cx='300' cy='255' r='2'/%3E%3Ccircle cx='420' cy='220' r='2'/%3E%3Ccircle cx='520' cy='275' r='2'/%3E%3Ccircle cx='140' cy='340' r='2'/%3E%3Ccircle cx='240' cy='310' r='2'/%3E%3Ccircle cx='330' cy='345' r='2'/%3E%3Ccircle cx='470' cy='315' r='2'/%3E%3Ccircle cx='600' cy='350' r='2'/%3E%3C/g%3E%3C/svg%3E"),
+    radial-gradient(1000px 700px at 50% -10%, rgba(255,255,255,0.09), transparent 60%),
+    radial-gradient(900px 700px at 18% 22%, rgba(147,197,253,0.12), transparent 62%),
+    radial-gradient(900px 700px at 82% 28%, rgba(216,180,254,0.12), transparent 62%),
+    radial-gradient(900px 700px at 50% 120%, rgba(16,185,129,0.08), transparent 55%),
+    radial-gradient(1200px 900px at 50% 50%, transparent 45%, rgba(0,0,0,0.60) 100%);
+  background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  background-size: 640px 420px, auto, auto, auto, auto, auto;
+  opacity: 1;
+  filter: saturate(105%);
+}
+
+/* Subtle drift (very slow) — alive feel */
+@media (prefers-reduced-motion: no-preference) {
+  body::after {
+    animation: bgDrift 24s ease-in-out infinite;
+  }
+}
+@keyframes bgDrift {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
 }
 
 /* Interactive polish */
