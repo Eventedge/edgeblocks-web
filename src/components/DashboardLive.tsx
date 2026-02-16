@@ -468,15 +468,15 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
                       key={p.key}
                       className="tile pill-row rounded-xl border border-border/50 bg-surface2/40 px-4 py-2"
                     >
-                      {/* Col 1: label + hint; on mobile includes chip inline */}
-                      <div className="min-w-0 flex items-center gap-2 md:block">
+                      {/* Col 1: label + hint; below lg includes chip inline */}
+                      <div className="min-w-0 flex items-center gap-2 lg:block">
                         <div className="min-w-0">
                           <div className="text-sm text-muted truncate leading-tight">{p.label}</div>
-                          <div className="hidden md:block mt-0.5 text-xs text-muted2 clamp-2 leading-tight">{p.hint}</div>
+                          <div className="hidden lg:block mt-0.5 text-xs text-muted2 clamp-2 leading-tight">{p.hint}</div>
                         </div>
-                        {/* Mobile-only chip */}
+                        {/* Below-lg chip */}
                         <span
-                          className={`ml-auto md:hidden shrink-0 whitespace-nowrap inline-block rounded-full border px-2 py-0.5 text-[10px] font-mono leading-tight ${
+                          className={`ml-auto lg:hidden shrink-0 whitespace-nowrap inline-block rounded-full border px-2 py-0.5 text-[10px] font-mono leading-tight ${
                             p.status === "positive"
                               ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
                               : p.status === "negative"
@@ -487,9 +487,9 @@ export function DashboardLive({ initial }: { initial: DashboardInitial }) {
                           {p.status ?? "neutral"}
                         </span>
                       </div>
-                      {/* Col 2: md+ chip */}
+                      {/* Col 2: lg+ chip */}
                       <span
-                        className={`hidden md:inline-block justify-self-end shrink-0 whitespace-nowrap rounded-full border px-2 py-0.5 text-[10px] font-mono leading-tight ${
+                        className={`hidden lg:inline-block justify-self-end shrink-0 whitespace-nowrap rounded-full border px-2 py-0.5 text-[10px] font-mono leading-tight ${
                           p.status === "positive"
                             ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
                             : p.status === "negative"

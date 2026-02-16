@@ -208,7 +208,7 @@ export default function RoadmapPage() {
             {PRINCIPLES.map((p) => (
               <div
                 key={p.title}
-                className="rounded-xl border border-border bg-surface p-5"
+                className="glass-card p-5"
               >
                 <div className="text-sm font-semibold text-fg">{p.title}</div>
                 <div className="mt-2 text-sm text-muted leading-relaxed">
@@ -239,7 +239,7 @@ export default function RoadmapPage() {
               <Link
                 key={item.label}
                 href={item.href}
-                className="group rounded-xl border border-border bg-surface/80 p-4 transition hover:border-border2 hover:bg-surface"
+                className="group glass-card p-4 transition hover:border-border2"
               >
                 <div className="flex items-center gap-2">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />

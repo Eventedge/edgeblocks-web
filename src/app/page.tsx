@@ -255,7 +255,7 @@ export default async function Home() {
             ].map((step) => (
               <div
                 key={step.num}
-                className="rounded-xl border border-border bg-surface/80 p-5"
+                className="glass-card p-5"
               >
                 <div className="text-2xl font-mono font-semibold text-accentCyan/60">
                   {step.num}
@@ -298,7 +298,7 @@ export default async function Home() {
             ].map((item) => (
               <div
                 key={item.title}
-                className="rounded-xl border border-border bg-surface/80 p-5"
+                className="glass-card p-5"
               >
                 <div className="text-sm font-semibold text-fg">
                   {item.title}
@@ -344,7 +344,7 @@ export default async function Home() {
             ].map((m) => (
               <div
                 key={m.quarter}
-                className="rounded-xl border border-border bg-surface/80 p-5"
+                className="glass-card p-5"
               >
                 <div className="flex items-center gap-2">
                   <span

@@ -92,17 +92,26 @@ body::after {
   min-height: 56px;
 }
 
-/* SuperCard pillar row: stable columns on md+ */
+/* SuperCard pillar row: stable columns on lg+ */
 .pill-row {
   display: grid;
   gap: 4px;
 }
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .pill-row {
     grid-template-columns: minmax(10rem, 1fr) auto auto;
     align-items: center;
     gap: 12px;
   }
+}
+
+/* Dark glass card — reusable for Home/Roadmap sections */
+.glass-card {
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.20), 0 0 0 1px rgba(255,255,255,0.02);
 }
 
 .nowrap-tight {
