@@ -82,3 +82,58 @@ export function SectionHeading({
     </div>
   );
 }
+
+export function LiveDot({ label = "LIVE", ts }: { label?: string; ts?: string | null }) {
+  const date = ts ? String(ts).slice(0, 16).replace("T", " ") : null;
+  return (
+    <div className="flex items-center gap-2 text-[11px] font-mono text-muted2">
+      <span className="relative inline-flex h-2 w-2">
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/60" />
+        <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-300" />
+      </span>
+      <span className="text-muted">{label}</span>
+      {date ? <span className="opacity-70">{date}Z</span> : null}
+    </div>
+  );
+}
+
+const ACCENT_MAP: Record<string, { border: string; gradient: string }> = {
+  cyan: { border: "border-cyan-500/20", gradient: "from-cyan-400/15 via-transparent" },
+  violet: { border: "border-violet-500/20", gradient: "from-violet-400/15 via-transparent" },
+  amber: { border: "border-amber-500/20", gradient: "from-amber-400/15 via-transparent" },
+  emerald: { border: "border-emerald-500/20", gradient: "from-emerald-400/15 via-transparent" },
+  rose: { border: "border-rose-500/20", gradient: "from-rose-400/15 via-transparent" },
+};
+
+export function ModuleCard({
+  accent = "cyan",
+  title,
+  subtitle,
+  right,
+  children,
+  className = "",
+}: {
+  accent?: "cyan" | "violet" | "amber" | "emerald" | "rose";
+  title?: string;
+  subtitle?: string;
+  right?: React.ReactNode;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const a = ACCENT_MAP[accent] ?? ACCENT_MAP.cyan;
+  return (
+    <div className={`rounded-2xl border ${a.border} bg-surface overflow-hidden ${className}`}>
+      <div className={`h-px w-full bg-gradient-to-r ${a.gradient} to-transparent`} />
+      {(title || subtitle || right) && (
+        <div className="flex items-start justify-between gap-4 px-6 pt-5 pb-3">
+          <div>
+            {title && <div className="text-lg font-semibold tracking-tight">{title}</div>}
+            {subtitle && <div className="mt-0.5 text-sm text-muted">{subtitle}</div>}
+          </div>
+          {right && <div className="shrink-0 pt-1">{right}</div>}
+        </div>
+      )}
+      <div className={title || subtitle || right ? "px-6 pb-6" : "p-6"}>{children}</div>
+    </div>
+  );
+}

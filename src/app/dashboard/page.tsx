@@ -1,4 +1,4 @@
-import { Button, Chip, Container, SectionHeading } from "@/components/ui";
+import { Button, Chip, Container, LiveDot, ModuleCard, SectionHeading } from "@/components/ui";
 import { ChartPlaceholder, Divider, Metric, Table } from "@/components/dashboard";
 
 export const dynamic = "force-dynamic";
@@ -55,9 +55,11 @@ export default async function Dashboard() {
 
   let kpis = FALLBACK_KPIS;
   let btcCard = FALLBACK_CARD;
+  let marketTs: string | null = null;
   try {
     const overview = await getJSON<{ ts: string; kpis: KPI[] }>(`${base}/api/v1/market/overview`);
     kpis = overview.kpis || FALLBACK_KPIS;
+    marketTs = overview.ts || null;
   } catch { /* use fallback */ }
 
   try {
@@ -107,74 +109,75 @@ export default async function Dashboard() {
         <Divider />
 
         <SectionHeading
-          eyebrow="KPIs"
-          title="Live market tiles"
-          desc="Sourced from EdgeCore snapshots via the EventEdge API. Prices, funding, open interest, and liquidations refresh every ~3–6 minutes."
-        />
-
-        <section className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {kpis.map((k) => (
-            <Metric key={k.key} label={k.label} value={k.value} sub={k.sub} />
-          ))}
-        </section>
-
-        <Divider />
-
-        <SectionHeading
-          eyebrow="BTC CARD"
-          title={`The \u201cBTC card\u201d widget (bot parity)`}
-          desc="This is the exact widget we'll match to your bot output: price, funding, OI, liquidations, dominance, volume — standardized and embeddable."
+          eyebrow="MARKET DATA"
+          title="Live market intelligence"
+          desc="Sourced from EdgeCore snapshots via the EventEdge API. Refreshes every ~3–6 minutes."
         />
 
         <section className="mt-6 grid gap-4 lg:grid-cols-3">
-          <div className="rounded-2xl border border-border bg-surface p-6 lg:col-span-2">
-            <div className="text-xs font-mono text-muted">BTC CARD</div>
-            <div className="mt-1 text-lg font-semibold">BTC Snapshot</div>
-            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <ModuleCard
+            accent="cyan"
+            title="Market Tiles"
+            subtitle="Price, funding, OI, liquidations"
+            right={<LiveDot ts={marketTs} />}
+            className="lg:col-span-2"
+          >
+            <div className="grid gap-3 sm:grid-cols-2">
+              {kpis.map((k) => (
+                <Metric key={k.key} label={k.label} value={k.value} sub={k.sub} />
+              ))}
+            </div>
+          </ModuleCard>
+
+          <ModuleCard
+            accent="cyan"
+            title="BTC Snapshot"
+            subtitle="Standardized bot-parity card"
+            right={<LiveDot ts={marketTs} />}
+          >
+            <div className="grid gap-3 sm:grid-cols-2">
               {Object.entries(btcCard).map(([k, v]) => (
-                <div key={k} className="rounded-xl border border-border/70 bg-surface2/50 p-4">
+                <div key={k} className="rounded-xl border border-border/70 bg-surface2/50 p-3">
                   <div className="text-xs font-mono text-muted">{k}</div>
                   <div className="mt-1 text-base font-semibold">{String(v)}</div>
                 </div>
               ))}
             </div>
-            <div className="mt-4 text-xs text-muted2 font-mono">
-              * Live data from EdgeCore snapshots.
-            </div>
-          </div>
+          </ModuleCard>
+        </section>
 
-          <div className="space-y-4">
-            <ChartPlaceholder
-              title="Funding / OI / Liq (placeholder)"
-              note="Next: render small sparklines or lightweight SVG charts (no heavy chart libs)."
-            />
-            <div className="rounded-2xl border border-border bg-surface p-6">
-              <div className="text-xs font-mono text-muted">SENTIMENT</div>
-              <div className="mt-1 text-lg font-semibold">Fear & Greed</div>
-              <div className="mt-3 flex items-end justify-between">
-                <div>
-                  <div className="text-3xl font-semibold">{fgValue ?? "—"}</div>
-                  <div className="text-sm text-muted">{fgLabel}</div>
-                </div>
-                <div className="text-xs text-muted2 font-mono">
-                  {fgUpdated ? String(fgUpdated).slice(0, 10) : "—"}
-                </div>
-              </div>
-              <div className="mt-4 rounded-xl border border-border/70 bg-surface2/50 p-3">
-                <div className="text-xs font-mono text-muted mb-2">7D HISTORY</div>
-                {fgPath ? (
-                  <svg width="100%" height="44" viewBox="0 0 220 44" preserveAspectRatio="none" role="img" aria-label="Fear and Greed 7-day sparkline">
-                    <path d={fgPath} fill="none" stroke="currentColor" strokeWidth="2" opacity="0.8" />
-                  </svg>
-                ) : (
-                  <div className="h-10 text-sm text-muted flex items-center">No history</div>
-                )}
-                <div className="mt-1 text-xs text-muted2 font-mono">
-                  {fgVals.length >= 2 ? `${fgVals[0]} → ${fgVals[fgVals.length - 1]}` : "—"}
-                </div>
+        <section className="mt-4 grid gap-4 lg:grid-cols-3">
+          <ModuleCard
+            accent="amber"
+            title="Fear & Greed"
+            subtitle="Behavioral context (Alternative.me)"
+            right={<LiveDot ts={fgUpdated} />}
+          >
+            <div className="flex items-end justify-between">
+              <div>
+                <div className="text-3xl font-semibold">{fgValue ?? "—"}</div>
+                <div className="text-sm text-muted">{fgLabel}</div>
               </div>
             </div>
-          </div>
+            <div className="mt-4 rounded-xl border border-border/70 bg-surface2/50 p-3">
+              <div className="text-xs font-mono text-muted mb-2">7D HISTORY</div>
+              {fgPath ? (
+                <svg width="100%" height="44" viewBox="0 0 220 44" preserveAspectRatio="none" role="img" aria-label="Fear and Greed 7-day sparkline">
+                  <path d={fgPath} fill="none" stroke="currentColor" strokeWidth="2" opacity="0.8" />
+                </svg>
+              ) : (
+                <div className="h-10 text-sm text-muted flex items-center">No history</div>
+              )}
+              <div className="mt-1 text-xs text-muted2 font-mono">
+                {fgVals.length >= 2 ? `${fgVals[0]} → ${fgVals[fgVals.length - 1]}` : "—"}
+              </div>
+            </div>
+          </ModuleCard>
+
+          <ChartPlaceholder
+            title="Funding / OI / Liq (placeholder)"
+            note="Next: render small sparklines or lightweight SVG charts (no heavy chart libs)."
+          />
         </section>
 
         <Divider />
@@ -187,14 +190,13 @@ export default async function Dashboard() {
 
         <section className="mt-6 grid gap-4 lg:grid-cols-3">
           {/* BTC SuperCard (Pillars) */}
-          <div className="rounded-2xl border border-border bg-surface/70 p-6 backdrop-blur">
-            <div className="text-xs font-mono text-accentCyan">SUPERCARD</div>
-            <div className="mt-1 text-lg font-semibold">{supercard?.summary?.headline ?? "BTC SuperCard"}</div>
-            <div className="mt-1 text-sm text-muted">
-              stance: <span className="text-fg">{supercard?.summary?.stance ?? "—"}</span>{" · "}
-              confidence: <span className="text-fg">{supercard?.summary?.confidence ?? "—"}</span>
-            </div>
-            <div className="mt-4 space-y-2">
+          <ModuleCard
+            accent="violet"
+            title={supercard?.summary?.headline ?? "BTC SuperCard"}
+            subtitle={`stance: ${supercard?.summary?.stance ?? "—"} · confidence: ${supercard?.summary?.confidence ?? "—"}`}
+            right={<LiveDot ts={supercard?.ts} />}
+          >
+            <div className="space-y-2">
               {(supercard?.pillars ?? []).map((p: { key: string; label: string; value: string; status: string; hint: string }) => (
                 <div key={p.key} className="flex items-center justify-between gap-2 rounded-xl border border-border/70 bg-surface2/50 px-4 py-2">
                   <div className="min-w-0">
@@ -217,37 +219,39 @@ export default async function Dashboard() {
                 </div>
               )}
             </div>
-            {supercard?.summary?.notes && supercard.summary.notes.some((n: string) => n && n !== "—") && (
+            {supercard?.summary?.notes && supercard.summary.notes.some((n: string) => n && n !== "\u2014") && (
               <div className="mt-3 space-y-1">
-                {supercard.summary.notes.filter((n: string) => n && n !== "—").map((n: string, i: number) => (
-                  <div key={i} className="text-xs text-muted2">· {n}</div>
+                {supercard.summary.notes.filter((n: string) => n && n !== "\u2014").map((n: string, i: number) => (
+                  <div key={i} className="text-xs text-muted2">{"\u00b7"} {n}</div>
                 ))}
               </div>
             )}
             <details className="mt-4 text-xs text-muted2 font-mono">
               <summary className="cursor-pointer text-muted hover:text-fg">info</summary>
-              <div className="mt-1">{supercard?.disclaimer ?? "—"}</div>
+              <div className="mt-1">{supercard?.disclaimer ?? "\u2014"}</div>
             </details>
-          </div>
+          </ModuleCard>
 
           {/* Market Regime */}
-          <div className="rounded-2xl border border-border bg-surface/70 p-6 backdrop-blur">
-            <div className="text-xs font-mono text-accentGold">REGIME</div>
-            <div className="mt-1 text-lg font-semibold">Market Regime</div>
-            <div className="mt-4 flex flex-col items-center justify-center rounded-xl border border-border/70 bg-surface2/50 py-6">
-              <div className="text-3xl font-semibold">{regime?.regime?.label ?? "—"}</div>
-              <div className="mt-2"><Chip>confidence: {regime?.regime?.confidence ?? "—"}</Chip></div>
+          <ModuleCard
+            accent="emerald"
+            title="Market Regime"
+            right={<LiveDot ts={regime?.ts} />}
+          >
+            <div className="flex flex-col items-center justify-center rounded-xl border border-border/70 bg-surface2/50 py-6">
+              <div className="text-3xl font-semibold">{regime?.regime?.label ?? "\u2014"}</div>
+              <div className="mt-2"><Chip>confidence: {regime?.regime?.confidence ?? "\u2014"}</Chip></div>
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2">
               {(regime?.axes ?? []).map((a: { key: string; label: string; value: string }) => (
                 <div key={a.key} className="flex items-center justify-between rounded-xl border border-border/70 bg-surface2/50 px-3 py-2">
                   <span className="text-xs text-muted">{a.label}</span>
-                  <span className="text-xs font-mono font-semibold text-fg">{a.value ?? "—"}</span>
+                  <span className="text-xs font-mono font-semibold text-fg">{a.value ?? "\u2014"}</span>
                 </div>
               ))}
             </div>
             <div className="mt-3 space-y-1">
-              {(regime?.drivers ?? []).filter((d: string) => d && d !== "—").slice(0, 3).map((d: string, i: number) => (
+              {(regime?.drivers ?? []).filter((d: string) => d && d !== "\u2014").slice(0, 3).map((d: string, i: number) => (
                 <div key={i} className="rounded-xl border border-border/70 bg-surface2/50 px-3 py-2 text-xs text-fg">
                   {d}
                 </div>
@@ -255,30 +259,33 @@ export default async function Dashboard() {
             </div>
             <details className="mt-4 text-xs text-muted2 font-mono">
               <summary className="cursor-pointer text-muted hover:text-fg">info</summary>
-              <div className="mt-1">{regime?.disclaimer ?? "—"}</div>
+              <div className="mt-1">{regime?.disclaimer ?? "\u2014"}</div>
             </details>
-          </div>
+          </ModuleCard>
 
           {/* Paper Trader / Strategy Outcomes */}
-          <div className="rounded-2xl border border-border bg-surface/70 p-6 backdrop-blur">
-            <div className="text-xs font-mono text-accentPurple">PAPER TRADER</div>
-            <div className="mt-1 text-lg font-semibold">Strategy Outcomes</div>
-            <div className="mt-4 grid grid-cols-2 gap-2">
+          <ModuleCard
+            accent="rose"
+            title="Paper Trader"
+            subtitle="Bot simulation outcomes"
+            right={<LiveDot ts={paper?.ts} />}
+          >
+            <div className="grid grid-cols-2 gap-2">
               <div className="rounded-xl border border-border/70 bg-surface2/50 p-3 text-center">
                 <div className="text-xs font-mono text-muted">Win rate</div>
-                <div className="mt-1 text-base font-semibold text-fg">{paper?.kpis?.win_rate ?? "—"}</div>
+                <div className="mt-1 text-base font-semibold text-fg">{paper?.kpis?.win_rate ?? "\u2014"}</div>
               </div>
               <div className="rounded-xl border border-border/70 bg-surface2/50 p-3 text-center">
                 <div className="text-xs font-mono text-muted">Active positions</div>
-                <div className="mt-1 text-base font-semibold text-fg">{paper?.kpis?.active_positions ?? "—"}</div>
+                <div className="mt-1 text-base font-semibold text-fg">{paper?.kpis?.active_positions ?? "\u2014"}</div>
               </div>
-              {paper?.kpis?.equity_30d && paper.kpis.equity_30d !== "—" && (
+              {paper?.kpis?.equity_30d && paper.kpis.equity_30d !== "\u2014" && (
                 <div className="rounded-xl border border-border/70 bg-surface2/50 p-3 text-center">
                   <div className="text-xs font-mono text-muted">Equity (30d)</div>
                   <div className="mt-1 text-base font-semibold text-fg">{paper.kpis.equity_30d}</div>
                 </div>
               )}
-              {paper?.kpis?.max_drawdown && paper.kpis.max_drawdown !== "—" && (
+              {paper?.kpis?.max_drawdown && paper.kpis.max_drawdown !== "\u2014" && (
                 <div className="rounded-xl border border-border/70 bg-surface2/50 p-3 text-center">
                   <div className="text-xs font-mono text-muted">Max drawdown</div>
                   <div className="mt-1 text-base font-semibold text-fg">{paper.kpis.max_drawdown}</div>
@@ -294,9 +301,9 @@ export default async function Dashboard() {
             </div>
             <details className="mt-4 text-xs text-muted2 font-mono">
               <summary className="cursor-pointer text-muted hover:text-fg">info</summary>
-              <div className="mt-1">{paper?.disclaimer ?? "—"}</div>
+              <div className="mt-1">{paper?.disclaimer ?? "\u2014"}</div>
             </details>
-          </div>
+          </ModuleCard>
         </section>
 
         <Divider />
