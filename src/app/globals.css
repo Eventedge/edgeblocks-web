@@ -133,6 +133,7 @@ body::after{
 }
 .trade-new { animation: rowIn 220ms ease-out; }
 .new-badge { animation: rowIn 180ms ease-out; }
+.event-row { animation: rowIn 200ms ease-out; }
 
 @keyframes kpiFlash {
   0% { box-shadow: 0 0 0 rgba(255,255,255,0); }

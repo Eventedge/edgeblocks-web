@@ -39,9 +39,11 @@ function flash(el: HTMLElement | null) {
 export function SimLabLive({
   initialOverview,
   initialTrades,
+  onEvent,
 }: {
   initialOverview: Overview;
   initialTrades: Trades;
+  onEvent?: (type: string, message: string) => void;
 }) {
   const [overview, setOverview] = useState<Overview>(initialOverview);
   const [trades, setTrades] = useState<Trades>(initialTrades);
@@ -91,12 +93,22 @@ export function SimLabLive({
       const items = (j?.items ?? []) as any[];
 
       const now = Date.now();
+      let newCount = 0;
+      let firstSym = "";
       for (const it of items) {
         const key = `${it?.t}|${it?.account}|${it?.symbol}|${it?.side}|${it?.pnl_usdt}|${it?.price}`;
         if (!seen.current.has(key)) {
           seen.current.add(key);
           newUntil.current.set(key, now + 2000);
+          newCount++;
+          if (!firstSym) firstSym = it?.symbol ?? "\u2014";
         }
+      }
+      if (newCount > 0 && onEvent) {
+        onEvent(
+          "SIMLAB_TRADE",
+          `${newCount} new trade${newCount > 1 ? "s" : ""}: ${firstSym}${newCount > 1 ? "\u2026" : ""}`,
+        );
       }
       // garbage-collect old marks
       for (const [k, exp] of newUntil.current.entries()) {
