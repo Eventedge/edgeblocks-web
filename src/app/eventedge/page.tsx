@@ -109,7 +109,7 @@ export default function EventEdgePage() {
             <Button href="/dashboard" variant="secondary">
               Dashboard
             </Button>
-            <Button href="https://t.me/EventEdgeBot" variant="primary">
+            <Button href="https://t.me/+b5WT3Sif_klhMGM0" variant="primary">
               Open on Telegram
             </Button>
           </div>
@@ -140,7 +140,7 @@ export default function EventEdgePage() {
             alerts&mdash;powered by 30+ live data pipelines running 24/7.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Button href="https://t.me/EventEdgeBot" variant="primary">
+            <Button href="https://t.me/+b5WT3Sif_klhMGM0" variant="primary">
               Try @EventEdgeBot
             </Button>
             <Button href="/dashboard" variant="secondary">
@@ -341,7 +341,7 @@ export default function EventEdgePage() {
               , and you&apos;re live. No sign-up, no API key, no paywall.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <Button href="https://t.me/EventEdgeBot" variant="primary">
+              <Button href="https://t.me/+b5WT3Sif_klhMGM0" variant="primary">
                 Open @EventEdgeBot
               </Button>
               <Button href="/dashboard" variant="secondary">

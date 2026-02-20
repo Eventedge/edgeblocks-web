@@ -42,7 +42,7 @@ export default async function Dashboard() {
           </div>
           <div className="flex gap-3">
             <Button href="/" variant="secondary">Home</Button>
-            <Button href="https://t.me/EventEdgeBot" variant="primary">Open EventEdge</Button>
+            <Button href="https://t.me/+b5WT3Sif_klhMGM0" variant="primary">Open EventEdge</Button>
           </div>
         </header>
 

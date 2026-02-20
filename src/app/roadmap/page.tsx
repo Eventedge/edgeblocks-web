@@ -120,7 +120,7 @@ export default function RoadmapPage() {
             <Button href="/dashboard" variant="secondary">
               View Dashboard
             </Button>
-            <Button href="https://t.me/EventEdgeBot" variant="primary">
+            <Button href="https://t.me/+b5WT3Sif_klhMGM0" variant="primary">
               Open EventEdge
             </Button>
           </div>
@@ -268,7 +268,7 @@ export default function RoadmapPage() {
               alerts.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <Button href="https://t.me/EventEdgeBot" variant="primary">
+              <Button href="https://t.me/+b5WT3Sif_klhMGM0" variant="primary">
                 Open EventEdge
               </Button>
               <Button href="/dashboard" variant="secondary">

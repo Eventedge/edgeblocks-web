@@ -45,7 +45,7 @@ export default async function Home() {
           </p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Button href="https://t.me/EventEdgeBot" variant="primary">
+            <Button href="https://t.me/+b5WT3Sif_klhMGM0" variant="primary">
               Open EventEdge
             </Button>
             <Button href="/eventedge" variant="secondary">
@@ -119,7 +119,7 @@ export default async function Home() {
                 paper trading, and 50+ interactive tools&mdash;all in one bot.
               </div>
               <div className="mt-auto pt-4 flex flex-wrap gap-3">
-                <Button href="https://t.me/EventEdgeBot" variant="primary">Open on Telegram</Button>
+                <Button href="https://t.me/+b5WT3Sif_klhMGM0" variant="primary">Open on Telegram</Button>
                 <Button href="/eventedge" variant="secondary">Terminal Guides</Button>
               </div>
             </div>
