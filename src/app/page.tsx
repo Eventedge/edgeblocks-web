@@ -43,6 +43,7 @@ export default async function Home() {
             <a className="hover:text-fg" href="/eventedge">EventEdge</a>
             <a className="hover:text-fg" href="/agent-layer">Agent Layer</a>
             <a className="hover:text-fg" href="/roadmap">Roadmap</a>
+            <a className="hover:text-fg" href="/dev-report">Dev Report</a>
             <a className="hover:text-fg" href="/proofclaw">ProofClaw</a>
             <a className="hover:text-fg" href="/dashboard">Dashboard</a>
           </nav>
