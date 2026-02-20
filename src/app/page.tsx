@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Button, Card, Container, SectionHeading } from "@/components/ui";
 import { Divider, Metric } from "@/components/dashboard";
+import { Navbar } from "@/components/Navbar";
 
 type KPI = { key: string; label: string; value: string; sub?: string };
 
@@ -29,30 +29,9 @@ export default async function Home() {
     <main className="min-h-screen">
       <Container>
         {/* Top nav */}
-        <header className="flex items-center justify-between gap-4 py-10">
-          <div className="flex items-center gap-3">
-            <Image src="/brand/icon.svg" alt="EdgeBlocks" width={36} height={36} className="rounded-lg" />
-            <div>
-              <div className="text-xs font-mono text-muted">EDGEBLOCKS</div>
-              <div className="text-lg font-semibold">Modular crypto intelligence</div>
-            </div>
-          </div>
-
-          <nav className="hidden md:flex items-center gap-6 text-sm text-muted">
-            <a className="hover:text-fg" href="#platform">Platform</a>
-            <a className="hover:text-fg" href="/eventedge">EventEdge</a>
-            <a className="hover:text-fg" href="/agent-layer">Agent Layer</a>
-            <a className="hover:text-fg" href="/roadmap">Roadmap</a>
-            <a className="hover:text-fg" href="/dev-report">Dev Report</a>
-            <a className="hover:text-fg" href="/proofclaw">ProofClaw</a>
-            <a className="hover:text-fg" href="/dashboard">Dashboard</a>
-          </nav>
-
-          <div className="flex items-center gap-3">
-            <Button href="/eventedge" variant="secondary">EventEdge</Button>
-            <Button href="/dashboard" variant="primary">Dashboard</Button>
-          </div>
-        </header>
+        <div className="relative">
+          <Navbar />
+        </div>
 
         {/* Hero */}
         <section className="pt-4 pb-10 text-center">
