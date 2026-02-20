@@ -41,6 +41,7 @@ export default async function Home() {
           <nav className="hidden md:flex items-center gap-6 text-sm text-muted">
             <a className="hover:text-fg" href="#platform">Platform</a>
             <a className="hover:text-fg" href="/eventedge">EventEdge</a>
+            <a className="hover:text-fg" href="/agent-layer">Agent Layer</a>
             <a className="hover:text-fg" href="/roadmap">Roadmap</a>
             <a className="hover:text-fg" href="/proofclaw">ProofClaw</a>
             <a className="hover:text-fg" href="/dashboard">Dashboard</a>
