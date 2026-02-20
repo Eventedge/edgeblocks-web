@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button, Card, Container, SectionHeading } from "@/components/ui";
 import { Divider } from "@/components/dashboard";
+import { TerminalGuides } from "./TerminalGuides";
 
 /* ------------------------------------------------------------------ */
 /*  Static data for example alerts + API categories                    */
@@ -61,6 +62,7 @@ const SECTIONS = [
   { id: "how", label: "How it works" },
   { id: "alerts", label: "Example alerts" },
   { id: "data", label: "Data infra" },
+  { id: "guides", label: "Guides" },
   { id: "cta", label: "Get started" },
 ];
 
@@ -315,6 +317,11 @@ export default function EventEdgePage() {
             </div>
           </div>
         </section>
+
+        <Divider />
+
+        {/* Terminal Guides */}
+        <TerminalGuides />
 
         <Divider />
 
