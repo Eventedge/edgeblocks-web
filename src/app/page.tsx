@@ -63,11 +63,11 @@ export default async function Home() {
           </p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Button href="https://app.edgeblocks.io" variant="primary">
-              Enter App
+            <Button href="https://t.me/EventEdgeBot" variant="primary">
+              Open EventEdge
             </Button>
             <Button href="/eventedge" variant="secondary">
-              EventEdge Terminal
+              Terminal Guides
             </Button>
             <Button href="/dashboard" variant="ghost">
               Live Dashboard &rarr;
@@ -120,38 +120,38 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ProofClaw + DataSnype — equal heights */}
+        {/* Product CTAs */}
         <section className="py-8">
           <SectionHeading
-            eyebrow="BUILT ON REAL SYSTEMS"
-            title="Proven foundations"
-            desc="ProofClaw secures agent execution. DataSnype is our multi-year on-chain signal foundation. EdgeBlocks merges both into one platform."
+            eyebrow="GET STARTED"
+            title="Explore the platform"
+            desc="EventEdge is the live Telegram terminal. The dashboard gives you a real-time web view of the same intelligence layer."
           />
 
           <div className="equal-grid mt-6 grid gap-4 lg:grid-cols-2 items-stretch">
             <div className="flex flex-col rounded-2xl border border-border bg-surface p-6">
-              <div className="text-xs font-mono text-muted">TRUST LAYER</div>
-              <div className="mt-2 text-xl font-semibold text-fg">ProofClaw</div>
+              <div className="text-xs font-mono text-muted">TELEGRAM TERMINAL</div>
+              <div className="mt-2 text-xl font-semibold text-fg">EventEdge</div>
               <div className="mt-2 text-sm text-muted leading-relaxed">
-                ProofClaw adds verifiable trust to the ecosystem—badges, evidence, and partner-friendly &ldquo;trust artifacts&rdquo;
-                for agents and outputs that run on EdgeBlocks.
+                Real-time market intelligence delivered natively in Telegram. Regime detection, confluence scoring,
+                paper trading, and 50+ interactive tools&mdash;all in one bot.
               </div>
               <div className="mt-auto pt-4 flex flex-wrap gap-3">
-                <Button href="/proofclaw" variant="secondary">Learn how it works</Button>
-                <Button href="https://proofclaw.io" variant="proof">Visit ProofClaw</Button>
+                <Button href="https://t.me/EventEdgeBot" variant="primary">Open on Telegram</Button>
+                <Button href="/eventedge" variant="secondary">Terminal Guides</Button>
               </div>
             </div>
 
             <div className="flex flex-col rounded-2xl border border-border bg-surface p-6">
-              <div className="text-xs font-mono text-muted">TRACK RECORD</div>
-              <div className="mt-2 text-xl font-semibold text-fg">DataSnype (2–3 years)</div>
+              <div className="text-xs font-mono text-muted">WEB DASHBOARD</div>
+              <div className="mt-2 text-xl font-semibold text-fg">Live Dashboard</div>
               <div className="mt-2 text-sm text-muted leading-relaxed">
-                We&apos;ve been collecting and operating on-chain data in production for years. EdgeBlocks is the next step:
-                from pipelines and bots &rarr; to a modular intelligence platform.
+                Same data, same schema&mdash;rendered on the web. BTC price, funding rates, open interest,
+                regime classification, and real-time snapshots from EdgeCore.
               </div>
               <div className="mt-auto pt-4 flex flex-wrap gap-3">
-                <Button href="/datasnype" variant="secondary">What we built</Button>
-                <Button href="https://datasnype.io" variant="datasnype">Visit DataSnype</Button>
+                <Button href="/dashboard" variant="primary">Open Dashboard</Button>
+                <Button href="/roadmap" variant="secondary">View Roadmap</Button>
               </div>
             </div>
           </div>
@@ -208,7 +208,7 @@ export default async function Home() {
             </div>
             <div className="flex flex-wrap gap-3">
               <Button href="/dashboard" variant="primary">Open Dashboard</Button>
-              <Button href="https://app.edgeblocks.io" variant="secondary">Enter App</Button>
+              <Button href="/eventedge" variant="secondary">EventEdge</Button>
             </div>
           </div>
 
@@ -385,7 +385,7 @@ export default async function Home() {
               <a className="hover:text-fg" href="/roadmap">Roadmap</a>
               <a className="hover:text-fg" href="/proofclaw">ProofClaw</a>
               <a className="hover:text-fg" href="/datasnype">DataSnype</a>
-              <a className="hover:text-fg" href="https://app.edgeblocks.io">Enter App</a>
+              <a className="hover:text-fg" href="/dashboard">Dashboard</a>
             </div>
           </div>
         </footer>
