@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button, Container } from "@/components/ui";
 import { DashboardLive } from "@/components/DashboardLive";
 
@@ -40,8 +41,8 @@ export default async function Dashboard() {
             <div className="mt-1 text-sm text-muted">Real-time market data powered by EdgeCore snapshots</div>
           </div>
           <div className="flex gap-3">
-            <Button href="/" variant="secondary">Back to site</Button>
-            <Button href="https://app.edgeblocks.io" variant="primary">Enter App</Button>
+            <Button href="/" variant="secondary">Home</Button>
+            <Button href="https://t.me/EventEdgeBot" variant="primary">Open EventEdge</Button>
           </div>
         </header>
 
@@ -51,12 +52,11 @@ export default async function Dashboard() {
 
         <footer className="border-t border-border py-10 text-sm text-muted2">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>EdgeBlocks Intelligence &bull; Powered by EdgeCore</div>
+            <div>&copy; {new Date().getFullYear()} EdgeBlocks &bull; Powered by EdgeCore</div>
             <div className="flex gap-4">
-              <a className="hover:text-fg" href="/eventedge">EventEdge</a>
-              <a className="hover:text-fg" href="/roadmap">Roadmap</a>
-              <a className="hover:text-fg" href="/proofclaw">ProofClaw</a>
-              <a className="hover:text-fg" href="/datasnype">DataSnype</a>
+              <Link className="hover:text-fg" href="/">Home</Link>
+              <Link className="hover:text-fg" href="/eventedge">EventEdge</Link>
+              <Link className="hover:text-fg" href="/roadmap">Roadmap</Link>
             </div>
           </div>
         </footer>

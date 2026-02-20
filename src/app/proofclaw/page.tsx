@@ -9,7 +9,7 @@ export default function ProofClawPage() {
           <Link className="text-sm text-muted hover:text-fg" href="/">&larr; Back to EdgeBlocks</Link>
           <div className="flex gap-3">
             <Button href="https://proofclaw.io" variant="proof">Visit ProofClaw</Button>
-            <Button href="https://app.edgeblocks.io" variant="secondary">Enter App</Button>
+            <Button href="/dashboard" variant="secondary">Dashboard</Button>
           </div>
         </header>
 

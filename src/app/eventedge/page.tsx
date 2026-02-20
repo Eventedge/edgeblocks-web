@@ -362,14 +362,11 @@ export default function EventEdgePage() {
               <Link className="hover:text-fg" href="/">
                 Home
               </Link>
-              <Link className="hover:text-fg" href="/proofclaw">
-                ProofClaw
-              </Link>
-              <Link className="hover:text-fg" href="/datasnype">
-                DataSnype
-              </Link>
               <Link className="hover:text-fg" href="/dashboard">
                 Dashboard
+              </Link>
+              <Link className="hover:text-fg" href="/roadmap">
+                Roadmap
               </Link>
             </div>
           </div>

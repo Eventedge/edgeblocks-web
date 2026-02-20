@@ -9,7 +9,7 @@ export default function DataSnypePage() {
           <Link className="text-sm text-muted hover:text-fg" href="/">&larr; Back to EdgeBlocks</Link>
           <div className="flex gap-3">
             <Button href="https://datasnype.io" variant="datasnype">Visit DataSnype</Button>
-            <Button href="https://app.edgeblocks.io" variant="secondary">Enter App</Button>
+            <Button href="/dashboard" variant="secondary">Dashboard</Button>
           </div>
         </header>
 
