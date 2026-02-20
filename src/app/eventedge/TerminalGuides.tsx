@@ -1473,6 +1473,1361 @@ function SimLabContent() {
 }
 
 /* ================================================================== */
+/*  4. MACRO DESK GUIDE                                                */
+/* ================================================================== */
+
+function MacroDeskContent() {
+  return (
+    <div className="space-y-6">
+      <StatsRow
+        items={[
+          { value: "10", label: "Menu Items" },
+          { value: "8", label: "Signal Pillars" },
+          { value: "7+", label: "Assets" },
+          { value: "4", label: "Card Actions" },
+        ]}
+      />
+
+      {/* ── Main Menu ── */}
+      <SectionDivider icon="🌐" title="Macro Desk Menu" />
+
+      <MenuGrid
+        columns={3}
+        items={[
+          { emoji: "₿", label: "BTC", desc: "Full coverage" },
+          { emoji: "⟠", label: "ETH", desc: "Full coverage" },
+          { emoji: "◎", label: "SOL", desc: "Full coverage" },
+          { emoji: "⚡", label: "HYPE", desc: "Perps coverage" },
+          { emoji: "🔶", label: "BNB", desc: "Perps coverage" },
+          { emoji: "🔹", label: "Others", desc: "XRP, DOGE +" },
+          { emoji: "🎯", label: "Confluence", desc: "Per-asset score" },
+          { emoji: "🌐", label: "Radar", desc: "Cross-market" },
+          { emoji: "📰", label: "Digest", desc: "AI summary" },
+          { emoji: "📰", label: "News", desc: "Live headlines" },
+        ]}
+      />
+
+      <Tip icon="💡" tone="info">
+        <strong className="text-cyan-200">Daily starting point:</strong> Type{" "}
+        <code className="rounded bg-surface2 px-1.5 py-0.5 text-[11px] text-accentCyan">
+          /btc
+        </code>{" "}
+        to open an asset card. Read the{" "}
+        <strong className="text-cyan-200">Score + Drivers + Regime</strong> → tap{" "}
+        <strong className="text-cyan-200">📊 Changes</strong> to see what shifted →
+        tap <strong className="text-cyan-200">🤖 Explain</strong> if anything is
+        unclear. That&apos;s your 30-second morning check.
+      </Tip>
+
+      {/* ── Asset Card Anatomy ── */}
+      <SectionDivider icon="🃏" title="Asset Card Anatomy" />
+
+      <TelegramMock>
+        <span className="font-semibold text-fg">₿ BTC · 24H View</span>
+        {"\n"}━━━━━━━━━━━━━━━━━━━━━{"\n"}
+        <span className="text-fg font-semibold">$97,432</span>{" "}
+        <span className="text-emerald-300">↑+2.3% 24H</span>{" "}
+        <span className="text-emerald-300">↑+5.1% 7D</span>
+        {"\n"}🕒 As of: 2026-02-19 14:30 UTC{"\n\n"}
+        <span className="font-semibold text-fg">MASTER:</span> 68/100 Leaning
+        Bullish | Conf: Medium | Cov: 7/8{"\n"}
+        <span className="font-semibold text-fg">REGIME:</span>{" "}
+        <span className="text-emerald-300">🟢 RISK ON</span> — ETF driven{"\n"}
+        <span className="font-semibold text-fg">DRIVERS:</span>{" "}
+        <span className="text-emerald-300">🟢ETF inflows 🟢Perps healthy</span>
+        {" | "}
+        <span className="text-rose-300">🔴PM risk elevated</span>
+        {"\n\n"}━━━ Signal Breakdown ━━━{"\n"}🎰 PM Sentiment:{" "}
+        <span className="text-amber-300">🟡</span> BTC $120K? Odds 42% (↑3pp)
+        {"\n"}⚡ Options Flow:{" "}
+        <span className="text-emerald-300">🟢</span> Calls dom (P/C:0.72)
+        {"\n"}🏛️ ETF Flows:{" "}
+        <span className="text-emerald-300">🟢</span> +$234M (1D) | 7D: +$890M
+        {"\n"}⛓️ On-Chain:{" "}
+        <span className="text-emerald-300">🟢</span> DEX +18% | Stable +0.8%
+        {"\n"}📈 Perps:{" "}
+        <span className="text-emerald-300">🟢</span> F +0.008% | L/S 1.24
+        {"\n"}💥 Liqs: <span className="text-amber-300">🟡</span> $47M |
+        52/48 balanced{"\n"}📐 OI Regime:{" "}
+        <span className="text-emerald-300">🟢</span> OI↑ + Price↑ = Strong
+        trend
+      </TelegramMock>
+
+      {/* ── Signal Pillars ── */}
+      <SectionDivider icon="📡" title="The 8 Signal Pillars" />
+
+      <div className="grid gap-3 md:grid-cols-2">
+        <DetailCard
+          icon="🎰"
+          title="PM Sentiment"
+          tag="Prediction Markets"
+          accent="violet"
+        >
+          <ul className="space-y-1">
+            <Li accent="violet">Top Polymarket market for this asset</Li>
+            <Li accent="violet">Odds % with 24h change in percentage points</Li>
+            <Li accent="violet">🟢 ≤20% risk = bullish, 🔴 ≥60% = bearish</Li>
+            <Li accent="violet">Tap 📊 PM for 5 markets + PM Index</Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="⚡"
+          title="Options Flow"
+          tag="Tier A only (BTC, ETH)"
+          accent="violet"
+        >
+          <ul className="space-y-1">
+            <Li accent="violet">Put/Call ratio from Deribit OI</Li>
+            <Li accent="violet">DVOL (implied volatility) + direction</Li>
+            <Li accent="violet">🟢 Call-dominant, 🔴 Put-dominant</Li>
+            <Li accent="violet">Tap ⚡ Opt for full term structure</Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="🏛️"
+          title="ETF Flows"
+          tag="Tier A only (BTC, ETH, SOL)"
+          accent="emerald"
+        >
+          <ul className="space-y-1">
+            <Li accent="emerald">Daily net flow in $M + 7-day total</Li>
+            <Li accent="emerald">Detects 1D vs 7D divergences</Li>
+            <Li accent="emerald">🟢 Inflows, 🔴 Outflows</Li>
+            <Li accent="emerald">Tap 🏦 ETF for fund-by-fund detail</Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="📈"
+          title="Perps & Funding"
+          tag="Funding, L/S, crowding"
+          accent="amber"
+        >
+          <ul className="space-y-1">
+            <Li accent="amber">Funding rate with crowding detection</Li>
+            <Li accent="amber">L/S ratio: &gt;2 = crowded longs, &lt;0.5 = shorts</Li>
+            <Li accent="amber">Conflict detection (funding vs L/S mismatch)</Li>
+            <Li accent="amber">Next funding timer (8h cycles)</Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="💥"
+          title="Liquidations"
+          tag="Total + long/short split"
+          accent="rose"
+        >
+          <ul className="space-y-1">
+            <Li accent="rose">24h total liquidations in $M</Li>
+            <Li accent="rose">Long vs short % with skew label</Li>
+            <Li accent="rose">&gt;65% one side = flush or squeeze detected</Li>
+            <Li accent="rose">Real-time intensity level when active</Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="⛓️"
+          title="On-Chain Flow"
+          tag="DEX + stables + TVL"
+          accent="cyan"
+        >
+          <ul className="space-y-1">
+            <Li accent="cyan">DEX volume change % (24h)</Li>
+            <Li accent="cyan">Stablecoin flow (7d trend)</Li>
+            <Li accent="cyan">TVL by chain with 24h delta</Li>
+            <Li accent="cyan">BTC: also shows hash rate + mempool</Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="📐"
+          title="Advanced Signals"
+          tag="OI Regime · Basis · Fund Δ · Venues"
+          accent="cyan"
+          wide
+        >
+          <ul className="space-y-1.5 sm:columns-2 sm:gap-x-6">
+            <Li accent="cyan">
+              <strong className="text-fg text-[11px]">OI Regime</strong> — OI+Price
+              quadrant: Trend Build, Crowded, Short Cover, or Deleveraging
+            </Li>
+            <Li accent="cyan">
+              <strong className="text-fg text-[11px]">Basis</strong> — Futures
+              premium/discount vs spot; big gaps = squeeze potential
+            </Li>
+            <Li accent="cyan">
+              <strong className="text-fg text-[11px]">Fund Δ</strong> — Funding rate
+              acceleration over 3 days; rising fast = overheating
+            </Li>
+            <Li accent="cyan">
+              <strong className="text-fg text-[11px]">Venues</strong> —
+              Cross-exchange funding spread; &gt;10bps = fragmented/stressed
+            </Li>
+          </ul>
+        </DetailCard>
+      </div>
+
+      {/* ── Card Actions ── */}
+      <SectionDivider icon="🛠️" title="Card Actions & Expand Buttons" />
+
+      <div className="grid gap-3 md:grid-cols-2">
+        <DetailCard
+          icon="🔍"
+          title="Expand Buttons"
+          tag="Drill into any pillar"
+          accent="violet"
+        >
+          <ul className="space-y-1.5">
+            <Li accent="violet">
+              <strong className="text-fg text-[11px]">📊 PM</strong> — 5 Polymarket
+              markets + PM Index (adoption/stress scoring)
+            </Li>
+            <Li accent="violet">
+              <strong className="text-fg text-[11px]">⚡ Opt</strong> — Full options
+              chain, P/C, DVOL, max pain, skew
+            </Li>
+            <Li accent="violet">
+              <strong className="text-fg text-[11px]">🏦 ETF</strong> — 7-day flow
+              history, top fund breakdown
+            </Li>
+            <Li accent="violet">
+              <strong className="text-fg text-[11px]">📈 Perps</strong> — Multi-venue
+              funding (HL, Binance, Bybit), OI, volume
+            </Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="🛠️"
+          title="Other Actions"
+          tag="Context & intelligence"
+          accent="emerald"
+        >
+          <ul className="space-y-1.5">
+            <Li accent="emerald">
+              <strong className="text-fg text-[11px]">📊 Changes</strong> — What
+              shifted in last 24h, factorized by pillar
+            </Li>
+            <Li accent="emerald">
+              <strong className="text-fg text-[11px]">🤖 Explain</strong> — Claude AI
+              reads the card and explains what matters
+            </Li>
+            <Li accent="emerald">
+              <strong className="text-fg text-[11px]">🔔 Watch</strong> — Set alerts
+              for this asset (price, funding, ETF, PM)
+            </Li>
+            <Li accent="emerald">
+              <strong className="text-fg text-[11px]">24H / 7D / 30D</strong> —
+              Toggle timeframe for all signals
+            </Li>
+          </ul>
+        </DetailCard>
+      </div>
+
+      {/* ── Smart Callouts ── */}
+      <SectionDivider icon="🚨" title="Smart Callouts — Automatic Alerts" />
+
+      <div className="grid gap-3 md:grid-cols-2">
+        <DetailCard
+          icon="🧯"
+          title="Deleveraging Alarm"
+          tag="Market-wide risk event"
+          accent="rose"
+        >
+          <ul className="space-y-1">
+            <Li accent="rose">
+              Triggers when OI drops + price drops + liqs spike simultaneously
+            </Li>
+            <Li accent="rose">
+              Message: &quot;Size down, avoid catching knives&quot;
+            </Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="⚠️"
+          title="Crowd Trap Risk"
+          tag="Squeeze detection"
+          accent="amber"
+        >
+          <ul className="space-y-1">
+            <Li accent="amber">
+              Crowded longs/shorts + funding extreme + OI rising
+            </Li>
+            <Li accent="amber">
+              HIGH / MED risk levels with pattern label
+            </Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="🔀"
+          title="Divergence Warnings"
+          tag="When pillars disagree"
+          accent="amber"
+        >
+          <ul className="space-y-1">
+            <Li accent="amber">
+              Auto-detects when signals conflict across pillars
+            </Li>
+            <Li accent="amber">
+              Enhanced severity scoring (warning → strong)
+            </Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="⚙️"
+          title="Data Quality"
+          tag="Transparency built-in"
+          accent="cyan"
+        >
+          <ul className="space-y-1">
+            <Li accent="cyan">OI anomaly detection (data shift suspected)</Li>
+            <Li accent="cyan">
+              Score caps when coverage is insufficient
+            </Li>
+          </ul>
+        </DetailCard>
+      </div>
+
+      {/* ── Other Views ── */}
+      <SectionDivider icon="🌐" title="Radar, Digest & Confluence" />
+
+      <div className="grid gap-3 md:grid-cols-2">
+        <DetailCard
+          icon="🌐"
+          title="Market Radar"
+          tag="Cross-asset overview"
+          accent="cyan"
+        >
+          <ul className="space-y-1">
+            <Li accent="cyan">
+              Top Polymarket markets ranked by impact score
+            </Li>
+            <Li accent="cyan">
+              Impact = 40% vol + 30% change + 20% recency + 10% type
+            </Li>
+            <Li accent="cyan">Radar Score — aggregate risk reading</Li>
+            <Li accent="cyan">Flow proxy — market-level risk-on/off signal</Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="📰"
+          title="Digest & News"
+          tag="AI summary + live feed"
+          accent="violet"
+        >
+          <ul className="space-y-1">
+            <Li accent="violet">
+              Digest — Claude AI generates daily market narrative
+            </Li>
+            <Li accent="violet">
+              News — Live CryptoPanic headlines with sentiment tagging
+            </Li>
+            <Li accent="violet">
+              Filter by tier (A-only), hide speculation, categories
+            </Li>
+          </ul>
+        </DetailCard>
+      </div>
+
+      {/* ── Coverage Tiers ── */}
+      <SectionDivider icon="📊" title="Asset Coverage Tiers" />
+
+      <div className="overflow-x-auto">
+        <table className="w-full text-[11px] font-mono">
+          <thead>
+            <tr className="border-b border-border/40">
+              <th className="py-2 pr-3 text-left text-muted2 font-semibold">
+                Pillar
+              </th>
+              <th className="py-2 px-3 text-center text-cyan-300 font-semibold">
+                Tier A
+              </th>
+              <th className="py-2 px-3 text-center text-amber-300 font-semibold">
+                Tier B
+              </th>
+              <th className="py-2 pl-3 text-center text-muted font-semibold">
+                Tier C
+              </th>
+            </tr>
+          </thead>
+          <tbody className="text-muted2">
+            {[
+              { pillar: "PM Sentiment", a: true, b: true, c: true },
+              { pillar: "Options Flow", a: true, b: false, c: false },
+              { pillar: "ETF Flows", a: true, b: false, c: false },
+              { pillar: "On-Chain Flow", a: true, b: true, c: true },
+              { pillar: "Perps / Funding", a: true, b: true, c: false },
+              { pillar: "Liquidations", a: true, b: true, c: false },
+              { pillar: "OI Regime / Basis", a: true, b: true, c: false },
+              { pillar: "Fund Δ / Venues", a: true, b: true, c: false },
+            ].map((r) => (
+              <tr key={r.pillar} className="border-b border-border/20">
+                <td className="py-1.5 pr-3 text-fg/80">{r.pillar}</td>
+                <td className="py-1.5 px-3 text-center">
+                  {r.a ? "✓" : "—"}
+                </td>
+                <td className="py-1.5 px-3 text-center">
+                  {r.b ? "✓" : "—"}
+                </td>
+                <td className="py-1.5 pl-3 text-center">
+                  {r.c ? "✓" : "—"}
+                </td>
+              </tr>
+            ))}
+            <tr className="border-t border-border/40 font-semibold">
+              <td className="py-1.5 pr-3 text-fg">Max Pillars</td>
+              <td className="py-1.5 px-3 text-center text-cyan-300">8</td>
+              <td className="py-1.5 px-3 text-center text-amber-300">6</td>
+              <td className="py-1.5 pl-3 text-center text-muted">2</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <Tip icon="📊" tone="info">
+        <strong className="text-cyan-200">Score reading:</strong> 70+ = Bullish,
+        55-70 = Leaning Bullish, 45-55 = Neutral, 30-45 = Leaning Bearish, &lt;30
+        = Bearish. Confidence is{" "}
+        <strong className="text-cyan-200">capped when coverage is low</strong> —
+        the bot won&apos;t overstate with missing data.
+      </Tip>
+
+      <Tip icon="⚠️" tone="warn">
+        <strong className="text-amber-200">Tier awareness:</strong> Tier A assets
+        (BTC, ETH, SOL) get all 8 pillars. Tier B (HYPE, XRP, DOGE, BNB) gets 6.
+        Tier C gets 2. The{" "}
+        <strong className="text-amber-200">confluence score auto-adjusts</strong>{" "}
+        — it only scores pillars with data, so a 70 on Tier B is genuinely strong.
+      </Tip>
+    </div>
+  );
+}
+
+/* ================================================================== */
+/*  5. PRO LAB GUIDE                                                   */
+/* ================================================================== */
+
+function ProLabContent() {
+  return (
+    <div className="space-y-6">
+      <StatsRow
+        items={[
+          { value: "5", label: "Sub-Menus" },
+          { value: "60+", label: "Tools" },
+          { value: "3", label: "Confluence Hubs" },
+          { value: "🔬", label: "Tester+ Access" },
+        ]}
+      />
+
+      {/* ── Main Menu ── */}
+      <SectionDivider icon="🔬" title="Pro Lab Main Menu" />
+
+      <MenuGrid
+        columns={3}
+        items={[
+          { emoji: "📊", label: "Derivs & Flow", desc: "Perps, options, ETF, liqs" },
+          { emoji: "🔗", label: "On-Chain", desc: "DEX, stables, wallets" },
+          { emoji: "🎰", label: "Sentiment & PM", desc: "Mood, predictions, macro" },
+          { emoji: "📈", label: "TA & Scanners", desc: "Opens TA Lab" },
+          { emoji: "🧠", label: "Intel Hub", desc: "All-in-one intelligence" },
+          { emoji: "🧠", label: "Snapshot Hub", desc: "Quick market posture" },
+        ]}
+      />
+
+      <Tip icon="🚀" tone="info">
+        <strong className="text-cyan-200">Quick access:</strong> Type{" "}
+        <code className="rounded bg-surface2 px-1.5 py-0.5 text-[11px] text-accentCyan">
+          /pro
+        </code>{" "}
+        to jump straight to Pro Lab from anywhere. Start with{" "}
+        <strong className="text-cyan-200">Snapshot Hub → Super Card</strong> for
+        the 30-second overview, then drill into whichever pillar looks
+        interesting.
+      </Tip>
+
+      {/* ── Derivs & Flow ── */}
+      <SectionDivider icon="📊" title="1 · Derivatives & Flow — 20+ Tools" />
+
+      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-4">
+        {[
+          { emoji: "🧠", name: "Flow Conf" },
+          { emoji: "🧩", name: "Stress Conf" },
+          { emoji: "🎯", name: "Master Conf" },
+          { emoji: "📈", name: "Regime" },
+          { emoji: "⚡", name: "Options" },
+          { emoji: "💰", name: "Funding" },
+        ].map((m) => (
+          <div
+            key={m.name}
+            className="rounded-lg border border-blue-500/20 bg-blue-500/5 px-2 py-2 text-center"
+          >
+            <span className="text-base block">{m.emoji}</span>
+            <span className="text-[10px] font-mono font-medium text-blue-200">
+              {m.name}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid gap-3 md:grid-cols-2">
+        <DetailCard
+          icon="📈"
+          title="Core Derivatives"
+          tag="Regime, options, funding, crowding"
+          accent="cyan"
+        >
+          <ul className="space-y-1.5">
+            <Li accent="cyan">
+              <strong className="text-fg text-[11px]">📈 Regime</strong> —
+              Derivatives regime classification (risk-on/off/neutral)
+            </Li>
+            <Li accent="cyan">
+              <strong className="text-fg text-[11px]">⚡ Options Pulse</strong> —
+              P/C ratio, DVOL, skew across BTC/ETH/SOL
+            </Li>
+            <Li accent="cyan">
+              <strong className="text-fg text-[11px]">💰 Funding</strong> —
+              Multi-venue rates with spread analysis
+            </Li>
+            <Li accent="cyan">
+              <strong className="text-fg text-[11px]">📊 Crowding</strong> — L/S
+              ratio + crowding alerts per asset
+            </Li>
+            <Li accent="cyan">
+              <strong className="text-fg text-[11px]">💥 Liqs / Liq Map</strong> —
+              Market-wide liquidation heatmap
+            </Li>
+            <Li accent="cyan">
+              <strong className="text-fg text-[11px]">🎯 Max Pain / ETF</strong> —
+              Options strike levels + ETF flow cards
+            </Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="📊"
+          title="Exchange Data Layer"
+          tag="OI, funding heat, volume"
+          accent="violet"
+        >
+          <ul className="space-y-1.5">
+            <Li accent="violet">
+              <strong className="text-fg text-[11px]">📊 OI Tracker</strong> — Open
+              interest trend with 24h delta per venue
+            </Li>
+            <Li accent="violet">
+              <strong className="text-fg text-[11px]">🔥 Funding Heatmap</strong> —
+              Visual heat across top 20 assets
+            </Li>
+            <Li accent="violet">
+              <strong className="text-fg text-[11px]">🐋 HYPE Intel</strong> —
+              Hyperliquid-specific funding, OI, vault data
+            </Li>
+            <Li accent="violet">
+              <strong className="text-fg text-[11px]">📈 Vol Leaders</strong> — Top
+              volume movers across exchanges
+            </Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="🔀"
+          title="Cross-Venue & Advanced"
+          tag="Basis, arb, order book, magnets"
+          accent="violet"
+          wide
+        >
+          <ul className="space-y-1.5 sm:columns-2 sm:gap-x-6">
+            <Li accent="violet">
+              <strong className="text-fg text-[11px]">📐 Basis Check</strong> —
+              Futures vs spot premium per venue
+            </Li>
+            <Li accent="violet">
+              <strong className="text-fg text-[11px]">💱 Funding Arb</strong> —
+              Venue funding spread = arb opportunity
+            </Li>
+            <Li accent="violet">
+              <strong className="text-fg text-[11px]">🔀 Venue Compare</strong> —
+              Side-by-side HL vs Binance vs Bybit
+            </Li>
+            <Li accent="violet">
+              <strong className="text-fg text-[11px]">📖 Order Book</strong> —
+              Bid/ask depth with wall detection
+            </Li>
+            <Li accent="violet">
+              <strong className="text-fg text-[11px]">🧲 Magnet Levels</strong> —
+              Price magnets from OI clusters
+            </Li>
+            <Li accent="violet">
+              <strong className="text-fg text-[11px]">⚡ Deleverage / 🪤 Trap</strong>{" "}
+              — Risk event detectors
+            </Li>
+          </ul>
+        </DetailCard>
+      </div>
+
+      {/* ── On-Chain ── */}
+      <SectionDivider icon="🔗" title="2 · On-Chain — DEX, Stables, Wallets" />
+
+      <div className="grid gap-3 md:grid-cols-2">
+        <DetailCard
+          icon="📊"
+          title="Dune Analytics Core"
+          tag="10 on-chain tools"
+          accent="emerald"
+        >
+          <ul className="space-y-1.5">
+            <Li accent="emerald">
+              <strong className="text-fg text-[11px]">🔗 DEX Volume</strong> —
+              Aggregate DEX volumes, 24h change, chain breakdown
+            </Li>
+            <Li accent="emerald">
+              <strong className="text-fg text-[11px]">💵 Stablecoin Flows</strong>{" "}
+              — USDT/USDC supply trends, 7d flow direction
+            </Li>
+            <Li accent="emerald">
+              <strong className="text-fg text-[11px]">🐋 Whale Trades</strong> —
+              Large on-chain transfers with USD sizing
+            </Li>
+            <Li accent="emerald">
+              <strong className="text-fg text-[11px]">🌉 Bridges</strong> —
+              Cross-chain bridge volume + rotation signals
+            </Li>
+            <Li accent="emerald">
+              <strong className="text-fg text-[11px]">📊 L2 Battle</strong> —
+              Layer 2 comparison (ARB, OP, BASE)
+            </Li>
+            <Li accent="emerald">
+              <strong className="text-fg text-[11px]">🏦 Lending</strong> — DeFi
+              lending rates &amp; utilization (Aave, Compound)
+            </Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="🐋"
+          title="Smart Wallets Hub"
+          tag="Auto-discovery + tracking"
+          accent="emerald"
+        >
+          <ul className="space-y-1.5">
+            <Li accent="emerald">
+              <strong className="text-fg text-[11px]">⛏️ Miner</strong> —
+              Auto-discovery pipeline (candidates → watchlist → verified)
+            </Li>
+            <Li accent="emerald">
+              <strong className="text-fg text-[11px]">🎯 Consensus</strong> —
+              Multiple smart wallets buying same token
+            </Li>
+            <Li accent="emerald">
+              <strong className="text-fg text-[11px]">🏦 CEX Flows</strong> —
+              Exchange deposit/withdrawal monitoring
+            </Li>
+            <Li accent="emerald">
+              <strong className="text-fg text-[11px]">📊 HL Perps</strong> —
+              Hyperliquid leaderboard top traders
+            </Li>
+            <Li accent="emerald">
+              Multi-chain: ETH, SOL, BSC, Base coverage
+            </Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="🦎"
+          title="DEXTools Integration"
+          tag="Pools, gainers, token health"
+          accent="cyan"
+          wide
+        >
+          <ul className="space-y-1.5 sm:columns-2 sm:gap-x-6">
+            <Li accent="cyan">
+              <strong className="text-fg text-[11px]">🏊 Hot Pools</strong> —
+              Trending liquidity pools by volume/activity
+            </Li>
+            <Li accent="cyan">
+              <strong className="text-fg text-[11px]">🆕 New Pools</strong> —
+              Recently created pools with risk scoring
+            </Li>
+            <Li accent="cyan">
+              <strong className="text-fg text-[11px]">📈/📉 Gainers/Losers</strong>{" "}
+              — Top movers on DEXes
+            </Li>
+            <Li accent="cyan">
+              <strong className="text-fg text-[11px]">💚 Token Health</strong> —
+              Liquidity locks, age, score, socials check
+            </Li>
+          </ul>
+        </DetailCard>
+      </div>
+
+      {/* ── Sentiment & Predictions ── */}
+      <SectionDivider icon="🎰" title="3 · Sentiment & Predictions — Macro + PM 3.0" />
+
+      <div className="grid gap-3 md:grid-cols-2">
+        <DetailCard
+          icon="🔮"
+          title="PM 3.0 Terminal"
+          tag="Polymarket + Kalshi"
+          accent="amber"
+        >
+          <ul className="space-y-1.5">
+            <Li accent="amber">
+              <strong className="text-fg text-[11px]">🔍 Search</strong> — Keyword
+              search across Polymarket + Kalshi
+            </Li>
+            <Li accent="amber">
+              <strong className="text-fg text-[11px]">🔥 Trending</strong> — Top
+              markets by volume + movement
+            </Li>
+            <Li accent="amber">
+              <strong className="text-fg text-[11px]">📚 Categories</strong> —
+              Crypto, Politics, Macro, Geopolitics, Sports, Tech
+            </Li>
+            <Li accent="amber">
+              <strong className="text-fg text-[11px]">⚖️ Divergence</strong> —
+              Same market, different odds across venues
+            </Li>
+            <Li accent="amber">
+              <strong className="text-fg text-[11px]">🧪 Paper</strong> — Paper
+              trade predictions risk-free
+            </Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="🏛️"
+          title="Macro & TradFi"
+          tag="DXY, yields, SPX, events"
+          accent="amber"
+        >
+          <ul className="space-y-1.5">
+            <Li accent="amber">
+              <strong className="text-fg text-[11px]">🏛️ Macro Regime</strong> —
+              DXY, yields, SPX, risk-on/off classification
+            </Li>
+            <Li accent="amber">
+              <strong className="text-fg text-[11px]">📅 Events Calendar</strong> —
+              CPI, FOMC, halvings, token unlocks
+            </Li>
+            <Li accent="amber">
+              <strong className="text-fg text-[11px]">📈 Index Pulse</strong> —
+              S&amp;P500, Nasdaq, DJI, VIX real-time
+            </Li>
+            <Li accent="amber">
+              <strong className="text-fg text-[11px]">🕐 Sessions</strong> — Active
+              trading session (Asia/Europe/US)
+            </Li>
+            <Li accent="amber">
+              <strong className="text-fg text-[11px]">💵 USD/FX</strong> — Dollar
+              index + forex impact on crypto
+            </Li>
+          </ul>
+        </DetailCard>
+      </div>
+
+      {/* ── Intel Hub ── */}
+      <SectionDivider icon="🧠" title="4 · Intel Hub — Real-Time Command Center" />
+
+      <DetailCard
+        icon="🧠"
+        title="Intel Hub"
+        tag="16 tools — cards from every module in one browsable menu"
+        accent="rose"
+        wide
+      >
+        <ul className="space-y-1.5 sm:columns-2 sm:gap-x-6">
+          <Li accent="rose">
+            <strong className="text-fg text-[11px]">🎯 Confluence</strong> — Master
+            signal confluence reading
+          </Li>
+          <Li accent="rose">
+            <strong className="text-fg text-[11px]">👁 Overview</strong> — Top-level
+            market state
+          </Li>
+          <Li accent="rose">
+            <strong className="text-fg text-[11px]">⛽ Gas / 💧 Liquidity</strong>{" "}
+            — Network cost + flow state
+          </Li>
+          <Li accent="rose">
+            <strong className="text-fg text-[11px]">🐋 Whales / 🚀 Launch</strong>{" "}
+            — Whale activity + new token launches
+          </Li>
+          <Li accent="rose">
+            <strong className="text-fg text-[11px]">🎰 Pumpfun / 🦎 DEX</strong> —
+            Meme launches + DEX radar
+          </Li>
+          <Li accent="rose">
+            <strong className="text-fg text-[11px]">📊 TA Lab / ⚡ Super TA</strong>{" "}
+            — Technical signals + super scanner
+          </Li>
+          <Li accent="rose">
+            <strong className="text-fg text-[11px]">🧭 Sentiment / 📰 News</strong>{" "}
+            — Market mood + headline feed
+          </Li>
+          <Li accent="rose">
+            <strong className="text-fg text-[11px]">👛 Wallet / 🧾 PM Trades</strong>{" "}
+            — Smart wallet + prediction market activity
+          </Li>
+        </ul>
+      </DetailCard>
+
+      {/* ── Snapshot Hub ── */}
+      <SectionDivider icon="📸" title="5 · Snapshot Hub — 30-Second Market Read" />
+
+      <div className="grid gap-3 md:grid-cols-2">
+        <DetailCard
+          icon="🎛️"
+          title="Super Card"
+          tag="THE master view"
+          accent="cyan"
+        >
+          <ul className="space-y-1">
+            <Li accent="cyan">
+              Combines all signals into one dense card
+            </Li>
+            <Li accent="cyan">
+              Regime + pulse + posture + key divergences
+            </Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="🧠"
+          title="System 2.0"
+          tag="Full market state"
+          accent="cyan"
+        >
+          <ul className="space-y-1">
+            <Li accent="cyan">
+              Complete regime + pulse + divergence snapshot
+            </Li>
+            <Li accent="cyan">
+              Deeper than Super Card — full system analysis
+            </Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="📊"
+          title="Changes 24h"
+          tag="What moved today"
+          accent="violet"
+        >
+          <ul className="space-y-1">
+            <Li accent="violet">
+              Factorized breakdown of what shifted per pillar
+            </Li>
+            <Li accent="violet">
+              Per-signal delta (e.g. &quot;ETF −$50M → +$234M&quot;)
+            </Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="🧭"
+          title="Intel + Regime"
+          tag="Quick intelligence summary"
+          accent="violet"
+        >
+          <ul className="space-y-1">
+            <Li accent="violet">
+              Current regime classification + Fear &amp; Greed
+            </Li>
+            <Li accent="violet">
+              Compact intelligence card for fast reads
+            </Li>
+          </ul>
+        </DetailCard>
+      </div>
+
+      <Tip icon="🔒" tone="warn">
+        <strong className="text-amber-200">Access:</strong> Pro Lab requires{" "}
+        <strong className="text-amber-200">🔬 Tester</strong> tier or above.
+        Explorers see locked buttons with 🔒 icons. Intel Hub is partially
+        accessible to Explorers for basic cards.
+      </Tip>
+
+      <Tip icon="🧭" tone="success">
+        <strong className="text-emerald-200">Pro tip:</strong> The{" "}
+        <strong className="text-emerald-200">Confluence Cards</strong> at the top
+        of each sub-menu are the fastest way to get a verdict. Start with
+        Snapshot Hub → Super Card for the overview, then use confluence cards to
+        drill into Derivs, On-Chain, or Sentiment.
+      </Tip>
+    </div>
+  );
+}
+
+/* ================================================================== */
+/*  6. TA LAB GUIDE                                                    */
+/* ================================================================== */
+
+function TALabContent() {
+  return (
+    <div className="space-y-6">
+      <StatsRow
+        items={[
+          { value: "3", label: "Confluence Cards" },
+          { value: "7", label: "Macro TA Tools" },
+          { value: "6", label: "Expansion Tools" },
+          { value: "20+", label: "Scanners" },
+        ]}
+      />
+
+      {/* ── Main Menu ── */}
+      <SectionDivider icon="📈" title="TA Lab Main Menu" />
+
+      <MenuGrid
+        columns={3}
+        items={[
+          { emoji: "🎯", label: "Master Conf", desc: "Unified stance" },
+          { emoji: "🧠", label: "Macro Conf", desc: "Trend + momentum" },
+          { emoji: "🧩", label: "Expansion Conf", desc: "Structure + regime" },
+          { emoji: "📊", label: "Macro TA", desc: "Asset trend analysis" },
+          { emoji: "🔧", label: "Expansion", desc: "Advanced structure" },
+          { emoji: "📡", label: "Scanners", desc: "Market-wide signals" },
+        ]}
+      />
+
+      {/* ── Master Confluence ── */}
+      <SectionDivider icon="🎯" title="Master Confluence — How It Works" />
+
+      <TelegramMock>
+        <span className="font-semibold text-fg">
+          🎯 MASTER CONFLUENCE — BTC
+        </span>
+        {"\n"}━━━━━━━━━━━━━━━━━━━━━{"\n"}Macro:{" "}
+        <span className="text-emerald-300">+2 🟢</span> | Expansion:{" "}
+        <span className="text-emerald-300">+3 🟢</span>
+        {"\n"}Master: <span className="text-emerald-300">+3 → 🟢 LONG TREND</span>
+        {"\n\n"}━━━ MACRO SIGNALS ━━━{"\n"}
+        <span className="text-emerald-300">✅</span> Weekly trend: bullish
+        (EMA20 &gt; EMA50){"\n"}
+        <span className="text-emerald-300">✅</span> Daily momentum: RSI 62
+        rising{"\n"}
+        <span className="text-amber-300">🟡</span> OBV: neutral (flat
+        divergence){"\n\n"}━━━ EXPANSION SIGNALS ━━━{"\n"}
+        <span className="text-emerald-300">✅</span> Regime: above EMA100 +
+        SMA200{"\n"}
+        <span className="text-emerald-300">✅</span> Structure: HH + HL
+        (uptrend){"\n"}
+        <span className="text-emerald-300">✅</span> VWAP: above Monthly +
+        Weekly{"\n"}
+        <span className="text-amber-300">🟡</span> ADX: 24 (borderline
+        trending){"\n\n"}━━━ ACTION ━━━{"\n"}📊 Stance:{" "}
+        <span className="text-emerald-300 font-semibold">LONG TREND</span>
+        {"\n"}🎯 Risk Multiplier: 0.9× (ATR high){"\n"}
+        <span className="text-emerald-300">✅</span> Conflict: NONE{"\n\n"}
+        ━━━ KEY LEVELS ━━━{"\n"}📈 Trigger: $98,200 (breakout confirm){"\n"}🛡️
+        Invalidation: $94,500{"\n"}🎯 Target: $102,000
+      </TelegramMock>
+
+      <DetailCard
+        icon="🎯"
+        title="How Master Confluence Works"
+        tag="55% Expansion + 45% Macro = one verdict"
+        accent="cyan"
+        wide
+      >
+        <ul className="space-y-1.5 sm:columns-2 sm:gap-x-6">
+          <Li accent="cyan">
+            <strong className="text-fg text-[11px]">Score Range</strong> — −5 to
+            +5: ≥+3 Long Trend, +1/+2 Long Biased, 0 Range, −1/−2 Short Biased,
+            ≤−3 Short Trend
+          </Li>
+          <Li accent="cyan">
+            <strong className="text-fg text-[11px]">Macro Feeds</strong> — Weekly
+            trend (EMA20/50), daily RSI, OBV flow, ATR regime, Trend Stack
+          </Li>
+          <Li accent="cyan">
+            <strong className="text-fg text-[11px]">Expansion Feeds</strong> —
+            Regime Bands, Structure Map, VWAP positions, ADX, breakout state
+          </Li>
+          <Li accent="cyan">
+            <strong className="text-fg text-[11px]">Conflict Detection</strong> —
+            HARD: macro vs expansion ≥4 pts apart → reduce size. SOFT: ≥3 pts →
+            caution
+          </Li>
+          <Li accent="cyan">
+            <strong className="text-fg text-[11px]">Assets</strong> — BTC, ETH,
+            SOL, HYPE, BNB, DOGE, XRP
+          </Li>
+          <Li accent="cyan">
+            <strong className="text-fg text-[11px]">Risk Multiplier</strong> —
+            Auto-adjusts position sizing based on ATR volatility regime
+          </Li>
+        </ul>
+      </DetailCard>
+
+      <Tip icon="🎯" tone="info">
+        <strong className="text-cyan-200">Quick workflow:</strong> Start with{" "}
+        <strong className="text-cyan-200">🎯 Master Confluence</strong> for the
+        verdict (+3 Long, 0 Range, −3 Short). If aligned, use{" "}
+        <strong className="text-cyan-200">📡 Scanners</strong> to find specific
+        entries. Use <strong className="text-cyan-200">Combo 7</strong> for
+        highest-conviction setups.
+      </Tip>
+
+      {/* ── Macro TA ── */}
+      <SectionDivider icon="📊" title="1 · Macro TA — Asset Trend Analysis" />
+
+      <div className="grid gap-3 md:grid-cols-2">
+        <DetailCard
+          icon="⚡"
+          title="TA Snapshot"
+          tag="Multi-indicator summary card"
+          accent="cyan"
+        >
+          <ul className="space-y-1">
+            <Li accent="cyan">RSI (oversold/overbought), MACD (crosses), EMA Stack</Li>
+            <Li accent="cyan">Composite score −10 to +10 for one asset</Li>
+            <Li accent="cyan">
+              Available: BTC, ETH, SOL, HYPE, BNB, DOGE, XRP
+            </Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="📊"
+          title="Trend Stack"
+          tag="EMA regime + momentum"
+          accent="cyan"
+        >
+          <ul className="space-y-1">
+            <Li accent="cyan">
+              EMA ordering: 20 &gt; 50 &gt; 100 &gt; 200 = perfect bull
+            </Li>
+            <Li accent="cyan">Combines EMA + SMA + RSI + OBV into trend score</Li>
+            <Li accent="cyan">Timeframes: 4H, 1D, 3D, 1W</Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="🧭"
+          title="Anchor Levels"
+          tag="Key support/resistance zones"
+          accent="violet"
+        >
+          <ul className="space-y-1">
+            <Li accent="violet">Swing high/low based S/R zones</Li>
+            <Li accent="violet">Confluence with round numbers = stronger</Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="🧲"
+          title="Acceptance Check"
+          tag="Level acceptance detection"
+          accent="violet"
+        >
+          <ul className="space-y-1">
+            <Li accent="violet">2+ closes above/below = trend confirm</Li>
+            <Li accent="violet">Rejection = potential reversal zone</Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="🌪️"
+          title="Volatility Regime"
+          tag="ATR bands + vol state"
+          accent="amber"
+        >
+          <ul className="space-y-1">
+            <Li accent="amber">High ATR: expect big moves, reduce size</Li>
+            <Li accent="amber">Low ATR: compression → breakout soon</Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="🧱"
+          title="Volume Flow (OBV)"
+          tag="On-Balance Volume analysis"
+          accent="amber"
+        >
+          <ul className="space-y-1">
+            <Li accent="amber">Rising OBV + rising price = healthy trend</Li>
+            <Li accent="amber">OBV divergence = potential reversal signal</Li>
+          </ul>
+        </DetailCard>
+      </div>
+
+      {/* ── Expansion ── */}
+      <SectionDivider icon="🔧" title="2 · Expansion — Advanced Structure" />
+
+      <div className="grid gap-3 md:grid-cols-2">
+        <DetailCard
+          icon="🟢"
+          title="Regime Bands"
+          tag="EMA100 + SMA200 zones"
+          accent="violet"
+        >
+          <ul className="space-y-1">
+            <Li accent="violet">
+              Above both = bull regime, below = bear, between = transition
+            </Li>
+            <Li accent="violet">The macro trend filter — tells you which direction to bias</Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="🗺️"
+          title="Structure Map"
+          tag="Swing levels + market mode"
+          accent="violet"
+        >
+          <ul className="space-y-1">
+            <Li accent="violet">HH + HL = uptrend, LH + LL = downtrend</Li>
+            <Li accent="violet">Mode classification: trending vs ranging</Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="📊"
+          title="VWAP Analysis"
+          tag="Anchored VWAP levels"
+          accent="cyan"
+        >
+          <ul className="space-y-1">
+            <Li accent="cyan">YTD VWAP: major institutional fair value</Li>
+            <Li accent="cyan">Monthly + Weekly VWAP: medium/short-term levels</Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="🕳️"
+          title="Gap Watch"
+          tag="CME weekend gaps"
+          accent="cyan"
+        >
+          <ul className="space-y-1">
+            <Li accent="cyan">~80% of CME Bitcoin futures gaps eventually fill</Li>
+            <Li accent="cyan">Gap fill = mean reversion target</Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="🧨"
+          title="Breakout Alert"
+          tag="Compression → expansion"
+          accent="amber"
+        >
+          <ul className="space-y-1">
+            <Li accent="amber">Squeeze: Bollinger Bands inside Keltner Channels</Li>
+            <Li accent="amber">Release direction with momentum confirmation</Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="📶"
+          title="ADX Strength"
+          tag="Trend vs chop filter"
+          accent="amber"
+        >
+          <ul className="space-y-1">
+            <Li accent="amber">ADX &gt; 25: trending (use trend strategies)</Li>
+            <Li accent="amber">ADX &lt; 20: ranging (use mean reversion)</Li>
+          </ul>
+        </DetailCard>
+      </div>
+
+      {/* ── Scanners ── */}
+      <SectionDivider icon="📡" title="3 · Scanners — Market-Wide Detection" />
+
+      <Tip icon="📡" tone="info">
+        <strong className="text-cyan-200">Scanner universe:</strong> Binance
+        USDT-M perpetuals with 24h volume ≥ $5M, scanned across{" "}
+        <strong className="text-cyan-200">15m, 1h, 4h, and 1D</strong>{" "}
+        timeframes. Results show bull/bear signals with multi-venue badges.
+      </Tip>
+
+      <div className="grid gap-3 md:grid-cols-2">
+        <DetailCard
+          icon="🧭"
+          title="Momentum"
+          tag="RSI, EMA, divergences"
+          accent="emerald"
+        >
+          <ul className="space-y-1.5">
+            <Li accent="emerald">
+              <strong className="text-fg text-[11px]">RSI Extremes</strong> —
+              Assets at RSI &lt;30 (oversold) or &gt;70 (overbought)
+            </Li>
+            <Li accent="emerald">
+              <strong className="text-fg text-[11px]">EMA Squeeze</strong> — EMAs
+              compressing → imminent breakout
+            </Li>
+            <Li accent="emerald">
+              <strong className="text-fg text-[11px]">RSI Divergences</strong> —
+              Price vs RSI divergence (reversal signals)
+            </Li>
+            <Li accent="emerald">
+              <strong className="text-fg text-[11px]">Extreme Divs</strong> —
+              HIGH-QUALITY: divergences only at RSI 30/70 zones
+            </Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="📈"
+          title="Trend Suite"
+          tag="Supertrend, EMA, ADX, MACD"
+          accent="cyan"
+        >
+          <ul className="space-y-1.5">
+            <Li accent="cyan">
+              <strong className="text-fg text-[11px]">Supertrend</strong> —
+              ATR-based trend flips + runners
+            </Li>
+            <Li accent="cyan">
+              <strong className="text-fg text-[11px]">EMA Stack / 200 Flip</strong>{" "}
+              — Structure + 4H regime line
+            </Li>
+            <Li accent="cyan">
+              <strong className="text-fg text-[11px]">ADX Regime</strong> —
+              Trending vs chop classification
+            </Li>
+            <Li accent="cyan">
+              <strong className="text-fg text-[11px]">MACD + Trend Conf</strong> —
+              Momentum + combined −4 to +4 score
+            </Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="🎯"
+          title="Trend Strats"
+          tag="TTM, Donchian, BOS, RVOL, Chandelier"
+          accent="amber"
+        >
+          <ul className="space-y-1.5">
+            <Li accent="amber">
+              <strong className="text-fg text-[11px]">TTM Squeeze</strong> — BB
+              inside KC + release direction detection
+            </Li>
+            <Li accent="amber">
+              <strong className="text-fg text-[11px]">Donchian</strong> — 20-period
+              channel breakouts
+            </Li>
+            <Li accent="amber">
+              <strong className="text-fg text-[11px]">BOS</strong> — Pivot-based
+              Break of Structure signals
+            </Li>
+            <Li accent="amber">
+              <strong className="text-fg text-[11px]">RVOL</strong> —
+              Volume-confirmed range breakouts
+            </Li>
+            <Li accent="amber">
+              <strong className="text-fg text-[11px]">Chandelier Exit</strong> —
+              ATR trailing stop flips
+            </Li>
+          </ul>
+        </DetailCard>
+
+        <DetailCard
+          icon="⚡"
+          title="Trade Systems"
+          tag="Funding, OI, Basis, L/S, VWAP, Sweeps"
+          accent="rose"
+        >
+          <ul className="space-y-1.5">
+            <Li accent="rose">
+              <strong className="text-fg text-[11px]">Funding</strong> — Crowding
+              via extreme rates (±0.01% threshold)
+            </Li>
+            <Li accent="rose">
+              <strong className="text-fg text-[11px]">OI Flow</strong> — OI
+              expansion/flush with price action
+            </Li>
+            <Li accent="rose">
+              <strong className="text-fg text-[11px]">Basis</strong> — Perp vs
+              index premium extremes
+            </Li>
+            <Li accent="rose">
+              <strong className="text-fg text-[11px]">L/S Ratio</strong> — Crowded
+              positioning detection
+            </Li>
+            <Li accent="rose">
+              <strong className="text-fg text-[11px]">VWAP / Sweeps</strong> —
+              Session reclaim + liquidity stop-hunt detection
+            </Li>
+          </ul>
+        </DetailCard>
+      </div>
+
+      {/* ── Combo 7 ── */}
+      <SectionDivider icon="🧬" title="Combo 7 — Multi-Indicator Strategies" />
+
+      <DetailCard
+        icon="🧬"
+        title="7 High-Confluence Combo Strategies"
+        tag="Each combines 3-4 independent signals for high-conviction entries"
+        accent="violet"
+        wide
+      >
+        <ul className="space-y-1.5 sm:columns-2 sm:gap-x-6">
+          <Li accent="violet">
+            <strong className="text-fg text-[11px]">RTC</strong> — Regime Trend
+            Continuation (ADX + Supertrend + EMA + MACD)
+          </Li>
+          <Li accent="violet">
+            <strong className="text-fg text-[11px]">MRS</strong> — Mean Reversion
+            Snap (RSI extreme + BB touch + OBV div)
+          </Li>
+          <Li accent="violet">
+            <strong className="text-fg text-[11px]">VSB</strong> — Volatility
+            Squeeze Breakout (TTM + ADX + volume)
+          </Li>
+          <Li accent="violet">
+            <strong className="text-fg text-[11px]">PRC</strong> — Pivot Range
+            Capture (Donchian + Structure + VWAP)
+          </Li>
+          <Li accent="violet">
+            <strong className="text-fg text-[11px]">TED</strong> — Trend
+            Exhaustion Detector (RSI div + Chandelier + OBV)
+          </Li>
+          <Li accent="violet">
+            <strong className="text-fg text-[11px]">SBR</strong> — Structure
+            Break &amp; Retest (BOS + EMA200 + Volume)
+          </Li>
+          <Li accent="violet">
+            <strong className="text-fg text-[11px]">CTF</strong> — Counter-Trend
+            Fade (Funding extreme + sweep + RSI div)
+          </Li>
+        </ul>
+      </DetailCard>
+
+      <Tip icon="🧬" tone="warn">
+        <strong className="text-amber-200">Combo 7 tip:</strong> Each combo
+        requires <strong className="text-amber-200">3-4 independent signals</strong>{" "}
+        to fire simultaneously — this is the highest-confluence scanner tier.{" "}
+        <strong className="text-amber-200">Extreme Divs</strong> (RSI divergences
+        at 30/70 only) is the highest-quality reversal signal.{" "}
+        <strong className="text-amber-200">TTM Squeeze</strong> fires{" "}
+        <em>before</em> the breakout — position early.
+      </Tip>
+
+      <Tip icon="🔗" tone="success">
+        <strong className="text-emerald-200">Cross-module links:</strong> TA Lab
+        scanners power{" "}
+        <strong className="text-emerald-200">Sim Lab strategies</strong> — preset
+        strategies in the Futures engine are based on the same scanner logic.
+        Scanner alerts flow into the{" "}
+        <strong className="text-emerald-200">Alerts Hub</strong> and{" "}
+        <strong className="text-emerald-200">Fusion system</strong> for
+        multi-scanner confluence filtering.
+      </Tip>
+    </div>
+  );
+}
+
+/* ================================================================== */
 /*  EXPORTED SECTION                                                   */
 /* ================================================================== */
 
@@ -1495,6 +2850,24 @@ export function TerminalGuides() {
       icon: "🧪",
       title: "Simulation Lab",
       content: <SimLabContent />,
+    },
+    {
+      id: "macro",
+      icon: "🌐",
+      title: "Macro Desk",
+      content: <MacroDeskContent />,
+    },
+    {
+      id: "pro",
+      icon: "🔬",
+      title: "Pro Lab",
+      content: <ProLabContent />,
+    },
+    {
+      id: "talab",
+      icon: "📈",
+      title: "TA Lab",
+      content: <TALabContent />,
     },
   ];
 
