@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button, Card, Chip, Container, SectionHeading } from "@/components/ui";
+import { Button, Card, Container, SectionHeading } from "@/components/ui";
 import { Divider, Metric } from "@/components/dashboard";
 
 type KPI = { key: string; label: string; value: string; sub?: string };
@@ -46,33 +46,31 @@ export default async function Home() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <Button href="/proofclaw" variant="secondary">Trust layer</Button>
-            <Button href="https://app.edgeblocks.io" variant="primary">Enter App</Button>
+            <Button href="/eventedge" variant="secondary">EventEdge</Button>
+            <Button href="/dashboard" variant="primary">Dashboard</Button>
           </div>
         </header>
 
         {/* Hero */}
-        <section className="pt-4 pb-10">
-          <Chip>ONE DATABASE &bull; ONE FLYWHEEL &bull; ONE TOKEN</Chip>
-
-          <h1 className="mt-6 text-4xl md:text-6xl font-semibold tracking-tight max-w-4xl">
-            Turn on-chain noise into signal—fast, modular, and composable.
+        <section className="pt-4 pb-10 text-center">
+          <h1 className="mx-auto text-4xl md:text-6xl font-semibold tracking-tight max-w-4xl">
+            Turn on-chain noise into signal&mdash;fast, modular, and composable.
           </h1>
 
-          <p className="mt-5 max-w-2xl text-lg text-muted leading-relaxed">
-            EdgeBlocks is a modular platform for collecting, normalizing, and scoring crypto data—powering alerts,
+          <p className="mx-auto mt-5 max-w-2xl text-lg text-muted leading-relaxed">
+            EdgeBlocks is a modular platform for collecting, normalizing, and scoring crypto data&mdash;powering alerts,
             dashboards, and agent workflows with a single intelligence layer.
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Button href="https://app.edgeblocks.io" variant="primary">
-              Enter App (app.edgeblocks.io)
+              Enter App
             </Button>
-            <Button href="#platform" variant="secondary">
-              Explore the platform
+            <Button href="/eventedge" variant="secondary">
+              EventEdge Terminal
             </Button>
-            <Button href="/proofclaw" variant="ghost">
-              How ProofClaw enriches EdgeBlocks &rarr;
+            <Button href="/dashboard" variant="ghost">
+              Live Dashboard &rarr;
             </Button>
           </div>
 
