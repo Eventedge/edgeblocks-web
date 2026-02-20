@@ -10,6 +10,14 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async rewrites() {
+    return [
+      {
+        source: "/api/v1/hypepipe/:path*",
+        destination: "https://api.edgeblocks.io/api/v1/hypepipe/:path*",
+      },
+    ];
+  },
 };
 
 export default nextConfig;
