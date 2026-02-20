@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Button, Card, Container, SectionHeading } from "@/components/ui";
 import { Divider, Metric } from "@/components/dashboard";
@@ -30,7 +31,7 @@ export default async function Home() {
         {/* Top nav */}
         <header className="flex items-center justify-between gap-4 py-10">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-accentGold via-accentCyan to-accentPurple opacity-90" />
+            <Image src="/brand/icon.svg" alt="EdgeBlocks" width={36} height={36} className="rounded-lg" />
             <div>
               <div className="text-xs font-mono text-muted">EDGEBLOCKS</div>
               <div className="text-lg font-semibold">Modular crypto intelligence</div>
