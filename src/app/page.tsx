@@ -1,377 +1,437 @@
-import Link from "next/link";
-import { Button, Card, Container, SectionHeading } from "@/components/ui";
-import { Divider, Metric } from "@/components/dashboard";
+import "./homepage-v2.css";
+import { Container } from "@/components/ui";
 import { Navbar } from "@/components/Navbar";
+import { ScrollReveal } from "@/components/home/ScrollReveal";
 
-type KPI = { key: string; label: string; value: string; sub?: string };
+/* ------------------------------------------------------------------ */
+/*  Layer section data                                                  */
+/* ------------------------------------------------------------------ */
 
-async function getJSON<T>(path: string, revalidateSeconds: number): Promise<T | null> {
-  try {
-    const res = await fetch(path, { next: { revalidate: revalidateSeconds } });
-    if (!res.ok) return null;
-    return res.json();
-  } catch {
-    return null;
-  }
+const API_CHIPS = [
+  "CoinGlass","Binance","Bybit","Hyperliquid","OKX","Deribit",
+  "Polymarket","Kalshi","Dune Analytics","DefiLlama","Nansen",
+  "CoinGecko","SoSoValue","DEXTools","CoinStats","DIA Oracle",
+  "TwelveData","Finnhub","CoinCap","mempool.space",
+];
+
+const PILLARS = [
+  { emoji: "\u{1F4C8}", name: "Derivatives", sub: "Funding \u00B7 OI \u00B7 L/S" },
+  { emoji: "\u{1F3B0}", name: "Options",     sub: "P/C \u00B7 DVOL \u00B7 Skew" },
+  { emoji: "\u{1F3E6}", name: "ETF Flows",   sub: "Inflows \u00B7 Outflows" },
+  { emoji: "\u{1F3AF}", name: "Prediction Mkts", sub: "Polymarket \u00B7 Kalshi" },
+  { emoji: "\u{1F4A5}", name: "Liquidations", sub: "Cascades \u00B7 Imbalance" },
+  { emoji: "\u26D3\uFE0F", name: "On-Chain",  sub: "DEX \u00B7 Stables \u00B7 Whales" },
+  { emoji: "\u{1F4B9}", name: "Sentiment",   sub: "Fear/Greed \u00B7 Social" },
+  { emoji: "\u{1F30D}", name: "Macro",       sub: "DXY \u00B7 Yields \u00B7 Risk" },
+];
+
+type Feat = { emoji: string; name: string; desc: string };
+
+const LAYER1_FEATS: Feat[] = [
+  { emoji: "\u{1F4E5}", name: "Ingest & Normalize", desc: "50+ APIs ingested, cleaned, and normalized into one consistent format. Different schemas, same output." },
+  { emoji: "\u{1F4BE}", name: "Snapshot Architecture", desc: "Every data point stored as a versioned snapshot. Full historical depth. Fall back to last-known-good when providers fail." },
+  { emoji: "\u26A1",     name: "Smart Caching + TTL", desc: "Order books refresh in 30s, funding in 1m, ETF flows in 1h. Each source has the right cadence. No wasted calls." },
+];
+
+const LAYER2_FEATS: Feat[] = [
+  { emoji: "\u{1F3AF}", name: "Confluence Scoring", desc: "8 weighted pillars. When they agree, you have conviction. When they don\u2019t, you wait. No more single-signal noise." },
+  { emoji: "\u{1F4CA}", name: "18 TA Scanners", desc: "RSI, Squeeze, Supertrend, EMA Stack, ADX, BOS/CHoCH \u2014 scanning 170 tokens every 5 minutes for alignment." },
+  { emoji: "\u{1F916}", name: "AI Analyst", desc: "Ask anything in natural language. AI reads all 8 pillars and explains the market in plain English. No jargon walls." },
+  { emoji: "\u2600\uFE0F", name: "Automated Reports", desc: "Morning Desk at 08:30 UTC, Close Wrap at 22:30 UTC. Bloomberg-style briefs delivered before you open charts." },
+  { emoji: "\u{1F4E1}", name: "Telegram-Native", desc: "No app download, no desktop dashboard. Just /start in Telegram. Intelligence finds you where you already are." },
+  { emoji: "\u{1F4BC}", name: "Portfolio Tracking", desc: "EdgeFolio tracks your positions across chains. Confluence-weighted portfolio view with rebalancing signals." },
+];
+
+const LAYER4_FEATS: Feat[] = [
+  { emoji: "\u{1F9EA}", name: "Simulation Lab", desc: "Paper trading across Binance, Bybit, Hyperliquid, Kraken, and Polymarket. Real prices, real fills, zero risk." },
+  { emoji: "\u{1F3AF}", name: "Auto-Entry on Signals", desc: "TA scanners trigger paper trades automatically when confluence aligns. SL/TP monitored every 2 minutes." },
+  { emoji: "\u{1F4C8}", name: "Track Record", desc: "Full PnL history, win rate, Sharpe ratio, R-multiples. Prove your strategy works before you risk capital." },
+  { emoji: "\u{1F514}", name: "Smart Alerts", desc: "Price, confluence, TA scanner, whale, ETF flow, and custom alerts. Deduplication and cooldowns \u2014 no spam." },
+  { emoji: "\u{1F4E1}", name: "alertd Service", desc: "Alerts extracted as a platform primitive. Bot, website, and future agents all consume the same signal stream." },
+  { emoji: "\u{1F4CA}", name: "Strategy Journal", desc: "Every trade logged with entry reason, exit result, and confluence at time of entry. Learn what works for you." },
+];
+
+const LAYER5_FEATS: Feat[] = [
+  { emoji: "\u{1F3A8}", name: "Pick Your Features", desc: "Choose from hundreds of EdgeBank features. Derivatives trader? Load up on funding + OI + liquidations. Macro first? DXY + yields + ETF flows." },
+  { emoji: "\u{1F527}", name: "Build Your Strategy", desc: "Combine features into custom confluence rules. Set your own weights, thresholds, and triggers. Your edge, your way." },
+  { emoji: "\u{1F916}", name: "Deploy as a Bot", desc: "Your strategy runs as a personal Telegram bot. Alerts, reports, and paper trades \u2014 all configured to how you trade." },
+  { emoji: "\u{1F9EA}", name: "Paper First, Real Later", desc: "Run every strategy in simulation before going live. See real results on real price action with zero exposure." },
+  { emoji: "\u{1F4CA}", name: "EdgeMind Integration", desc: "Wire ML predictions into your strategy. Use probability scores as confirmation or filters on your own setups." },
+  { emoji: "\u{1F4C8}", name: "Performance Dashboard", desc: "See how your custom strategy performs over time. Compare against default confluence. Iterate and improve." },
+];
+
+const LAYER6_FEATS: Feat[] = [
+  { emoji: "\u{1F916}", name: "Personal Agents", desc: "Turn your strategy into an agent that monitors, alerts, and paper trades automatically. Set it and let it run." },
+  { emoji: "\u{1F514}", name: "Smart Notifications", desc: "Agents watch your specific conditions \u2014 not generic price alerts, but \u201Cmy confluence on ETH hit 80 with funding spike.\u201D" },
+  { emoji: "\u{1F3EA}", name: "Rent Agents", desc: "Browse proven agents from other traders. See their verified track record. Rent the ones that match your style." },
+  { emoji: "\u{1F4B0}", name: "Monetize Yours", desc: "Built a strategy that works? Deploy it as a rentable agent. Other traders pay to use it. You earn from your edge." },
+  { emoji: "\u{1F512}", name: "Gated & Verified", desc: "Agents run through EdgePipe with strict scopes. Read-only access. Auditable execution. No direct DB or exchange access." },
+  { emoji: "\u{1F4CA}", name: "Verified Track Records", desc: "Every agent\u2019s performance tracked by the platform \u2014 not self-reported. Calibrated confidence. Proven results." },
+];
+
+const FLOW_NODES = [
+  { label: "Signal Detected", border: "var(--hp2-gold)",   color: "var(--hp2-gold2)" },
+  { label: "Confluence Check", border: "var(--hp2-blue)",   color: "var(--hp2-blue2)" },
+  { label: "Alert Fired",      border: "var(--hp2-purple)", color: "var(--hp2-purple2)" },
+  { label: "Paper Trade Opened", border: "var(--hp2-green)", color: "var(--hp2-green2)" },
+  { label: "SL/TP Monitored",  border: "var(--hp2-cyan)",  color: "var(--hp2-cyan2)" },
+  { label: "Result Logged",    border: "var(--hp2-green)",  color: "var(--hp2-green2)" },
+];
+
+const RELEVANCE_ROWS = [
+  { label: "ETF Flows",    pct: 92, grad: "linear-gradient(90deg,var(--hp2-green),var(--hp2-green2))",  pctColor: "var(--hp2-green2)" },
+  { label: "Funding Rate",  pct: 78, grad: "linear-gradient(90deg,var(--hp2-green),var(--hp2-green2))",  pctColor: "var(--hp2-green2)" },
+  { label: "PM Odds",       pct: 65, grad: "linear-gradient(90deg,var(--hp2-blue),var(--hp2-blue2))",    pctColor: "var(--hp2-blue2)" },
+  { label: "RSI Div",       pct: 54, grad: "linear-gradient(90deg,var(--hp2-blue),var(--hp2-blue2))",    pctColor: "var(--hp2-blue2)" },
+  { label: "Social Sent.",   pct: 31, grad: "linear-gradient(90deg,var(--hp2-red),#ef444480)",           pctColor: "var(--hp2-text4)" },
+  { label: "Whale Txs",     pct: 22, grad: "linear-gradient(90deg,var(--hp2-red),#ef444480)",           pctColor: "var(--hp2-text4)" },
+];
+
+/* ------------------------------------------------------------------ */
+/*  Reusable sub-components (server-side, no "use client")             */
+/* ------------------------------------------------------------------ */
+
+function FeatGrid({ feats }: { feats: Feat[] }) {
+  return (
+    <div className="hp2-feat-grid hp2-reveal">
+      {feats.map((f) => (
+        <div className="hp2-feat" key={f.name}>
+          <span className="hp2-feat-emoji">{f.emoji}</span>
+          <div className="hp2-feat-name">{f.name}</div>
+          <div className="hp2-feat-desc">{f.desc}</div>
+        </div>
+      ))}
+    </div>
+  );
 }
 
-export default async function Home() {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://edgeblocks.io";
-  const overview = await getJSON<{ ts: string; kpis: KPI[]; global?: Record<string, string> }>(
-    `${base}/api/v1/market/overview`,
-    30
-  );
-  const kpiMap = new Map((overview?.kpis || []).map((k) => [k.key, k]));
-  const kBtc = kpiMap.get("btc_price");
-  const kFunding = kpiMap.get("funding_oiw");
-  const kOi = kpiMap.get("open_interest");
+/* ------------------------------------------------------------------ */
+/*  Page                                                                */
+/* ------------------------------------------------------------------ */
+
+export default function Home() {
   return (
-    <main className="min-h-screen">
+    <main className="hp2-root">
+      {/* -------- Existing site nav (untouched) -------- */}
       <Container>
-        {/* Top nav */}
         <div className="relative">
           <Navbar />
         </div>
+      </Container>
 
-        {/* Hero */}
-        <section className="pt-4 pb-10 text-center">
-          <h1 className="mx-auto text-4xl md:text-6xl font-semibold tracking-tight max-w-4xl">
-            Turn on-chain noise into signal&mdash;fast, modular, and composable.
-          </h1>
+      {/* -------- ScrollReveal (client island) -------- */}
+      <ScrollReveal />
 
-          <p className="mx-auto mt-5 max-w-2xl text-lg text-muted leading-relaxed">
-            EdgeBlocks is a modular platform for collecting, normalizing, and scoring crypto data&mdash;powering alerts,
-            dashboards, and agent workflows with a single intelligence layer.
-          </p>
+      {/* ============================================ */}
+      {/*  HERO                                         */}
+      {/* ============================================ */}
+      <section className="hp2-hero">
+        <div className="hp2-container">
+          <div className="hp2-hero-content">
+            <h1>
+              Find your <span style={{ color: "var(--hp2-gold2)" }}>edge</span>.
+            </h1>
+            <p className="hp2-hero-pitch">
+              EdgeBlocks is a <strong>sandbox for crypto traders</strong> &mdash; we aggregate massive
+              data into hundreds of features, interpret them as actionable events, and let you build
+              strategies, test them in real market conditions, and refine your edge{" "}
+              <strong>without risking a single dollar.</strong>
+            </p>
 
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Button href="https://t.me/+b5WT3Sif_klhMGM0" variant="primary">
-              Open EventEdge
-            </Button>
-            <Button href="/eventedge" variant="secondary">
-              Terminal Guides
-            </Button>
-            <Button href="/dashboard" variant="ghost">
-              Live Dashboard &rarr;
-            </Button>
-          </div>
-
-          {/* Metric chips */}
-          <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="rounded-2xl border border-border bg-surface/70 p-4 backdrop-blur">
-              <div className="text-xs font-mono text-muted">FOCUS</div>
-              <div className="mt-1 font-semibold">Signals</div>
-              <div className="mt-1 text-sm text-muted">Regime-aware scoring &amp; validation.</div>
-            </div>
-            <div className="rounded-2xl border border-border bg-surface/70 p-4 backdrop-blur">
-              <div className="text-xs font-mono text-muted">OUTPUTS</div>
-              <div className="mt-1 font-semibold">Alerts</div>
-              <div className="mt-1 text-sm text-muted">Fast, explainable triggers.</div>
-            </div>
-            <div className="rounded-2xl border border-border bg-surface/70 p-4 backdrop-blur">
-              <div className="text-xs font-mono text-muted">SURFACE</div>
-              <div className="mt-1 font-semibold">Apps + agents</div>
-              <div className="mt-1 text-sm text-muted">Composable workflows.</div>
-            </div>
-            <div className="rounded-2xl border border-border bg-surface/70 p-4 backdrop-blur">
-              <div className="text-xs font-mono text-muted">PRINCIPLE</div>
-              <div className="mt-1 font-semibold">Modular by design</div>
-              <div className="mt-1 text-sm text-muted">Swap blocks without rewrites.</div>
-            </div>
-          </div>
-        </section>
-
-        {/* Platform */}
-        <section id="platform" className="py-8">
-          <SectionHeading
-            eyebrow="PLATFORM"
-            title="A modular stack for crypto intelligence"
-            desc="EdgeBlocks is built as a set of composable layers—data → features → intelligence → outputs—so each part can evolve without breaking the rest."
-          />
-
-          <div className="equal-grid mt-6 grid gap-4 md:grid-cols-3 items-stretch">
-            <Card label="DATA ENGINE" title="EdgeCore + EdgeBank">
-              Collection, normalization, caching, and a feature store that turns raw feeds into consistent primitives you can reuse everywhere.
-            </Card>
-            <Card label="INTELLIGENCE" title="EdgeMind">
-              Validation and scoring that learns what matters—signals, compatibility, and confidence—so users get decisions, not dashboards.
-            </Card>
-            <Card label="EXECUTION" title="EdgeBlocks Apps">
-              Alerts, dashboards, agents, and workflows—built on the same blocks so outputs stay consistent across surfaces.
-            </Card>
-          </div>
-        </section>
-
-        {/* Product CTAs */}
-        <section className="py-8">
-          <SectionHeading
-            eyebrow="GET STARTED"
-            title="Explore the platform"
-            desc="EventEdge is the live Telegram terminal. The dashboard gives you a real-time web view of the same intelligence layer."
-          />
-
-          <div className="equal-grid mt-6 grid gap-4 lg:grid-cols-2 items-stretch">
-            <div className="flex flex-col rounded-2xl border border-border bg-surface p-6">
-              <div className="text-xs font-mono text-muted">TELEGRAM TERMINAL</div>
-              <div className="mt-2 text-xl font-semibold text-fg">EventEdge</div>
-              <div className="mt-2 text-sm text-muted leading-relaxed">
-                Real-time market intelligence delivered natively in Telegram. Regime detection, confluence scoring,
-                paper trading, and 50+ interactive tools&mdash;all in one bot.
+            <div className="hp2-hero-stats">
+              <div className="hp2-hero-stat">
+                <div className="hp2-hero-stat-n" style={{ color: "var(--hp2-gold2)" }}>50+</div>
+                <div className="hp2-hero-stat-l">Data Sources</div>
               </div>
-              <div className="mt-auto pt-4 flex flex-wrap gap-3">
-                <Button href="https://t.me/+b5WT3Sif_klhMGM0" variant="primary">Open on Telegram</Button>
-                <Button href="/eventedge" variant="secondary">Terminal Guides</Button>
+              <div className="hp2-hero-stat">
+                <div className="hp2-hero-stat-n" style={{ color: "var(--hp2-blue2)" }}>100s</div>
+                <div className="hp2-hero-stat-l">Features</div>
+              </div>
+              <div className="hp2-hero-stat">
+                <div className="hp2-hero-stat-n" style={{ color: "var(--hp2-green2)" }}>8</div>
+                <div className="hp2-hero-stat-l">Confluence Pillars</div>
+              </div>
+              <div className="hp2-hero-stat">
+                <div className="hp2-hero-stat-n" style={{ color: "var(--hp2-cyan2)" }}>$0</div>
+                <div className="hp2-hero-stat-l">Risk Required</div>
               </div>
             </div>
-
-            <div className="flex flex-col rounded-2xl border border-border bg-surface p-6">
-              <div className="text-xs font-mono text-muted">WEB DASHBOARD</div>
-              <div className="mt-2 text-xl font-semibold text-fg">Live Dashboard</div>
-              <div className="mt-2 text-sm text-muted leading-relaxed">
-                Same data, same schema&mdash;rendered on the web. BTC price, funding rates, open interest,
-                regime classification, and real-time snapshots from EdgeCore.
-              </div>
-              <div className="mt-auto pt-4 flex flex-wrap gap-3">
-                <Button href="/dashboard" variant="primary">Open Dashboard</Button>
-                <Button href="/roadmap" variant="secondary">View Roadmap</Button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <Divider />
-
-        <SectionHeading
-          eyebrow="DIFFERENTIATION"
-          title="We don't just show data — we interpret it"
-          desc="EdgeBlocks turns raw market signals into bot-native widgets: pillars, regimes, and supercards, powered by HiveMind rollups and HiveBank features."
-        />
-
-        <div className="equal-grid mt-6 grid gap-4 lg:grid-cols-3 items-stretch">
-          <div className="flex flex-col rounded-2xl border border-border bg-surface p-6">
-            <div className="text-xs font-mono text-muted">WIDGETS</div>
-            <div className="mt-1 text-lg font-semibold text-fg">Bot-native cards</div>
-            <ul className="mt-3 space-y-2 text-sm text-muted leading-relaxed">
-              <li>&bull; BTC SuperCard with pillars & flags</li>
-              <li>&bull; Regime cards (risk-on/off, trend, chop)</li>
-              <li>&bull; Actionable summaries (without noise)</li>
-            </ul>
-          </div>
-
-          <div className="flex flex-col rounded-2xl border border-border bg-surface p-6">
-            <div className="text-xs font-mono text-muted">HIVEMIND</div>
-            <div className="mt-1 text-lg font-semibold text-fg">Rollups & logic layer</div>
-            <ul className="mt-3 space-y-2 text-sm text-muted leading-relaxed">
-              <li>&bull; Multi-source rollups (price, leverage, flow)</li>
-              <li>&bull; Consistent scoring + confidence signals</li>
-              <li>&bull; &ldquo;Interpretation first&rdquo; outputs</li>
-            </ul>
-          </div>
-
-          <div className="flex flex-col rounded-2xl border border-border bg-surface p-6">
-            <div className="text-xs font-mono text-muted">HIVEBANK</div>
-            <div className="mt-1 text-lg font-semibold text-fg">Feature store</div>
-            <ul className="mt-3 space-y-2 text-sm text-muted leading-relaxed">
-              <li>&bull; Versioned features powering widgets</li>
-              <li>&bull; Reproducible snapshots + history</li>
-              <li>&bull; Foundation for EdgeMind models</li>
-            </ul>
           </div>
         </div>
 
-        <section className="mt-6 rounded-2xl border border-border bg-surface p-6">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div className="hp2-scroll-hint">
+          <span>Explore the stack</span>
+          <div className="hp2-scroll-arrow" />
+        </div>
+      </section>
+
+      <div className="hp2-divider" />
+
+      {/* ============================================ */}
+      {/*  LAYER 1 — DATA INGESTION (EdgeCore)          */}
+      {/* ============================================ */}
+      <section className="hp2-section hp2-c-gold" id="data">
+        <div className="hp2-container">
+          <div className="hp2-reveal">
+            <div className="hp2-layer-tag">
+              <span className="hp2-layer-num">1</span> Data Ingestion Layer
+            </div>
+            <h2 className="hp2-section-title">
+              <span className="hp2-hl">EdgeCore</span> &mdash; The Pipeline
+            </h2>
+            <p className="hp2-section-sub">
+              We connect to <strong>50+ data providers</strong>, normalize everything into a unified
+              format, cache it intelligently, and serve it as a single source of truth. You never
+              think about APIs. We handle the plumbing.
+            </p>
+          </div>
+
+          <div className="hp2-api-wall hp2-reveal">
+            {API_CHIPS.map((c) => (
+              <span className="hp2-api-chip hp2-api-chip-live" key={c}>{c}</span>
+            ))}
+            <span className="hp2-api-chip">+ 30 more</span>
+          </div>
+
+          <FeatGrid feats={LAYER1_FEATS} />
+        </div>
+      </section>
+
+      <div className="hp2-divider" />
+
+      {/* ============================================ */}
+      {/*  LAYER 2 — INTELLIGENCE (EventEdge)           */}
+      {/* ============================================ */}
+      <section className="hp2-section hp2-c-blue" id="intelligence">
+        <div className="hp2-container">
+          <div className="hp2-reveal">
+            <div className="hp2-layer-tag">
+              <span className="hp2-layer-num">2</span> Intelligence Layer
+            </div>
+            <h2 className="hp2-section-title">
+              <span className="hp2-hl">EventEdge</span> &mdash; The Terminal
+            </h2>
+            <p className="hp2-section-sub">
+              A Telegram bot that turns EdgeCore&apos;s raw pipeline into{" "}
+              <strong>interpreted intelligence</strong>. Not a dashboard you stare at &mdash; signals
+              that come to you, already scored, explained, and actionable.
+            </p>
+          </div>
+
+          <div className="hp2-pillars hp2-reveal">
+            {PILLARS.map((p) => (
+              <div className="hp2-pillar" key={p.name}>
+                <span className="hp2-pillar-emoji">{p.emoji}</span>
+                <div className="hp2-pillar-name">{p.name}</div>
+                <div className="hp2-pillar-sub">{p.sub}</div>
+              </div>
+            ))}
+          </div>
+
+          <FeatGrid feats={LAYER2_FEATS} />
+        </div>
+      </section>
+
+      <div className="hp2-divider" />
+
+      {/* ============================================ */}
+      {/*  LAYER 3 — PREDICTION (EdgeMind + EdgeBank)   */}
+      {/* ============================================ */}
+      <section className="hp2-section hp2-c-purple" id="prediction">
+        <div className="hp2-container">
+          <div className="hp2-reveal">
+            <div className="hp2-layer-tag">
+              <span className="hp2-layer-num">3</span> Prediction Layer
+            </div>
+            <h2 className="hp2-section-title">
+              <span className="hp2-hl">EdgeMind</span> + <span className="hp2-hl">EdgeBank</span>
+            </h2>
+            <p className="hp2-section-sub">
+              The platform learns. EdgeBank tracks which features actually predict price moves.
+              EdgeMind uses that knowledge to generate <strong>calibrated forecasts</strong> &mdash;
+              where 70% confidence means it&apos;s right ~70% of the time.
+            </p>
+          </div>
+
+          <div className="hp2-split hp2-reveal">
             <div>
-              <div className="text-xs font-mono text-muted">LIVE PREVIEW</div>
-              <div className="mt-1 text-lg font-semibold text-fg">Real-time snapshots from our stack</div>
-              <div className="mt-2 max-w-xl text-sm text-muted leading-relaxed">
-                These values are served by our API and refreshed by EdgeCore shadow jobs every few minutes.
+              <div className="hp2-feat" style={{ marginBottom: 12 }}>
+                <span className="hp2-feat-emoji">{"\u{1F9E0}"}</span>
+                <div className="hp2-feat-name">EdgeMind &mdash; ML Predictions</div>
+                <div className="hp2-feat-desc">
+                  Trained on months of real confluence history. Multi-horizon directional forecasts
+                  (4h, 24h, 7d) with probability scores. Not vibes &mdash; math.
+                </div>
+              </div>
+              <div className="hp2-feat">
+                <span className="hp2-feat-emoji">{"\u{1F4CA}"}</span>
+                <div className="hp2-feat-name">EdgeBank &mdash; Feature Library</div>
+                <div className="hp2-feat-desc">
+                  Registry of 100s of tracked signals. Each feature scored for relevance per regime,
+                  per asset. The system knows what works right now &mdash; not what worked last cycle.
+                </div>
               </div>
             </div>
-            <div className="flex flex-wrap gap-3">
-              <Button href="/dashboard" variant="primary">Open Dashboard</Button>
-              <Button href="/eventedge" variant="secondary">EventEdge</Button>
+
+            {/* Mock feature-relevance widget */}
+            <div className="hp2-split-visual">
+              <div className="hp2-mock-widget">
+                <div className="hp2-mw-head">
+                  <span className="hp2-mw-dot" style={{ background: "var(--hp2-purple)" }} />
+                  Feature Relevance &middot; Current Regime
+                </div>
+                {RELEVANCE_ROWS.map((r) => (
+                  <div className="hp2-mw-row" key={r.label}>
+                    <span className="hp2-mw-label">{r.label}</span>
+                    <div className="hp2-mw-bar">
+                      <div
+                        className="hp2-mw-bar-fill"
+                        style={{ width: `${r.pct}%`, background: r.grad }}
+                      />
+                    </div>
+                    <span className="hp2-mw-pct" style={{ color: r.pctColor }}>{r.pct}%</span>
+                  </div>
+                ))}
+                <div
+                  style={{
+                    marginTop: 14,
+                    paddingTop: 10,
+                    borderTop: "1px solid var(--hp2-border)",
+                    fontSize: 10,
+                    color: "var(--hp2-text4)",
+                  }}
+                >
+                  Regime:{" "}
+                  <span style={{ color: "var(--hp2-green2)" }}>Risk-On Expansion</span>{" "}
+                  &middot; Updated: 2m ago
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div className="mt-5 grid gap-3 sm:grid-cols-3">
-            <Metric label="BTC Price" value={kBtc?.value ?? "—"} sub={kBtc?.sub ?? "—"} />
-            <Metric label="Funding (OI-weighted)" value={kFunding?.value ?? "—"} sub={kFunding?.sub ?? "—"} />
-            <Metric label="Open Interest" value={kOi?.value ?? "—"} sub={kOi?.sub ?? "—"} />
-          </div>
+      <div className="hp2-divider" />
 
-          <div className="mt-4 text-xs text-muted2 font-mono">
-            * Preview is intentionally minimal — the full interpretation layer lives in the dashboard.
-          </div>
-        </section>
-
-        <Divider />
-
-        {/* How it works */}
-        <section className="py-8">
-          <SectionHeading
-            eyebrow="HOW IT WORKS"
-            title="Three steps from noise to signal"
-            desc="EdgeBlocks runs a continuous pipeline that turns raw market data into scored, explainable intelligence."
-          />
-
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
-            {[
-              {
-                num: "01",
-                title: "Collect",
-                desc: "30+ data feeds ingested every 3 minutes\u2014price, funding, OI, on-chain, sentiment, prediction markets.",
-              },
-              {
-                num: "02",
-                title: "Score",
-                desc: "Multi-source confluence scoring. Signals only fire when multiple inputs agree. Every output carries a confidence tag.",
-              },
-              {
-                num: "03",
-                title: "Deliver",
-                desc: "Alerts, dashboards, and API endpoints. Same data schema across Telegram, web, and programmatic access.",
-              },
-            ].map((step) => (
-              <div
-                key={step.num}
-                className="glass-card p-5"
-              >
-                <div className="text-2xl font-mono font-semibold text-accentCyan/60">
-                  {step.num}
-                </div>
-                <div className="mt-2 text-sm font-semibold text-fg">
-                  {step.title}
-                </div>
-                <div className="mt-2 text-sm text-muted leading-relaxed">
-                  {step.desc}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <Divider />
-
-        {/* Why EdgeBlocks */}
-        <section className="py-8">
-          <SectionHeading
-            eyebrow="WHY EDGEBLOCKS"
-            title="What makes this different"
-            desc="Most tools show data. We interpret it."
-          />
-
-          <div className="mt-6 grid gap-3 md:grid-cols-3">
-            {[
-              {
-                title: "Confluence, not indicators",
-                desc: "Signals require multi-source agreement. A regime change only fires when funding, OI, momentum, and sentiment align.",
-              },
-              {
-                title: "Confidence-tagged outputs",
-                desc: "Every alert carries LOW / MEDIUM / HIGH confidence so you can filter by conviction instead of guessing.",
-              },
-              {
-                title: "Built on real operations",
-                desc: "Years of production on-chain ops (DataSnype) \u2192 a modular platform. Not a demo\u2014a working system.",
-              },
-            ].map((item) => (
-              <div
-                key={item.title}
-                className="glass-card p-5"
-              >
-                <div className="text-sm font-semibold text-fg">
-                  {item.title}
-                </div>
-                <div className="mt-2 text-sm text-muted leading-relaxed">
-                  {item.desc}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <Divider />
-
-        {/* Roadmap preview */}
-        <section className="py-8">
-          <SectionHeading
-            eyebrow="ROADMAP"
-            title="What&apos;s next"
-            desc="Building incrementally, shipping continuously."
-          />
-
-          <div className="mt-6 grid gap-3 md:grid-cols-3">
-            {[
-              {
-                quarter: "Q2 2026",
-                title: "Intelligence + Builder Tools",
-                highlights: "EdgeMind scoring, multi-asset SuperCards, agent SDK",
-                status: "building" as const,
-              },
-              {
-                quarter: "Q3 2026",
-                title: "Marketplace + Expansion",
-                highlights: "EdgeDesk, strategy marketplace, on-chain analytics",
-                status: "planned" as const,
-              },
-              {
-                quarter: "Q4 2026",
-                title: "North Star",
-                highlights: "EDGE token, autonomous agents, cross-chain",
-                status: "planned" as const,
-              },
-            ].map((m) => (
-              <div
-                key={m.quarter}
-                className="glass-card p-5"
-              >
-                <div className="flex items-center gap-2">
-                  <span
-                    className={`h-1.5 w-1.5 rounded-full ${
-                      m.status === "building"
-                        ? "bg-amber-400 shadow-[0_0_6px_rgba(251,191,36,0.4)]"
-                        : "bg-muted2"
-                    }`}
-                  />
-                  <span className="text-xs font-mono text-muted">
-                    {m.quarter}
-                  </span>
-                </div>
-                <div className="mt-2 text-sm font-semibold text-fg">
-                  {m.title}
-                </div>
-                <div className="mt-1 text-sm text-muted leading-relaxed">
-                  {m.highlights}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-4">
-            <Link
-              href="/roadmap"
-              className="text-sm font-mono text-muted hover:text-fg transition"
-            >
-              View full roadmap &rarr;
-            </Link>
-          </div>
-        </section>
-
-        {/* Footer */}
-        <footer className="border-t border-border py-10 mt-10 text-sm text-muted2">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>&copy; {new Date().getFullYear()} EdgeBlocks</div>
-            <div className="flex flex-wrap gap-4">
-              <a className="hover:text-fg" href="/eventedge">EventEdge</a>
-              <a className="hover:text-fg" href="/roadmap">Roadmap</a>
-              <a className="hover:text-fg" href="/proofclaw">ProofClaw</a>
-              <a className="hover:text-fg" href="/datasnype">DataSnype</a>
-              <a className="hover:text-fg" href="/dashboard">Dashboard</a>
+      {/* ============================================ */}
+      {/*  LAYER 4 — EXECUTION (SimLab + Alerts)        */}
+      {/* ============================================ */}
+      <section className="hp2-section hp2-c-green" id="execution">
+        <div className="hp2-container">
+          <div className="hp2-reveal">
+            <div className="hp2-layer-tag">
+              <span className="hp2-layer-num">4</span> Execution Layer
             </div>
+            <h2 className="hp2-section-title">
+              <span className="hp2-hl">SimLab</span> + <span className="hp2-hl">Alerts</span>
+            </h2>
+            <p className="hp2-section-sub">
+              See a signal? Act on it. Paper trade across multiple venues, set intelligent alerts,
+              and build a real track record &mdash; all before you put real money on the line.
+            </p>
           </div>
-        </footer>
-      </Container>
+
+          <FeatGrid feats={LAYER4_FEATS} />
+
+          <div className="hp2-flow hp2-reveal">
+            {FLOW_NODES.map((node, i) => (
+              <span key={node.label}>
+                {i > 0 && <span className="hp2-flow-arrow">{"\u2192"}</span>}
+                <span
+                  className="hp2-flow-node"
+                  style={{ borderColor: node.border, color: node.color }}
+                >
+                  {node.label}
+                </span>
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <div className="hp2-divider" />
+
+      {/* ============================================ */}
+      {/*  LAYER 5 — CUSTOMIZATION                      */}
+      {/* ============================================ */}
+      <section className="hp2-section hp2-c-cyan" id="custom">
+        <div className="hp2-container">
+          <div className="hp2-reveal">
+            <div className="hp2-layer-tag">
+              <span className="hp2-layer-num">5</span> Customization Layer
+            </div>
+            <h2 className="hp2-section-title">
+              Your <span className="hp2-hl">Own Terminal</span>
+            </h2>
+            <p className="hp2-section-sub">
+              Build your personal trading dashboard. Pick your assets, choose your pillars, set your
+              alerts, wire in EdgeMind predictions and EdgeBank features &mdash; then deploy it as{" "}
+              <strong>your own Telegram bot</strong> for paper or real trading.
+            </p>
+          </div>
+
+          <FeatGrid feats={LAYER5_FEATS} />
+        </div>
+      </section>
+
+      <div className="hp2-divider" />
+
+      {/* ============================================ */}
+      {/*  LAYER 6 — AGENTIC                            */}
+      {/* ============================================ */}
+      <section className="hp2-section hp2-c-pink" id="agents">
+        <div className="hp2-container">
+          <div className="hp2-reveal">
+            <div className="hp2-layer-tag">
+              <span className="hp2-layer-num">6</span> Agentic Layer
+            </div>
+            <h2 className="hp2-section-title">
+              Let <span className="hp2-hl">Agents</span> Work for You
+            </h2>
+            <p className="hp2-section-sub">
+              Deploy AI agents that run your strategies 24/7. Rent proven agents from other traders.
+              Monetize your own. The platform does the work &mdash; you define the rules.
+            </p>
+          </div>
+
+          <FeatGrid feats={LAYER6_FEATS} />
+        </div>
+      </section>
+
+      <div className="hp2-divider" />
+
+      {/* ============================================ */}
+      {/*  CTA                                          */}
+      {/* ============================================ */}
+      <section className="hp2-cta-section" id="beta">
+        <div className="hp2-container">
+          <h2>
+            Ready to find your <span style={{ color: "var(--hp2-gold2)" }}>edge</span>?
+          </h2>
+          <p>We&apos;re looking for beta testers who actually trade. Limited spots.</p>
+          <div className="hp2-cta-row">
+            <a className="hp2-btn hp2-btn-primary" href="https://t.me/+b5WT3Sif_klhMGM0">
+              {"\u26A1"} Join the Beta
+            </a>
+            <a className="hp2-btn hp2-btn-secondary" href="/eventedge">
+              {"\u{1F4E1}"} Open EventEdge
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================ */}
+      {/*  FOOTER                                       */}
+      {/* ============================================ */}
+      <footer className="hp2-footer">
+        <div className="hp2-container">
+          <div className="hp2-foot-logo">
+            <span style={{ color: "var(--hp2-blue2)" }}>Edge</span>
+            <span style={{ color: "var(--hp2-gold2)" }}>Blocks</span>
+          </div>
+          <div className="hp2-foot-sub">Find your edge. Test it. Prove it. Trade it.</div>
+        </div>
+      </footer>
     </main>
   );
 }
