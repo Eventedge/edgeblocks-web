@@ -3,21 +3,21 @@
 @tailwind utilities;
 
 :root{
-  --bg:#06080e;
+  --bg:#03060b;
   --surface:#0a0f1a;
   --surface2:#0e1525;
   --border:#1a2540;
   --border2:#243352;
-  --fg:#e8edf5;
-  --muted:#a0b0c8;
-  --muted2:#607590;
+  --fg:#edf0f7;
+  --muted:#b0bdd6;
+  --muted2:#7b8fae;
 
   --accentGold:#f5c842;
   --accentCyan:#22d3ee;
   --accentGreen:#34d399;
   --accentPurple:#a78bfa;
 
-  --ink:#06080e;
+  --ink:#03060b;
 }
 
 html,body{
@@ -25,12 +25,7 @@ html,body{
 }
 
 body{
-  background:
-    radial-gradient(1200px 700px at 15% 15%, rgba(74,222,128,0.10), transparent 60%),
-    radial-gradient(900px 600px at 80% 20%, rgba(99,102,241,0.12), transparent 55%),
-    radial-gradient(900px 700px at 55% 85%, rgba(250,204,21,0.10), transparent 60%),
-    radial-gradient(1400px 900px at 50% 50%, rgba(255,255,255,0.03), transparent 70%),
-    linear-gradient(to bottom, rgba(5,8,16,0.95), rgba(5,8,16,0.98));
+  background: linear-gradient(to bottom, #03060b, #050a14);
   color: var(--fg);
   position: relative;
   text-rendering: optimizeLegibility;
@@ -38,7 +33,7 @@ body{
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Unified background system (ledger + network + vignette) */
+/* Background overlay: subtle network SVG + soft vignette */
 body::before,
 body::after {
   content: "";
@@ -47,44 +42,23 @@ body::after {
   pointer-events: none;
 }
 
-/* Layer 1: Ledger grid (fine + faint) */
+/* Layer 1: Network node SVG (subtle) */
 body::before {
   z-index: -3;
   background:
-    linear-gradient(to right, rgba(255,255,255,0.022) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255,255,255,0.022) 1px, transparent 1px),
-    linear-gradient(to right, rgba(255,255,255,0.010) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255,255,255,0.010) 1px, transparent 1px);
-  background-size: 72px 72px, 72px 72px, 12px 12px, 12px 12px;
-  opacity: 0.55;
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='420' viewBox='0 0 640 420'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.04)' stroke-width='1'%3E%3Cpath d='M70 90 L170 60 L260 110 L360 80 L460 130 L560 95'/%3E%3Cpath d='M90 250 L200 210 L300 255 L420 220 L520 275'/%3E%3Cpath d='M140 340 L240 310 L330 345 L470 315 L600 350'/%3E%3Cpath d='M170 60 L200 210'/%3E%3Cpath d='M360 80 L420 220'/%3E%3Cpath d='M460 130 L520 275'/%3E%3C/g%3E%3Cg fill='rgba(255,255,255,0.05)'%3E%3Ccircle cx='70' cy='90' r='2'/%3E%3Ccircle cx='170' cy='60' r='2'/%3E%3Ccircle cx='260' cy='110' r='2'/%3E%3Ccircle cx='360' cy='80' r='2'/%3E%3Ccircle cx='460' cy='130' r='2'/%3E%3Ccircle cx='560' cy='95' r='2'/%3E%3Ccircle cx='90' cy='250' r='2'/%3E%3Ccircle cx='200' cy='210' r='2'/%3E%3Ccircle cx='300' cy='255' r='2'/%3E%3Ccircle cx='420' cy='220' r='2'/%3E%3Ccircle cx='520' cy='275' r='2'/%3E%3Ccircle cx='140' cy='340' r='2'/%3E%3Ccircle cx='240' cy='310' r='2'/%3E%3Ccircle cx='330' cy='345' r='2'/%3E%3Ccircle cx='470' cy='315' r='2'/%3E%3Ccircle cx='600' cy='350' r='2'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 640px 420px;
 }
 
-/* Layer 2+3: Network SVG + vignette/glow */
+/* Layer 2: Soft top glow + edge vignette */
 body::after {
   z-index: -2;
   background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='420' viewBox='0 0 640 420'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.07)' stroke-width='1'%3E%3Cpath d='M70 90 L170 60 L260 110 L360 80 L460 130 L560 95'/%3E%3Cpath d='M90 250 L200 210 L300 255 L420 220 L520 275'/%3E%3Cpath d='M140 340 L240 310 L330 345 L470 315 L600 350'/%3E%3Cpath d='M170 60 L200 210'/%3E%3Cpath d='M360 80 L420 220'/%3E%3Cpath d='M460 130 L520 275'/%3E%3C/g%3E%3Cg fill='rgba(255,255,255,0.10)'%3E%3Ccircle cx='70' cy='90' r='2'/%3E%3Ccircle cx='170' cy='60' r='2'/%3E%3Ccircle cx='260' cy='110' r='2'/%3E%3Ccircle cx='360' cy='80' r='2'/%3E%3Ccircle cx='460' cy='130' r='2'/%3E%3Ccircle cx='560' cy='95' r='2'/%3E%3Ccircle cx='90' cy='250' r='2'/%3E%3Ccircle cx='200' cy='210' r='2'/%3E%3Ccircle cx='300' cy='255' r='2'/%3E%3Ccircle cx='420' cy='220' r='2'/%3E%3Ccircle cx='520' cy='275' r='2'/%3E%3Ccircle cx='140' cy='340' r='2'/%3E%3Ccircle cx='240' cy='310' r='2'/%3E%3Ccircle cx='330' cy='345' r='2'/%3E%3Ccircle cx='470' cy='315' r='2'/%3E%3Ccircle cx='600' cy='350' r='2'/%3E%3C/g%3E%3C/svg%3E"),
-    radial-gradient(1000px 700px at 50% -10%, rgba(255,255,255,0.09), transparent 60%),
-    radial-gradient(900px 700px at 18% 22%, rgba(147,197,253,0.12), transparent 62%),
-    radial-gradient(900px 700px at 82% 28%, rgba(216,180,254,0.12), transparent 62%),
-    radial-gradient(900px 700px at 50% 120%, rgba(16,185,129,0.08), transparent 55%),
-    radial-gradient(1200px 900px at 50% 50%, transparent 45%, rgba(0,0,0,0.60) 100%);
-  background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
-  background-size: 640px 420px, auto, auto, auto, auto, auto;
-  opacity: 1;
-  filter: saturate(105%);
-}
-
-/* Subtle drift (very slow) — alive feel */
-@media (prefers-reduced-motion: no-preference) {
-  body::after {
-    animation: bgDrift 24s ease-in-out infinite;
-  }
-}
-@keyframes bgDrift {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
+    radial-gradient(900px 600px at 50% 10%, rgba(255,255,255,0.03), transparent 60%),
+    radial-gradient(1200px 900px at 50% 50%, transparent 45%, rgba(0,0,0,0.50) 100%);
+  background-repeat: no-repeat;
+  background-size: auto;
 }
 
 /* Module header normalization */
