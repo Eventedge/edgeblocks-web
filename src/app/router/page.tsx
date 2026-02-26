@@ -20,15 +20,44 @@ function edgecoreBase(): string {
   return "http://127.0.0.1:18888";
 }
 
-async function fetchJSON<T>(path: string): Promise<T | null> {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+async function fetchRaw(path: string): Promise<any | null> {
   try {
     const res = await fetch(`${edgecoreBase()}${path}`, { cache: "no-store" });
     if (!res.ok) return null;
-    return (await res.json()) as T;
+    return await res.json();
   } catch {
     return null;
   }
 }
+
+/** Unwrap EdgeCore envelope: {ok, state, age_s, ttl_s, payload} → component data */
+function unwrapRegime(raw: any): RegimeData | null {
+  if (!raw?.ok || !raw.payload) return null;
+  const p = raw.payload;
+  return {
+    ...p,
+    freshness: { age_s: raw.age_s, ttl_s: raw.ttl_s, state: raw.state },
+  } as RegimeData;
+}
+
+function unwrapTopFeatures(raw: any): TopFeaturesData | null {
+  if (!raw?.ok || !raw.payload) return null;
+  return raw.payload as TopFeaturesData;
+}
+
+function unwrapHealth(raw: any): HealthData | null {
+  if (!raw?.ok) return null;
+  const c = raw.counts ?? {};
+  return {
+    total: raw.total ?? 0,
+    fresh: c.FRESH ?? 0,
+    stale: c.STALE ?? 0,
+    dead: c.DEAD ?? 0,
+    stale_or_dead: raw.stale_or_dead ?? [],
+  };
+}
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 interface AssetData {
   asset: string;
@@ -43,17 +72,21 @@ export default function RouterPage() {
 
   useEffect(() => {
     async function load() {
-      const [healthData, ...assetResults] = await Promise.all([
-        fetchJSON<HealthData>("/v1/health/data"),
+      const [healthRaw, ...assetResults] = await Promise.all([
+        fetchRaw("/v1/health/data"),
         ...TIER0.map(async (asset) => {
-          const [regime, topFeatures] = await Promise.all([
-            fetchJSON<RegimeData>(`/v1/regime/${asset}`),
-            fetchJSON<TopFeaturesData>(`/v1/top-features/${asset}?n=12`),
+          const [regimeRaw, tfRaw] = await Promise.all([
+            fetchRaw(`/v1/regime/${asset}`),
+            fetchRaw(`/v1/top-features/${asset}?n=12`),
           ]);
-          return { asset, regime, topFeatures } as AssetData;
+          return {
+            asset,
+            regime: unwrapRegime(regimeRaw),
+            topFeatures: unwrapTopFeatures(tfRaw),
+          } as AssetData;
         }),
       ]);
-      setHealth(healthData);
+      setHealth(unwrapHealth(healthRaw));
       setResults(assetResults);
       setLoading(false);
     }

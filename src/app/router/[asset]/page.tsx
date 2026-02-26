@@ -22,15 +22,48 @@ function edgecoreBase(): string {
   return "http://127.0.0.1:18888";
 }
 
-async function fetchJSON<T>(path: string): Promise<T | null> {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+async function fetchRaw(path: string): Promise<any | null> {
   try {
     const res = await fetch(`${edgecoreBase()}${path}`, { cache: "no-store" });
     if (!res.ok) return null;
-    return (await res.json()) as T;
+    return await res.json();
   } catch {
     return null;
   }
 }
+
+function unwrapRegime(raw: any): RegimeData | null {
+  if (!raw?.ok || !raw.payload) return null;
+  const p = raw.payload;
+  return {
+    ...p,
+    freshness: { age_s: raw.age_s, ttl_s: raw.ttl_s, state: raw.state },
+  } as RegimeData;
+}
+
+function unwrapTopFeatures(raw: any): TopFeaturesData | null {
+  if (!raw?.ok || !raw.payload) return null;
+  return raw.payload as TopFeaturesData;
+}
+
+/** /v1/features/{asset} → {ok, items: [{family, key, state, age_s, ttl_s, payload}]} */
+function unwrapFamilies(raw: any): Record<string, FamilySnapshot> | null {
+  if (!raw?.ok || !Array.isArray(raw.items)) return null;
+  const out: Record<string, FamilySnapshot> = {};
+  for (const item of raw.items) {
+    const famKey = `${item.family}_core`;
+    out[famKey] = {
+      key: item.key,
+      age_s: item.age_s,
+      ttl_s: item.ttl_s,
+      state: item.state,
+      payload: item.payload ?? {},
+    };
+  }
+  return out;
+}
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 export default function AssetRouterPage() {
   const params = useParams();
@@ -43,14 +76,14 @@ export default function AssetRouterPage() {
 
   useEffect(() => {
     async function load() {
-      const [r, tf, fd] = await Promise.all([
-        fetchJSON<RegimeData>(`/v1/regime/${asset}`),
-        fetchJSON<TopFeaturesData>(`/v1/top-features/${asset}?n=15`),
-        fetchJSON<Record<string, FamilySnapshot>>(`/v1/features/${asset}`),
+      const [regimeRaw, tfRaw, fdRaw] = await Promise.all([
+        fetchRaw(`/v1/regime/${asset}`),
+        fetchRaw(`/v1/top-features/${asset}?n=15`),
+        fetchRaw(`/v1/features/${asset}`),
       ]);
-      setRegime(r);
-      setTopFeatures(tf);
-      setFamilyData(fd);
+      setRegime(unwrapRegime(regimeRaw));
+      setTopFeatures(unwrapTopFeatures(tfRaw));
+      setFamilyData(unwrapFamilies(fdRaw));
       setLoading(false);
     }
     load();
