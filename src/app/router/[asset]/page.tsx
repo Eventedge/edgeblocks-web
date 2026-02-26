@@ -1,28 +1,56 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Container } from "@/components/ui";
 import { Navbar } from "@/components/Navbar";
-import { fetchRegime, fetchTopFeatures, fetchFamily } from "@/lib/edgecore";
 import { RegimeCard } from "@/components/router/RegimeCard";
 import { TopFeaturesCard } from "@/components/router/TopFeaturesCard";
 import { FamilySnapshotCard } from "@/components/router/FamilySnapshotCard";
-
-export const dynamic = "force-dynamic";
+import type { RegimeData, TopFeaturesData, FamilySnapshot } from "@/lib/edgecore";
 
 const FAMILIES = ["ta_core", "deriv_core", "macro_core", "pm_core"] as const;
 
-export default async function AssetRouterPage({
-  params,
-}: {
-  params: Promise<{ asset: string }>;
-}) {
-  const { asset: rawAsset } = await params;
-  const asset = rawAsset.toUpperCase();
+function edgecoreBase(): string {
+  const env = process.env.NEXT_PUBLIC_EDGECORE_HTTP_BASE?.trim();
+  if (env) return env.endsWith("/") ? env.slice(0, -1) : env;
+  return "http://127.0.0.1:18888";
+}
 
-  const [regime, topFeatures, familyData] = await Promise.all([
-    fetchRegime(asset),
-    fetchTopFeatures(asset, 15),
-    fetchFamily(asset),
-  ]);
+async function fetchJSON<T>(path: string): Promise<T | null> {
+  try {
+    const res = await fetch(`${edgecoreBase()}${path}`, { cache: "no-store" });
+    if (!res.ok) return null;
+    return (await res.json()) as T;
+  } catch {
+    return null;
+  }
+}
+
+export default function AssetRouterPage() {
+  const params = useParams();
+  const asset = (params.asset as string)?.toUpperCase() ?? "BTC";
+
+  const [regime, setRegime] = useState<RegimeData | null>(null);
+  const [topFeatures, setTopFeatures] = useState<TopFeaturesData | null>(null);
+  const [familyData, setFamilyData] = useState<Record<string, FamilySnapshot> | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      const [r, tf, fd] = await Promise.all([
+        fetchJSON<RegimeData>(`/v1/regime/${asset}`),
+        fetchJSON<TopFeaturesData>(`/v1/top-features/${asset}?n=15`),
+        fetchJSON<Record<string, FamilySnapshot>>(`/v1/features/${asset}`),
+      ]);
+      setRegime(r);
+      setTopFeatures(tf);
+      setFamilyData(fd);
+      setLoading(false);
+    }
+    load();
+  }, [asset]);
 
   return (
     <main className="min-h-screen">
@@ -42,26 +70,23 @@ export default async function AssetRouterPage({
           </div>
         </header>
 
-        <div className="space-y-6 pb-12">
-          {/* Regime */}
-          <RegimeCard data={regime} asset={asset} />
-
-          {/* Top Features */}
-          <TopFeaturesCard data={topFeatures} asset={asset} />
-
-          {/* Family Snapshots */}
-          <div>
-            <div className="text-xs font-mono text-muted2 mb-3">FAMILY SNAPSHOTS</div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {FAMILIES.map((fam) => {
-                const snap = familyData?.[fam] ?? null;
-                return (
-                  <FamilySnapshotCard key={fam} familyKey={fam} snapshot={snap} />
-                );
-              })}
+        {loading ? (
+          <div className="py-20 text-center text-muted2 text-sm font-mono">Loading {asset} data...</div>
+        ) : (
+          <div className="space-y-6 pb-12">
+            <RegimeCard data={regime} asset={asset} />
+            <TopFeaturesCard data={topFeatures} asset={asset} />
+            <div>
+              <div className="text-xs font-mono text-muted2 mb-3">FAMILY SNAPSHOTS</div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {FAMILIES.map((fam) => {
+                  const snap = familyData?.[fam] ?? null;
+                  return <FamilySnapshotCard key={fam} familyKey={fam} snapshot={snap} />;
+                })}
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         <footer className="border-t border-border py-10 text-sm text-muted2">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">

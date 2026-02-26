@@ -1,26 +1,60 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Container } from "@/components/ui";
 import { Navbar } from "@/components/Navbar";
-import { fetchRegime, fetchTopFeatures, fetchHealth } from "@/lib/edgecore";
 import { RegimeCard } from "@/components/router/RegimeCard";
 import { TopFeaturesCard } from "@/components/router/TopFeaturesCard";
-
-export const dynamic = "force-dynamic";
+import type { RegimeData, TopFeaturesData, HealthData } from "@/lib/edgecore";
 
 const TIER0 = ["BTC", "ETH", "SOL", "HYPE"] as const;
 
-export default async function RouterPage() {
-  const results = await Promise.all(
-    TIER0.map(async (asset) => {
-      const [regime, topFeatures] = await Promise.all([
-        fetchRegime(asset),
-        fetchTopFeatures(asset, 12),
-      ]);
-      return { asset, regime, topFeatures };
-    })
-  );
+function edgecoreBase(): string {
+  const env = process.env.NEXT_PUBLIC_EDGECORE_HTTP_BASE?.trim();
+  if (env) return env.endsWith("/") ? env.slice(0, -1) : env;
+  return "http://127.0.0.1:18888";
+}
 
-  const health = await fetchHealth();
+async function fetchJSON<T>(path: string): Promise<T | null> {
+  try {
+    const res = await fetch(`${edgecoreBase()}${path}`, { cache: "no-store" });
+    if (!res.ok) return null;
+    return (await res.json()) as T;
+  } catch {
+    return null;
+  }
+}
+
+interface AssetData {
+  asset: string;
+  regime: RegimeData | null;
+  topFeatures: TopFeaturesData | null;
+}
+
+export default function RouterPage() {
+  const [results, setResults] = useState<AssetData[]>([]);
+  const [health, setHealth] = useState<HealthData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      const [healthData, ...assetResults] = await Promise.all([
+        fetchJSON<HealthData>("/v1/health/data"),
+        ...TIER0.map(async (asset) => {
+          const [regime, topFeatures] = await Promise.all([
+            fetchJSON<RegimeData>(`/v1/regime/${asset}`),
+            fetchJSON<TopFeaturesData>(`/v1/top-features/${asset}?n=12`),
+          ]);
+          return { asset, regime, topFeatures } as AssetData;
+        }),
+      ]);
+      setHealth(healthData);
+      setResults(assetResults);
+      setLoading(false);
+    }
+    load();
+  }, []);
 
   return (
     <main className="min-h-screen">
@@ -43,26 +77,26 @@ export default async function RouterPage() {
           )}
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-12">
-          {results.map(({ asset, regime, topFeatures }) => (
-            <Link
-              key={asset}
-              href={`/router/${asset}`}
-              className="block group"
-            >
-              <div className="module-card rounded-2xl border border-border/40 bg-surface p-5 space-y-4 shadow-[0_2px_16px_rgba(0,0,0,0.25)]">
-                <div className="flex items-center justify-between">
-                  <span className="text-lg font-semibold">{asset}</span>
-                  <span className="text-[11px] font-mono text-muted group-hover:text-fg transition">
-                    View details &rarr;
-                  </span>
+        {loading ? (
+          <div className="py-20 text-center text-muted2 text-sm font-mono">Loading router data...</div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-12">
+            {results.map(({ asset, regime, topFeatures }) => (
+              <Link key={asset} href={`/router/${asset}`} className="block group">
+                <div className="module-card rounded-2xl border border-border/40 bg-surface p-5 space-y-4 shadow-[0_2px_16px_rgba(0,0,0,0.25)]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg font-semibold">{asset}</span>
+                    <span className="text-[11px] font-mono text-muted group-hover:text-fg transition">
+                      View details &rarr;
+                    </span>
+                  </div>
+                  <RegimeCard data={regime} asset={asset} />
+                  <TopFeaturesCard data={topFeatures} asset={asset} compact />
                 </div>
-                <RegimeCard data={regime} asset={asset} />
-                <TopFeaturesCard data={topFeatures} asset={asset} compact />
-              </div>
-            </Link>
-          ))}
-        </div>
+              </Link>
+            ))}
+          </div>
+        )}
 
         <footer className="border-t border-border py-10 text-sm text-muted2">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
