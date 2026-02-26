@@ -13,6 +13,7 @@ const PRIMARY_LINKS = [
   { label: "EventEdge", href: "/eventedge" },
   { label: "Agent", href: "/agent-layer" },
   { label: "Dashboard", href: "/dashboard" },
+  { label: "Router", href: "/router" },
 ];
 
 /** Links tucked inside the "More" dropdown on desktop. */
@@ -28,6 +29,7 @@ const ALL_LINKS = [
   { label: "EventEdge", href: "/eventedge" },
   { label: "Agent Layer", href: "/agent-layer" },
   { label: "Dashboard", href: "/dashboard" },
+  { label: "Router", href: "/router" },
   { label: "Roadmap", href: "/roadmap" },
   { label: "Dev Report", href: "/dev-report" },
   { label: "ProofClaw", href: "/proofclaw" },
