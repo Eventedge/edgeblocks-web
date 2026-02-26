@@ -62,7 +62,7 @@ export function RegimeCard({ data, asset }: { data: RegimeData | null; asset: st
       </div>
       <div className="mt-2 text-lg font-semibold tracking-tight">{data.label}</div>
       <div className="mt-3 grid grid-cols-4 gap-2">
-        <AxisPill label="Dir" value={data.axes?.direction ?? data.scores?.direction_label ?? "?"} />
+        <AxisPill label="Dir" value={data.direction ?? "?"} />
         <AxisPill label="Struct" value={data.structure} />
         <AxisPill label="Vol" value={data.volatility} />
         <AxisPill label="Risk" value={data.risk} />

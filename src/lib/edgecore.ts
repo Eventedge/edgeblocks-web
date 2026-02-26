@@ -12,11 +12,11 @@
 export interface RegimeData {
   label: string;
   confidence: string;
+  direction: string;
   structure: string;
   volatility: string;
   risk: string;
   scores: Record<string, number>;
-  axes: Record<string, string>;
   freshness: { age_s: number; ttl_s: number; state: string };
 }
 
