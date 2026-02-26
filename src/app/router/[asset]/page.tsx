@@ -90,19 +90,19 @@ export default function AssetRouterPage() {
   }, [asset]);
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen overflow-x-hidden">
       <Container>
         <Navbar />
 
-        <header className="pb-8">
+        <header className="pb-4 sm:pb-8">
           <div className="flex items-center gap-3">
-            <Link href="/router" className="text-xs font-mono text-muted hover:text-fg transition">
+            <Link href="/router" className="text-xs font-mono text-muted hover:text-fg transition min-h-[44px] flex items-center">
               &larr; Router
             </Link>
           </div>
-          <div className="mt-2 text-xs font-mono text-muted2">ROUTER / {asset}</div>
-          <div className="mt-1 text-2xl font-semibold">{asset} Working Features</div>
-          <div className="mt-1 text-sm text-muted">
+          <div className="text-xs font-mono text-muted2">ROUTER / {asset}</div>
+          <div className="mt-1 text-xl sm:text-2xl font-semibold">{asset} Working Features</div>
+          <div className="mt-1 text-xs sm:text-sm text-muted">
             Full regime + top features + per-family snapshots
           </div>
         </header>
@@ -110,12 +110,12 @@ export default function AssetRouterPage() {
         {loading ? (
           <div className="py-20 text-center text-muted2 text-sm font-mono">Loading {asset} data...</div>
         ) : (
-          <div className="space-y-6 pb-12">
+          <div className="space-y-4 sm:space-y-6 pb-8 sm:pb-12">
             <RegimeCard data={regime} asset={asset} />
             <TopFeaturesCard data={topFeatures} asset={asset} />
             <div>
-              <div className="text-xs font-mono text-muted2 mb-3">FAMILY SNAPSHOTS</div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="text-xs font-mono text-muted2 mb-2 sm:mb-3">FAMILY SNAPSHOTS</div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                 {FAMILIES.map((fam) => {
                   const snap = familyData?.[fam] ?? null;
                   return <FamilySnapshotCard key={fam} familyKey={fam} snapshot={snap} />;
@@ -125,7 +125,7 @@ export default function AssetRouterPage() {
           </div>
         )}
 
-        <footer className="border-t border-border py-10 text-sm text-muted2">
+        <footer className="border-t border-border py-6 sm:py-10 text-sm text-muted2">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>&copy; {new Date().getFullYear()} EdgeBlocks &bull; Powered by EdgeCore</div>
             <div className="flex gap-4">

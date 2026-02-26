@@ -40,7 +40,7 @@ function StateIndicator({ state }: { state: string }) {
   const color =
     state === "FRESH" ? "bg-emerald-400" : state === "STALE" ? "bg-amber-400" : state === "DEAD" ? "bg-rose-400" : "bg-zinc-500";
   return (
-    <span className="flex items-center gap-1.5 text-[10px] font-mono text-muted2">
+    <span className="flex items-center gap-1 sm:gap-1.5 text-[10px] font-mono text-muted2">
       <span className={`inline-block h-1.5 w-1.5 rounded-full ${color}`} />
       {state}
     </span>
@@ -59,7 +59,7 @@ export function FamilySnapshotCard({
 
   if (!snapshot) {
     return (
-      <div className={`rounded-xl border ${accent} bg-surface/60 p-4`}>
+      <div className={`rounded-xl border ${accent} bg-surface/60 p-3 sm:p-4`}>
         <div className="text-xs font-mono text-muted2">{label.toUpperCase()}</div>
         <div className="mt-2 text-sm text-muted">No data</div>
       </div>
@@ -76,21 +76,21 @@ export function FamilySnapshotCard({
   );
 
   return (
-    <div className={`rounded-xl border ${accent} bg-surface/60 p-4`}>
-      <div className="flex items-center justify-between">
-        <div className="text-xs font-mono text-muted2">{label.toUpperCase()}</div>
-        <div className="flex items-center gap-2">
+    <div className={`rounded-xl border ${accent} bg-surface/60 p-3 sm:p-4`}>
+      <div className="flex items-center justify-between gap-2">
+        <div className="text-[11px] sm:text-xs font-mono text-muted2 truncate">{label.toUpperCase()}</div>
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           <StateIndicator state={snapshot.state} />
           <span className="text-[10px] font-mono text-muted2">{age}</span>
         </div>
       </div>
-      <div className="mt-3 space-y-0.5">
+      <div className="mt-2 sm:mt-3 space-y-0.5">
         {entries.map(([k, v]) => (
-          <div key={k} className="flex items-center justify-between py-0.5">
-            <span className="text-[12px] text-muted truncate mr-2">
+          <div key={k} className="flex items-baseline justify-between gap-2 py-0.5 min-w-0">
+            <span className="text-[11px] sm:text-[12px] text-muted truncate shrink min-w-0">
               {k.replace(/_/g, " ")}
             </span>
-            <span className="text-[12px] font-mono text-fg tabular-nums whitespace-nowrap">
+            <span className="text-[11px] sm:text-[12px] font-mono text-fg tabular-nums whitespace-nowrap shrink-0">
               {formatValue(k, v)}
             </span>
           </div>

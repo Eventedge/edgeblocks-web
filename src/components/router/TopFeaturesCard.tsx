@@ -18,7 +18,7 @@ const FAMILY_COLORS: Record<string, string> = {
 function FamilyBadge({ family }: { family: string }) {
   const cls = FAMILY_COLORS[family] ?? "border-border bg-surface2 text-muted";
   return (
-    <span className={`inline-block rounded-md border px-1.5 py-0.5 text-[10px] font-mono ${cls}`}>
+    <span className={`inline-block rounded-md border px-1.5 py-0.5 text-[10px] font-mono shrink-0 ${cls}`}>
       {family}
     </span>
   );
@@ -26,13 +26,13 @@ function FamilyBadge({ family }: { family: string }) {
 
 function QualityDot({ q }: { q: number }) {
   const color = q >= 0.7 ? "bg-emerald-400" : q >= 0.4 ? "bg-amber-400" : "bg-rose-400";
-  return <span className={`inline-block h-1.5 w-1.5 rounded-full ${color}`} title={`q=${q.toFixed(2)}`} />;
+  return <span className={`inline-block h-1.5 w-1.5 rounded-full shrink-0 ${color}`} title={`q=${q.toFixed(2)}`} />;
 }
 
 function ScoreBar({ score, maxScore }: { score: number; maxScore: number }) {
   const pct = maxScore > 0 ? Math.min(100, (score / maxScore) * 100) : 0;
   return (
-    <div className="h-1 w-16 rounded-full bg-surface2 overflow-hidden">
+    <div className="h-1 w-10 sm:w-16 rounded-full bg-surface2 overflow-hidden shrink-0">
       <div className="h-full rounded-full bg-accentCyan/70" style={{ width: `${pct}%` }} />
     </div>
   );
@@ -55,7 +55,7 @@ function InputQualityBars({ inputs }: { inputs: TopFeaturesData["inputs"] }) {
             <div className="h-1 w-full rounded-full bg-surface2 overflow-hidden">
               <div className={`h-full rounded-full ${color}`} style={{ width: `${pct}%` }} />
             </div>
-            <span className="text-[9px] font-mono text-muted2 capitalize">{label}</span>
+            <span className="text-[8px] sm:text-[9px] font-mono text-muted2 capitalize">{label}</span>
           </div>
         );
       })}
@@ -76,7 +76,7 @@ export function TopFeaturesCard({
 
   if (!data) {
     return (
-      <div className="rounded-xl border border-border/40 bg-surface/60 p-4">
+      <div className="rounded-xl border border-border/40 bg-surface/60 p-3 sm:p-4">
         <div className="text-xs font-mono text-muted2">TOP FEATURES</div>
         <div className="mt-2 text-sm text-muted">No feature data for {asset}</div>
       </div>
@@ -88,7 +88,7 @@ export function TopFeaturesCard({
   const cov = data.coverage;
 
   return (
-    <div className="rounded-xl border border-border/40 bg-surface/60 p-4">
+    <div className="rounded-xl border border-border/40 bg-surface/60 p-3 sm:p-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-xs font-mono text-muted2">TOP FEATURES</span>
@@ -97,20 +97,20 @@ export function TopFeaturesCard({
           </span>
         </div>
         <button
-          onClick={() => setShowWhy(!showWhy)}
-          className="text-[11px] font-mono text-muted hover:text-fg transition"
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowWhy(!showWhy); }}
+          className="text-[11px] font-mono text-muted hover:text-fg transition min-h-[44px] min-w-[44px] flex items-center justify-center -mr-2"
         >
           {showWhy ? "Hide" : "Why?"}
         </button>
       </div>
 
       {showWhy && (
-        <div className="mt-3 rounded-lg border border-border/30 bg-surface2/40 p-3 space-y-2">
-          <div className="text-[11px] font-mono text-muted2">
+        <div className="mt-2 sm:mt-3 rounded-lg border border-border/30 bg-surface2/40 p-2.5 sm:p-3 space-y-2">
+          <div className="text-[10px] sm:text-[11px] font-mono text-muted2">
             Regime: <span className="text-fg">{data.regime_label}</span>{" "}
             <span className="text-muted2">(conf: {data.regime_confidence})</span>
           </div>
-          <div className="text-[11px] font-mono text-muted2">Input Quality</div>
+          <div className="text-[10px] sm:text-[11px] font-mono text-muted2">Input Quality</div>
           <InputQualityBars inputs={data.inputs} />
           {cov.missing_families.length > 0 && (
             <div className="text-[10px] font-mono text-rose-300/80">
@@ -118,7 +118,7 @@ export function TopFeaturesCard({
             </div>
           )}
           {Object.keys(data.family_weights_effective).length > 0 && (
-            <div className="text-[10px] font-mono text-muted2">
+            <div className="text-[9px] sm:text-[10px] font-mono text-muted2 break-words">
               Weights: {Object.entries(data.family_weights_effective)
                 .map(([f, w]) => `${f}=${w.toFixed(2)}`)
                 .join("  ")}
@@ -127,16 +127,22 @@ export function TopFeaturesCard({
         </div>
       )}
 
-      <div className="mt-3 space-y-1">
+      <div className="mt-2 sm:mt-3 space-y-0">
         {features.map((f, i) => (
           <div
             key={f.id}
-            className="flex items-center gap-2 py-1 border-b border-border/20 last:border-0"
+            className="flex flex-wrap sm:flex-nowrap items-center gap-x-2 gap-y-0.5 py-1.5 sm:py-1 border-b border-border/20 last:border-0 min-h-[44px] sm:min-h-0"
           >
-            <span className="w-5 text-right text-[11px] font-mono text-muted2">{i + 1}</span>
+            {/* Row 1 on mobile: rank + quality + title */}
+            <span className="w-5 text-right text-[11px] font-mono text-muted2 shrink-0">{i + 1}</span>
             <QualityDot q={f.quality} />
-            <span className="flex-1 text-[13px] text-fg truncate">{f.title}</span>
-            <span className="text-[12px] font-mono text-muted tabular-nums">{f.value}</span>
+            <span className="flex-1 text-[12px] sm:text-[13px] text-fg min-w-0 break-words sm:truncate leading-snug">
+              {f.title}
+            </span>
+            {/* Value + score bar + badge — wraps to second line on mobile */}
+            <span className="text-[11px] sm:text-[12px] font-mono text-muted tabular-nums whitespace-nowrap shrink-0">
+              {f.value}
+            </span>
             <ScoreBar score={f.score} maxScore={maxScore} />
             <FamilyBadge family={f.family} />
           </div>
