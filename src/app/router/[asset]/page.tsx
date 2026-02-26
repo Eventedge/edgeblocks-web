@@ -13,6 +13,10 @@ import type { RegimeData, TopFeaturesData, FamilySnapshot } from "@/lib/edgecore
 const FAMILIES = ["ta_core", "deriv_core", "macro_core", "pm_core"] as const;
 
 function edgecoreBase(): string {
+  // In production, use same-origin proxy to avoid mixed-content blocking
+  if (typeof window !== "undefined" && window.location.protocol === "https:") {
+    return "/api/edgecore";
+  }
   const env = process.env.NEXT_PUBLIC_EDGECORE_HTTP_BASE?.trim();
   if (env) return env.endsWith("/") ? env.slice(0, -1) : env;
   return "http://127.0.0.1:18888";
