@@ -94,12 +94,13 @@ export default function RouterPage() {
 
   useEffect(() => {
     async function load() {
+      const h = prefs.horizon;
       const [healthRaw, ...assetResults] = await Promise.all([
         fetchRaw("/v1/health/data"),
         ...TIER0.map(async (asset) => {
           const [regimeRaw, tfRaw] = await Promise.all([
             fetchRaw(`/v1/regime/${asset}`),
-            fetchRaw(`/v1/top-features/${asset}?n=15`),
+            fetchRaw(`/v1/top-features/${asset}?n=15&h=${h}`),
           ]);
           return {
             asset,
@@ -113,7 +114,7 @@ export default function RouterPage() {
       setLoading(false);
     }
     load();
-  }, []);
+  }, [prefs.horizon]);
 
   /* ---- Filtering ---- */
 
@@ -147,7 +148,12 @@ export default function RouterPage() {
           <div className="flex items-center justify-between">
             <div>
               <div className="text-xs font-mono text-muted2">ROUTER</div>
-              <div className="mt-1 text-xl sm:text-2xl font-semibold">Working Features</div>
+              <div className="mt-1 text-xl sm:text-2xl font-semibold flex items-center gap-2">
+                Working Features
+                <span className="text-xs font-mono text-muted2 bg-surface2/50 border border-border/30 rounded px-1.5 py-0.5">
+                  {prefs.horizon}
+                </span>
+              </div>
             </div>
             <button
               onClick={() => setCustomizeOpen(true)}

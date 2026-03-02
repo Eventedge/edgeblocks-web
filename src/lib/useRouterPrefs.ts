@@ -40,12 +40,17 @@ export const FAMILY_GROUP_DESCS: Record<FamilyGroup, string> = {
   pm: "Polymarket, Kalshi probabilities",
 };
 
+export type Horizon = "4h" | "12h" | "24h";
+
+export const HORIZONS: Horizon[] = ["4h", "12h", "24h"];
+
 export interface RouterPrefs {
   enabledFamilies: Record<FamilyGroup, boolean>;
   minCoverage: number;
   topN: number;
   showSuppressed: boolean;
   showStale: boolean;
+  horizon: Horizon;
 }
 
 export const ROUTER_PREFS_DEFAULTS: RouterPrefs = {
@@ -54,6 +59,7 @@ export const ROUTER_PREFS_DEFAULTS: RouterPrefs = {
   topN: 15,
   showSuppressed: false,
   showStale: true,
+  horizon: "24h",
 };
 
 /* ------------------------------------------------------------------ */
@@ -146,5 +152,6 @@ export function countActiveFilters(prefs: RouterPrefs): number {
     prefs.topN !== d.topN,
     prefs.showSuppressed !== d.showSuppressed,
     prefs.showStale !== d.showStale,
+    prefs.horizon !== d.horizon,
   ].filter(Boolean).length;
 }
