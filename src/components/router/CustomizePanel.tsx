@@ -1,11 +1,12 @@
 "use client";
 
-import type { RouterPrefs, FamilyGroup } from "@/lib/useRouterPrefs";
+import type { RouterPrefs, FamilyGroup, Horizon } from "@/lib/useRouterPrefs";
 import {
   FAMILY_GROUPS,
   FAMILY_GROUP_LABELS,
   FAMILY_GROUP_DESCS,
   ROUTER_PREFS_DEFAULTS,
+  HORIZONS,
 } from "@/lib/useRouterPrefs";
 
 const FAMILY_DOT_COLORS: Record<FamilyGroup, string> = {
@@ -43,6 +44,10 @@ export function CustomizePanel({
 
   function setTopN(v: number) {
     onChange({ ...prefs, topN: v });
+  }
+
+  function setHorizon(h: Horizon) {
+    onChange({ ...prefs, horizon: h });
   }
 
   function toggle(key: "showSuppressed" | "showStale") {
@@ -115,6 +120,28 @@ export function CustomizePanel({
                   >
                     {prefs.enabledFamilies[g] ? "ON" : "OFF"}
                   </span>
+                </button>
+              ))}
+            </div>
+          </section>
+
+          {/* Horizon */}
+          <section>
+            <div className="text-[10px] font-mono text-muted2 uppercase tracking-wider mb-2">
+              Horizon
+            </div>
+            <div className="flex gap-2">
+              {HORIZONS.map((h) => (
+                <button
+                  key={h}
+                  onClick={() => setHorizon(h)}
+                  className={`flex-1 rounded-lg border px-3 py-2 text-xs font-mono text-center transition ${
+                    prefs.horizon === h
+                      ? "border-cyan-500/40 bg-cyan-500/10 text-cyan-300"
+                      : "border-border/40 bg-surface2/30 text-muted hover:text-fg"
+                  }`}
+                >
+                  {h}
                 </button>
               ))}
             </div>
