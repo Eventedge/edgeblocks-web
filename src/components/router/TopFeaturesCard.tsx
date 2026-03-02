@@ -67,10 +67,12 @@ export function TopFeaturesCard({
   data,
   asset,
   compact = false,
+  limit,
 }: {
   data: TopFeaturesData | null;
   asset: string;
   compact?: boolean;
+  limit?: number;
 }) {
   const [showWhy, setShowWhy] = useState(false);
 
@@ -83,7 +85,8 @@ export function TopFeaturesCard({
     );
   }
 
-  const features = compact ? data.top_features.slice(0, 6) : data.top_features;
+  const displayCount = limit ?? (compact ? 6 : data.top_features.length);
+  const features = data.top_features.slice(0, displayCount);
   const maxScore = features.length > 0 ? features[0].score : 1;
   const cov = data.coverage;
 
@@ -149,9 +152,9 @@ export function TopFeaturesCard({
         ))}
       </div>
 
-      {compact && data.top_features.length > 6 && (
+      {data.top_features.length > displayCount && (
         <div className="mt-2 text-center text-[11px] font-mono text-muted2">
-          +{data.top_features.length - 6} more
+          +{data.top_features.length - displayCount} more
         </div>
       )}
     </div>
